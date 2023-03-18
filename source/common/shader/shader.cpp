@@ -6,7 +6,21 @@
 #include <string>
 
 // Forward definition for error checking functions
+/*
+ * checks if there is an error in the given shader. You should use it to check if there is a
+ *  compilation error and print it so that you can know what is wrong with
+ *  the shader. The returned string will be empty if there is no errors.
+ * @param shader: the shader to check for errors
+ */
 std::string checkForShaderCompilationErrors(GLuint shader);
+
+/*
+ * checks if there is an error in the given program.
+ * You should use it to check if there is a
+ * linking error and print it so that you can know what is wrong with the
+ * program. The returned string will be empty if there is no errors.
+ * @param program: the program to check for errors.
+ */
 std::string checkForLinkingErrors(GLuint program);
 
 bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const
@@ -22,11 +36,23 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const
     const char *sourceCStr = sourceString.c_str();
     file.close();
 
-    // TODO: Complete this function
-    // Note: The function "checkForShaderCompilationErrors" checks if there is
-    //  an error in the given shader. You should use it to check if there is a
-    //  compilation error and print it so that you can know what is wrong with
-    //  the shader. The returned string will be empty if there is no errors.
+    // // TODO: Complete this function
+
+    // create a shader object with the given type
+    GLuint shader = glCreateShader(type);
+    // attach the source code to the shader object
+    glShaderSource(shader, 1, &sourceCStr, nullptr);
+    // compile the shader
+    glCompileShader(shader);
+
+    // check for compilation errors
+    std::string error = checkForShaderCompilationErrors(shader);
+    if (!error.empty())
+    {
+        std::cerr << "ERROR: Couldn't compile shader: " << filename << std::endl;
+        std::cerr << error << std::endl;
+        return false;
+    }
 
     // We return true if the compilation succeeded
     return true;
@@ -34,12 +60,18 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const
 
 bool our::ShaderProgram::link() const
 {
-    // TODO: Complete this function
-    // Note: The function "checkForLinkingErrors" checks if there is
-    //  an error in the given program. You should use it to check if there is a
-    //  linking error and print it so that you can know what is wrong with the
-    //  program. The returned string will be empty if there is no errors.
+    // // TODO: Complete this function
+    // link the program
+    glLinkProgram(program);
 
+    // check for linking errors
+    std::string error = checkForLinkingErrors(program);
+    if (!error.empty())
+    {
+        std::cerr << "ERROR: Couldn't link shader program" << std::endl;
+        std::cerr << error << std::endl;
+        return false;
+    }
     return true;
 }
 
