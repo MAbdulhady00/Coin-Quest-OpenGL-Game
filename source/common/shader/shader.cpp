@@ -54,6 +54,10 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const
         return false;
     }
 
+    // attach the shader to the program
+    glAttachShader(program, shader);
+    // delete the shader object
+    glDeleteShader(shader);
     // We return true if the compilation succeeded
     return true;
 }
