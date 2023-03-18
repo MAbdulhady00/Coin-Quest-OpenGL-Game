@@ -130,7 +130,7 @@ namespace our
         /*
          * Sets the value of a uniform variable in the shader.
          * @param uniform: the name of the uniform variable.
-         * @param value: the value to set the uniform variable to.
+         * @param matrix: the value to set the uniform variable to.
          */
         void set(const std::string &uniform, glm::mat4 matrix)
         {
