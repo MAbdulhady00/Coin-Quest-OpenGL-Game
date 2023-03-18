@@ -16,7 +16,7 @@ void main() {
   // getting postion of the pixel after normalizing by size
   vec2 Pos = floor(gl_FragCoord.xy / float(size));
   // if the sum of x and y is even then the color is colors[0] else colors[1]
-  int mask = mod(Pos.x + mod(Pos.y, 2.0), 2.0);
+  float mask = mod(Pos.x + mod(Pos.y, 2.0), 2.0);
   // if mask is 1 then the color is colors[1] else colors[0]
   frag_color = vec4(colors[int(mask)], 1.0);
 }
