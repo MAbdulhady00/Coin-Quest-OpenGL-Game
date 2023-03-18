@@ -2,6 +2,7 @@
 #define SHADER_HPP
 
 #include <string>
+#include <map>
 
 #include <glad/gl.h>
 #include <glm/glm.hpp>
@@ -23,12 +24,16 @@ namespace our
         ShaderProgram()
         {
             // TODO: (Req 1) Create A shader program
-            program = 0;
+            // Create Shader Program
+            program = glCreateProgram();
         }
         ~ShaderProgram()
         {
             // TODO: (Req 1) Delete a shader program
-            destroy();
+            // Delete Shader Program
+            if (program != 0)
+                glDeleteProgram(program);
+            program = 0;
         }
 
         //  reads the shader source code from the given file send it to GPU, compile it then attach it to shader.
