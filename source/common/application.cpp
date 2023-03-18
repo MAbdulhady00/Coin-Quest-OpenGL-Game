@@ -277,12 +277,6 @@ std:
     double last_frame_time = glfwGetTime();
     int current_frame = 0;
 
-    int id = 9203292;
-    float r = ((id / 1) % 16) / 16.0;
-    float g = ((id / 16) % 16) / 16.0;
-    float b = ((id / 256) % 16) / 16.0;
-    glClearColor(r, g, b, 1.0f);
-
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -314,7 +308,6 @@ std:
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
 
-        glClear(GL_COLOR_BUFFER_BIT);
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if (currentState)
             currentState->onDraw(current_frame_time - last_frame_time);
