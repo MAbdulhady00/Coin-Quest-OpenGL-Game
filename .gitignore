@@ -24,3 +24,6 @@ CMakeSettings.json
 # Screenshots
 screenshots/
 errors/
+
+# img comapre exe
+imgcmp.exe
