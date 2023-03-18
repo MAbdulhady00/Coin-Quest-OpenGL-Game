@@ -21,9 +21,9 @@ out vec4 frag_color;
 //TODO: (Req 1) Finish this shader and apply the channel mixing using the "dot" function.
 
 // creating 3 uniforms for the color matrix
-uniform vec4 red;
-uniform vec4 green;
-uniform vec4 blue;
+uniform vec4 red = vec4(1.0, 0.0, 0.0, 0.0);
+uniform vec4 green = vec4(0.0, 1.0, 0.0, 0.0);
+uniform vec4 blue = vec4(0.0, 0.0, 1.0, 0.0);
 
 void main(){
 

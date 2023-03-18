@@ -15,9 +15,10 @@ vs_out;
 // Each vertex "v" should be transformed to be "scale * v + translation".
 // The default value for "translation" is (0.0, 0.0) and for "scale" is
 // (1.0, 1.0).
-uniform vec2 scale;
-uniform vec2 translation;
-
+// This vector of size 2 represents scale(size).
+uniform vec2 scale = vec2(1, 1);
+// This vector of size 2 represents translation(position).
+uniform vec2 translation = vec2(0, 0);
 // TODO: (Req 1) Finish this shader
 
 void main() {

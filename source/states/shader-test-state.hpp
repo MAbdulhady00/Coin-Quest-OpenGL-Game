@@ -10,14 +10,7 @@ class ShaderTestState : public our::State
 
     our::ShaderProgram *shader;
     GLuint vertex_array;
-    // This vector of size 2 represents scale(size).
-    glm::vec2 scale = glm::vec2(1, 1);
-    // This vector of size 2 represents translation(position).
-    glm::vec2 translation = glm::vec2(0, 0);
-    // default red and green and blue
-    glm::vec4 red = glm::vec4(1.0, 0.0, 0.0, 0.0);
-    glm::vec4 green = glm::vec4(0.0, 1.0, 0.0, 0.0);
-    glm::vec4 blue = glm::vec4(0.0, 0.0, 1.0, 0.0);
+
     void onInitialize() override
     {
         // First of all, we get the scene configuration from the app config
@@ -29,12 +22,7 @@ class ShaderTestState : public our::State
         shader->link();
         // Then we will set the output_type: 0=Position, 1=Color, 2=TexCoord, 3=Normal
         shader->use();
-        // set scale and transformation to default values
-        shader->set("scale", scale);
-        shader->set("translation", translation);
-        shader->set("red", red);
-        shader->set("green", green);
-        shader->set("blue", blue);
+
         // We loop over every uniform in the configuration and send to the program
         if (const auto &uniforms = config["uniforms"]; uniforms.is_object())
         {
