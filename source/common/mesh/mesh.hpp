@@ -76,7 +76,7 @@ namespace our
         // this function should render the mesh
         void draw()
         {
-            // TODO: (Req 2) Write this function
+            // // TODO: (Req 2) Write this function
             // 1. Bind the VAO
             glBindVertexArray(VAO);
             // 2. Bind the EBO
@@ -92,7 +92,7 @@ namespace our
         // this function should delete the vertex & element buffers and the vertex array object
         ~Mesh()
         {
-            // TODO: (Req 2) Write this function
+            // // TODO: (Req 2) Write this function
             // 1. Delete the VAO
             glDeleteVertexArrays(1, &VAO);
             // 2. Delete the VBO
