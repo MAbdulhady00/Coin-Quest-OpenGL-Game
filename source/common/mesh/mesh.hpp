@@ -51,24 +51,19 @@ namespace our
             // 4. Copy our index array in a element buffer for OpenGL to use
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(unsigned int), &elements[0], GL_STATIC_DRAW);
-            for (int i = 0; i < vertices.size(); i++)
-            {
-                auto vertex = vertices[i];
-                // 5. Then set the vertex attributes pointers
-                // Vertex Positions
-                glVertexAttribPointer(ATTRIB_LOC_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
-                glEnableVertexAttribArray(ATTRIB_LOC_POSITION);
-                // Vertex Normals
-                glVertexAttribPointer(ATTRIB_LOC_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, color));
-                glEnableVertexAttribArray(ATTRIB_LOC_NORMAL);
-                // Vertex Colors
-                glVertexAttribPointer(ATTRIB_LOC_COLOR, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, tex_coord));
-                glEnableVertexAttribArray(ATTRIB_LOC_COLOR);
-                // Vertex Texture Coords
-                glVertexAttribPointer(ATTRIB_LOC_TEXCOORD, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
-                glEnableVertexAttribArray(ATTRIB_LOC_TEXCOORD);
-            }
-            // 6. Unbind the VAO
+            // 5. Then set the vertex attributes pointers
+            // Vertex Positions
+            glVertexAttribPointer(ATTRIB_LOC_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
+            glEnableVertexAttribArray(ATTRIB_LOC_POSITION);
+            // Vertex Normals
+            glVertexAttribPointer(ATTRIB_LOC_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
+            glEnableVertexAttribArray(ATTRIB_LOC_NORMAL);
+            // Vertex Colors
+            glVertexAttribPointer(ATTRIB_LOC_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void *)offsetof(Vertex, color));
+            glEnableVertexAttribArray(ATTRIB_LOC_COLOR);
+            // Vertex Texture Coords
+            glVertexAttribPointer(ATTRIB_LOC_TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, tex_coord));
+            glEnableVertexAttribArray(ATTRIB_LOC_TEXCOORD); // 6. Unbind the VAO
             glBindVertexArray(0);
             // 7. Unbind the VBO
             glBindBuffer(GL_ARRAY_BUFFER, 0);
