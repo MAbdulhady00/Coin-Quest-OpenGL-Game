@@ -16,8 +16,10 @@ uniform mat4 transform;
 
 void main(){
     // //TODO: (Req 3) Change the next line to apply the transformation matrix
+    // apply the transformation matrix to the position
     gl_Position = transform * vec4(position, 1.0);
     // No need to change any of the following lines
+    // position is in the object space of the mesh
     vs_out.position = position;
     vs_out.color = color;
     vs_out.tex_coord = tex_coord;
