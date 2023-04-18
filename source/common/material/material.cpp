@@ -82,7 +82,9 @@ namespace our
         glActiveTexture(GL_TEXTURE0); // Set active texture unit to 0
         shader->set("tex", 0);        // Bind texture to texture unit 0
         texture->bind();
-        sampler->bind(0); // Bind sampler to texture unit 0
+        // If there is a sampler, bind it to texture unit 0
+        if (sampler)
+            sampler->bind(0); // Bind sampler to texture unit 0
     }
 
     /**
