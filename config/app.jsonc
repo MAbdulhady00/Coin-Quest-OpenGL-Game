@@ -31,14 +31,16 @@
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
                 "monkey": "assets/textures/monkey.png",
-                "coin": "assets/textures/coin.png"
+                "coin": "assets/textures/coin.png",
+                "gem_heart": "assets/textures/gem_heart.png"
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
                 "monkey": "assets/models/monkey.obj",
                 "plane": "assets/models/plane.obj",
                 "sphere": "assets/models/sphere.obj",
-                "coin": "assets/models/coin.obj"
+                "coin": "assets/models/coin.obj",
+                "gem_heart": "assets/models/gem_heart.obj"
             },
             "samplers":{
                 "default":{},
@@ -140,6 +142,21 @@
                     },
                     "tint": [1, 1, 1, 1],
                     "texture": "coin",
+                    "sampler": "default"
+                },
+                "gem_heart":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "gem_heart",
                     "sampler": "default"
                 }
             }
@@ -287,6 +304,23 @@
                         "type": "Movement",
                         "angularVelocity": [0, 100, 0],
                         "linearVelocity": [0, 0, 0.5]
+                    }
+                ]
+            },
+            {
+                "position": [0, -0.5, 0],
+                "rotation": [0, 0, 0],
+                "scale": [0.01, 0.01, 0.01],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "gem_heart",
+                        "material": "gem_heart"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 100, 0],
+                        "linearVelocity": [0.15, 0, 0.5]
                     }
                 ]
             }
