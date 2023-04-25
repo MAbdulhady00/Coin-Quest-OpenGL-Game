@@ -18,5 +18,16 @@ void main(){
     // Hint: remember that the NDC space ranges from -1 to 1
     // while the texture coordinate space ranges from 0 to 1
     // We have the pixel's texture coordinate, how can we compute its location in the NDC space?
-    frag_color = texture(tex, tex_coord);    
+
+    // Compute the pixel's location in NDC space
+    vec2 ndc_coord = (2.0 * tex_coord) - 1.0;
+
+    // Compute the squared length of the pixel's location in NDC space
+    float ndc_length_sq = dot(ndc_coord, ndc_coord);
+
+    // Compute the vignette factor
+    float vignette_factor = 1.0 / (1.0 + ndc_length_sq);
+
+    // Apply the vignette effect to the scene color
+    frag_color = texture(tex, tex_coord) * vignette_factor;
 }
