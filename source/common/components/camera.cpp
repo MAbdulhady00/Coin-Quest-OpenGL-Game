@@ -44,7 +44,7 @@ namespace our
         // then you can use glm::lookAt
         glm::vec3 eye = M * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
         glm::vec3 center = M * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
-        glm::vec3 up = M * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+        glm::vec3 up = M * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
         return glm::lookAt(eye, center, up);
     }
 
