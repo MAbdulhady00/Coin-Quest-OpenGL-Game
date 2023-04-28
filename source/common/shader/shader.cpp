@@ -6,7 +6,7 @@
 #include <string>
 
 // Forward definition for error checking functions
-/*
+/**
  * checks if there is an error in the given shader. You should use it to check if there is a
  *  compilation error and print it so that you can know what is wrong with
  *  the shader. The returned string will be empty if there is no errors.
@@ -14,7 +14,7 @@
  */
 std::string checkForShaderCompilationErrors(GLuint shader);
 
-/*
+/**
  * checks if there is an error in the given program.
  * You should use it to check if there is a
  * linking error and print it so that you can know what is wrong with the
