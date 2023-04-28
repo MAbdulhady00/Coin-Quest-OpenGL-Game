@@ -24,8 +24,8 @@ namespace our
             // pipeline state for sky
             PipelineState skyPipelineState;
             skyPipelineState.depthTesting.enabled = true;
-            // since the sphere is drawn far away (z = 1), we only need to draw it
-            skyPipelineState.depthTesting.function = GL_EQUAL;
+            // since the sphere is drawn far away (z = 1).
+            skyPipelineState.depthTesting.function = GL_LEQUAL;
             skyPipelineState.faceCulling.enabled = true;
             // cull the front face since we are inside the sphere
             skyPipelineState.faceCulling.culledFace = GL_FRONT;
