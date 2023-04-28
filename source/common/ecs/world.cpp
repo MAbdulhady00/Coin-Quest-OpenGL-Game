@@ -12,14 +12,13 @@ namespace our
             return;
         for (const auto &entityData : data)
         {
-            // // TODO: (Req 8) Create an entity, make its parent "parent" and call its deserialize with "entityData".
+            // Create an entity, make its parent "parent" and call its deserialize with "entityData".
             Entity *entity = add();
             entity->parent = parent;
             entity->deserialize(entityData);
             if (entityData.contains("children"))
             {
-                // // TODO: (Req 8) Recursively call this world's "deserialize" using the children data
-                //  and the current entity as the parent
+                // If the entity has children, call this function recursively with the children data and the entity as parent
                 deserialize(entityData["children"], entity);
             }
         }

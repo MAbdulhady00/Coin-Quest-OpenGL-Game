@@ -1,5 +1,6 @@
 #version 330 core
 
+// input from the vertex shader
 in Varyings {
     vec3 position;
     vec4 color;
@@ -7,12 +8,13 @@ in Varyings {
     vec3 normal;
 } fs_in;
 
+// output color
 out vec4 frag_color;
 
+// texture sampler
 uniform sampler2D tex;
 
 void main(){
-    // // TODO: (Req 5) Change the following line to read the fragment color
     // from the texture at the received texture coordinates
     frag_color = texture(tex, fs_in.tex_coord);
 }

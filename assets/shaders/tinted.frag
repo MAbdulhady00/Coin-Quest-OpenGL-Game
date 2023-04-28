@@ -1,14 +1,17 @@
 #version 330 core
 
+// Input vertex data.
 in Varyings { vec4 color; }
 fs_in;
 
+// fragment color
 out vec4 frag_color;
 
+// Tint color
 uniform vec4 tint;
 
 void main() {
-  // // TODO: (Req 7) Modify the following line to compute the fragment color
-  //  by multiplying the tint with the vertex color
+  
+  // Multiply the tint color by the fragment color
   frag_color = tint * fs_in.color;
 }

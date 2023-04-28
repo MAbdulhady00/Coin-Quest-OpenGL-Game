@@ -30,8 +30,7 @@ namespace our
     {
         auto owner = getOwner();
         auto M = owner->getLocalToWorldMatrix();
-        // // TODO: (Req 8) Complete this function
-        // HINT:
+
         // In the camera space:
         // - eye is the origin (0,0,0)
         // - center is any point on the line of sight. So center can be any point (0,0,z) where z < 0. For simplicity, we let center be (0,0,-1)
@@ -42,9 +41,14 @@ namespace our
         // - the center position which is the point (0,0,-1) but after being transformed by M
         // - the up direction which is the vector (0,1,0) but after being transformed by M
         // then you can use glm::lookAt
+
+        // construct eye at the origin and transform it by M
         glm::vec3 eye = M * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        // construct center at (0,0,-1) and transform it by M
         glm::vec3 center = M * glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
+        // construct the up vector, note that w = 0
         glm::vec3 up = M * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);
+        // cosntruct and return the view matrix by using eye and center and up vectors all transformed by M
         return glm::lookAt(eye, center, up);
     }
 
@@ -52,7 +56,6 @@ namespace our
     // "viewportSize" is used to compute the aspect ratio
     glm::mat4 CameraComponent::getProjectionMatrix(glm::ivec2 viewportSize) const
     {
-        // // TODO: (Req 8) Wrtie this function
         //  NOTE: The function glm::ortho can be used to create the orthographic projection matrix
         //  It takes left, right, bottom, top. Bottom is -orthoHeight/2 and Top is orthoHeight/2.
         //  Left and Right are the same but after being multiplied by the aspect ratio

@@ -29,12 +29,13 @@ void main(){
     // Read the blue channel from the pixel to the right
     vec4 blue = texture(tex, tex_coord + vec2(STRENGTH, 0));
 
-    // Write the final color
+    // Write the final color from the three channels after shifting them by STRENGTH
     frag_color.r = red.r;
     frag_color.g = green.g;
     frag_color.b = blue.b;
     frag_color.a = 1.0;
 
 
+    // NOTE: we don't need it now as we created texture for every channel and read from them separately
     // frag_color = texture(tex, tex_coord);
 }
