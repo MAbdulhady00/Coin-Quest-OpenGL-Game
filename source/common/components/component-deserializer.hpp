@@ -15,24 +15,28 @@ namespace our
     {
         std::string type = data.value("type", "");
         Component *component = nullptr;
-        // // TODO: (Req 8) Add an option to deserialize a "MeshRendererComponent" to the following if-else statement
         if (type == CameraComponent::getID())
         {
+            // if the type is "CameraComponent", then create a new CameraComponent and return pointer to it
             component = entity->addComponent<CameraComponent>();
         }
         else if (type == FreeCameraControllerComponent::getID())
         {
+            // if the type is "FreeCameraControllerComponent", then create a new FreeCameraControllerComponent and return pointer to it
             component = entity->addComponent<FreeCameraControllerComponent>();
         }
         else if (type == MovementComponent::getID())
         {
+            // if the type is "MovementComponent", then create a new MovementComponent and return pointer to it
             component = entity->addComponent<MovementComponent>();
         }
         else if (type == MeshRendererComponent::getID())
         {
+            // if the type is "MeshRendererComponent", then create a new MeshRendererComponent and return pointer to it
             component = entity->addComponent<MeshRendererComponent>();
         }
         if (component)
+            // if the component is not null, then deserialize it
             component->deserialize(data);
     }
 

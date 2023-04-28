@@ -13,15 +13,19 @@ namespace our
     // its parent's parent's matrix and so on till you reach the root.
     glm::mat4 Entity::getLocalToWorldMatrix() const
     {
-        // // TODO: (Req 8) Write this function
+        // get the transformation matrix of this entity
         glm::mat4 transform = localTransform.toMat4();
         Entity *parentEntity = this->parent;
+
+        // for each parent entity, multiply the current transformation matrix
+        // by the parent's transformation matrix
         while (parentEntity != nullptr)
         {
             transform = parentEntity->localTransform.toMat4() * transform;
             parentEntity = parentEntity->parent;
         }
 
+        // return the local to world transformation matrix
         return transform;
     }
 

@@ -36,19 +36,22 @@ namespace our
          */
         Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &elements)
         {
-            // // TODO: (Req 2) Write this function
             //  remember to store the number of elements in "elementCount" since you will need it for drawing
             //  For the attribute locations, use the constants defined above: ATTRIB_LOC_POSITION, ATTRIB_LOC_COLOR, etc
+
             // 1. Create Vertex and Element buffers/arrays
+            // Vertex Array Object
             glGenVertexArrays(1, &VAO);
+            // Vertex Buffer Object
             glGenBuffers(1, &VBO);
+            // Element Buffer Object
             glGenBuffers(1, &EBO);
             // 2. Bind Vertex Array Object
             glBindVertexArray(VAO);
             // 3. Copy our vertices array in a buffer for OpenGL to use
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
             glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
-            // 4. Copy our index array in a element buffer for OpenGL to use
+            // 4. Copy our Element array object in a element buffer for OpenGL to use
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(unsigned int), &elements[0], GL_STATIC_DRAW);
             // 5. Then set the vertex attributes pointers
@@ -63,20 +66,24 @@ namespace our
             glEnableVertexAttribArray(ATTRIB_LOC_COLOR);
             // Vertex Texture Coords
             glVertexAttribPointer(ATTRIB_LOC_TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, tex_coord));
-            glEnableVertexAttribArray(ATTRIB_LOC_TEXCOORD); // 6. Unbind the VAO
+            glEnableVertexAttribArray(ATTRIB_LOC_TEXCOORD);
+            // 6. Unbind the VAO
             glBindVertexArray(0);
             // 7. Unbind the VBO
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             // 8. Unbind the EBO
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-            // 9. Remember the number of elements
+            // 9. Set the number of elements
             elementCount = elements.size();
         }
 
         // this function should render the mesh
+        /**
+         * @brief Render the mesh
+         *
+         */
         void draw()
         {
-            // // TODO: (Req 2) Write this function
             // 1. Bind the VAO
             glBindVertexArray(VAO);
             // 2. Bind the EBO
@@ -89,10 +96,12 @@ namespace our
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
 
-        // this function should delete the vertex & element buffers and the vertex array object
+        /**
+         * @brief Destroy the Mesh object.
+         * should delete the vertex & element buffers and the vertex array object
+         */
         ~Mesh()
         {
-            // // TODO: (Req 2) Write this function
             // 1. Delete the VAO
             glDeleteVertexArrays(1, &VAO);
             // 2. Delete the VBO
@@ -101,6 +110,7 @@ namespace our
             glDeleteBuffers(1, &EBO);
         }
 
+        // Meshes should not be copied or moved around, as they own OpenGL resources.
         Mesh(Mesh const &) = delete;
         Mesh &operator=(Mesh const &) = delete;
     };

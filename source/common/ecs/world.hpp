@@ -26,11 +26,13 @@ namespace our
         // deleted when "deleteMarkedEntities" is called.
         Entity *add()
         {
-            // // TODO: (Req 8) Create a new entity, set its world member variable to this,
-            //  and don't forget to insert it in the suitable container.
+            // Create a new entity
             Entity *entity = new Entity();
+            // Set its world member variable to this
             entity->world = this;
+            // Insert it in the entites container
             entities.insert(entity);
+            // Return a pointer to that entity
             return entity;
         }
 
@@ -44,7 +46,7 @@ namespace our
         // The elements in the "markedForRemoval" set will be removed and deleted when "deleteMarkedEntities" is called.
         void markForRemoval(Entity *entity)
         {
-            // // TODO: (Req 8) If the entity is in this world, add it to the "markedForRemoval" set.
+            // If the entity is in this world, add it to the "markedForRemoval" set.
             if (entities.find(entity) != entities.end())
             {
                 markedForRemoval.insert(entity);
@@ -55,27 +57,32 @@ namespace our
         // Then each of these elements are deleted.
         void deleteMarkedEntities()
         {
-            // // TODO: (Req 8) Remove and delete all the entities that have been marked for removal
+            // Remove and delete all the entities that have been marked for removal
             for (Entity *entity : markedForRemoval)
             {
+                // Erase the entity from the entities set
                 entities.erase(entity);
+                // Delete the entity
                 delete entity;
             }
 
+            // Clear the "markedForRemoval" set
             markedForRemoval.clear();
         }
 
         // This deletes all entities in the world
         void clear()
         {
+            // Delete all the entities that have been marked for removal
             deleteMarkedEntities();
 
-            // // TODO: (Req 8) Delete all the entites and make sure that the containers are empty
+            // Delete all the entites and make sure that the containers are empty
             for (Entity *entity : entities)
             {
                 delete entity;
             }
 
+            // Clear the entities set
             entities.clear();
         }
 
