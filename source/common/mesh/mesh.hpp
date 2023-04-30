@@ -87,13 +87,13 @@ namespace our
             // 1. Bind the VAO
             glBindVertexArray(VAO);
             // 2. Bind the EBO
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+            // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
             // 3. Draw the triangles
-            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, (void *)0);
             // 4. Unbind the VAO
             glBindVertexArray(0);
             // 5. Unbind the EBO
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
 
         /**
