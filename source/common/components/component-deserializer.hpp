@@ -5,7 +5,7 @@
 #include "mesh-renderer.hpp"
 #include "free-camera-controller.hpp"
 #include "movement.hpp"
-#include "coin.hpp"
+
 namespace our
 {
 
@@ -35,7 +35,6 @@ namespace our
             // if the type is "MeshRendererComponent", then create a new MeshRendererComponent and return pointer to it
             component = entity->addComponent<MeshRendererComponent>();
         }
-
         if (component)
             // if the component is not null, then deserialize it
             component->deserialize(data);

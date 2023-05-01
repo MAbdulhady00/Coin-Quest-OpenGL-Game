@@ -2,7 +2,6 @@
 
 #include "../ecs/world.hpp"
 #include "../components/mesh-renderer.hpp"
-#include "../components/coin.hpp"
 #include "../components/movement.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -39,10 +38,8 @@ namespace our
             int count = 0;
             for (auto entity : world->getEntities())
             {
-                // Get the coin component if it exists
-                CoinComponent *coin = entity->getComponent<CoinComponent>();
                 // If the coin component exists
-                if (coin)
+                if (entity->name == "Coin")
                 {
                     count++;
                 }
@@ -58,7 +55,6 @@ namespace our
                 CreateCoinMeshComponent(mesh);
                 MovementComponent *movement = newCoin->addComponent<MovementComponent>();
                 CreateCoinMovementComponent(movement);
-                // CoinComponent *coin = newCoin->addComponent<CoinComponent>();
                 count++;
             }
         }
