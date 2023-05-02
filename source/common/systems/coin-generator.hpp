@@ -11,7 +11,9 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 
-#define MAX_COIN 1
+#define MAX_COIN 25
+#define FAR_VERTICAL_DISTANCE 50
+#define FAR_HORIZONTAL_DISTANCE 10
 
 namespace our
 {
@@ -85,13 +87,18 @@ namespace our
             }
             // Delete all the marked entities
             world->deleteMarkedEntities();
-
             // If the number of coins is less than the max number of coins, add a new coin
             while (count < MAX_COIN)
             {
                 Entity *newCoin = world->add();
                 newCoin->name = "Coin";
-                newCoin->localTransform.position = glm::vec3(0.0f, -1.0f, 0.0f);
+                // Random location for the coin
+                newCoin->localTransform.position = glm::vec3(
+                    (float)(rand() % FAR_HORIZONTAL_DISTANCE - FAR_HORIZONTAL_DISTANCE / 2.0),
+                    -1.0f,
+                    (float)(rand() % FAR_VERTICAL_DISTANCE * -1) + playerPosition.z);
+                // print the coin position
+                printf("New Coin Position: %f, %f, %f\n", newCoin->localTransform.position.x, newCoin->localTransform.position.y, newCoin->localTransform.position.z);
                 newCoin->localTransform.scale = glm::vec3(0.1f, 0.1f, 0.1f);
                 newCoin->localTransform.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
                 // add mesh component
