@@ -9,7 +9,7 @@ namespace our
 
         void deserialize(const nlohmann::json &data) override
         {
-
+            // No data to deserialize
             return;
         }
     };
