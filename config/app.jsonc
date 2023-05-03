@@ -170,7 +170,11 @@
                     },
                     {
                         "type": "Free Camera Controller"
+                    },
+                    {
+                        "type": "Player"
                     }
+                    
                 ],
                 "children": [
                     {

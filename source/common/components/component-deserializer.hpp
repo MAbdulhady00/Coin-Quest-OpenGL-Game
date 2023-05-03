@@ -3,6 +3,7 @@
 #include "../ecs/entity.hpp"
 #include "camera.hpp"
 #include "mesh-renderer.hpp"
+#include "player.hpp"
 #include "free-camera-controller.hpp"
 #include "movement.hpp"
 
@@ -34,6 +35,11 @@ namespace our
         {
             // if the type is "MeshRendererComponent", then create a new MeshRendererComponent and return pointer to it
             component = entity->addComponent<MeshRendererComponent>();
+        }
+        else if (type == PlayerComponent::getID())
+        {
+            // if the type is "PlayerComponent", then create a new PlayerComponent and return pointer to it
+            component = entity->addComponent<PlayerComponent>();
         }
         if (component)
             // if the component is not null, then deserialize it

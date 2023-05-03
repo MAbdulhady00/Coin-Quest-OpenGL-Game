@@ -6,6 +6,7 @@
 #include "../components/coin.hpp"
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
+#include "../components/player.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
@@ -49,6 +50,8 @@ namespace our
         // This should be called every frame to update all entities containing a CoinComponent.
         void update(World *world, float deltaTime)
         {
+            // set seed for random number generator to be the current time
+            srand(time(NULL));
             // Count the number of coins in the world
             int count = 0;
             glm::vec3 playerPosition = glm::vec3(0, 0, 0);
@@ -56,10 +59,9 @@ namespace our
             for (auto entity : world->getEntities())
             {
                 // Get the camera and controller components to get the player position
-                CameraComponent *camera = entity->getComponent<CameraComponent>();
-                FreeCameraControllerComponent *controller = entity->getComponent<FreeCameraControllerComponent>();
-                if (camera && controller)
-                    playerPosition = camera->getOwner()->localTransform.position;
+                PlayerComponent *player = entity->getComponent<PlayerComponent>();
+                if (player)
+                    playerPosition = player->getOwner()->localTransform.position;
             }
 
             // For each entity in the world get the coins
@@ -78,7 +80,7 @@ namespace our
                         printf("Removed Coin was too far\n");
                     }
                     // If the coin is close to the player, remove it and count a point
-                    if (glm::distance(playerPosition, entity->localTransform.position) < 0.5f)
+                    if (glm::distance(playerPosition, entity->localTransform.position) < 1.0f)
                     {
                         world->markForRemoval(entity);
                         printf("Removed Collected Coin\n");
