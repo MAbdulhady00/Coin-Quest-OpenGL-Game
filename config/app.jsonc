@@ -31,6 +31,7 @@
         "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
         "coin": "assets/textures/coin.png",
+        "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png"
       },
       "meshes": {
@@ -39,6 +40,7 @@
         "plane": "assets/models/plane.obj",
         "sphere": "assets/models/sphere.obj",
         "coin": "assets/models/coin.obj",
+        "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj"
       },
       "samplers": {
@@ -163,17 +165,7 @@
     "world": [
       {
         "position": [0, 0, 10],
-        "components": [
-          {
-            "type": "Camera"
-          },
-          {
-            "type": "Free Camera Controller"
-          },
-          {
-            "type": "Player"
-          }
-        ],
+        "components": [],
         "children": [
           {
             "position": [1, -1, -1],
@@ -306,6 +298,43 @@
             "type": "Movement",
             "angularVelocity": [0, 100, 0],
             "linearVelocity": [0, 0, 0.5]
+          }
+        ]
+      },
+      {
+        "position": [0, 1, 0],
+        "rotation": [0, 0, 0],
+        "scale": [0.3, 0.3, 0.3],
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "sphere",
+            "material": "moon"
+          },
+          {
+            "type": "Player"
+          },
+          {
+            "type": "Free Camera Controller"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [-300, 0, 0],
+            "linearVelocity": [0, 0, -3.0]
+          }
+        ]
+      },
+      {
+        "position": [0, 3, 2],
+        "rotation": [-30, 0, 0],
+        "components": [
+          {
+            "type": "Camera"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, 0, 0],
+            "linearVelocity": [0, 0, -3.0]
           }
         ]
       },

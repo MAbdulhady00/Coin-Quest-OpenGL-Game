@@ -29,7 +29,7 @@ uniform vec4 blue = vec4(0.0, 0.0, 1.0, 0.0);
 void main(){
 
     // create a vec4 for each of the color channels
-    // Dot product is defined as: a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
+    // Dot product is defined as: a.x * b.x + a.y * b.y + a.z * b.z
     frag_color.r = dot(red.rgb, fs_in.color) + red.a;
     frag_color.g = dot(green.rgb, fs_in.color) + green.a;
     frag_color.b = dot(blue.rgb, fs_in.color)+ blue.a;
