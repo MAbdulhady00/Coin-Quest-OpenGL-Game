@@ -5,6 +5,7 @@
 #include "mesh-renderer.hpp"
 #include "player.hpp"
 #include "free-camera-controller.hpp"
+#include "player-movement-controller.hpp"
 #include "movement.hpp"
 
 namespace our
@@ -40,6 +41,16 @@ namespace our
         {
             // if the type is "PlayerComponent", then create a new PlayerComponent and return pointer to it
             component = entity->addComponent<PlayerComponent>();
+        }
+        else if (type == PlayerMovementControllerComponent::getID())
+        {
+            // if the type is "PlayerMovementControllerComponent", then create a new PlayerMovementControllerComponent and return pointer to it
+            component = entity->addComponent<PlayerMovementControllerComponent>();
+        }
+        else
+        {
+            // if the type is not recognized, then return
+            return;
         }
         if (component)
             // if the component is not null, then deserialize it

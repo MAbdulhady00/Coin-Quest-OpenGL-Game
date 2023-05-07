@@ -7,6 +7,7 @@
 #include <systems/coin-generator.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
+#include <systems/player-movement-controller.hpp>
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -16,6 +17,7 @@ class Playstate : public our::State
     our::World world;
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
+    our::PlayerMovementControllerSystem playerMovementController;
     our::MovementSystem movementSystem;
     our::CoinGeneratorSystem coinGeneratorSystem;
 
@@ -35,6 +37,7 @@ class Playstate : public our::State
         }
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
+        playerMovementController.enter(getApp());
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
@@ -44,6 +47,7 @@ class Playstate : public our::State
     {
         // Here, we just run a bunch of systems to control the world logic
         coinGeneratorSystem.update(&world, (float)deltaTime);
+        playerMovementController.update(&world, (float)deltaTime);
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
@@ -65,6 +69,7 @@ class Playstate : public our::State
         renderer.destroy();
         // On exit, we call exit for the camera controller system to make sure that the mouse is unlocked
         cameraController.exit();
+        playerMovementController.exit();
         // Clear the world
         world.clear();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
