@@ -8,6 +8,7 @@
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <systems/player-movement-controller.hpp>
+#include <systems/score-system.hpp>
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -20,6 +21,7 @@ class Playstate : public our::State
     our::PlayerMovementControllerSystem playerMovementController;
     our::MovementSystem movementSystem;
     our::CoinGeneratorSystem coinGeneratorSystem;
+    our::ScoreSystem scoreSystem;
 
     void onInitialize() override
     {
@@ -46,6 +48,7 @@ class Playstate : public our::State
     void onDraw(double deltaTime) override
     {
         // Here, we just run a bunch of systems to control the world logic
+        scoreSystem.update(&world, (float)deltaTime);
         coinGeneratorSystem.update(&world, (float)deltaTime);
         playerMovementController.update(&world, (float)deltaTime);
         movementSystem.update(&world, (float)deltaTime);

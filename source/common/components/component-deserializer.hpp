@@ -7,7 +7,7 @@
 #include "free-camera-controller.hpp"
 #include "player-movement-controller.hpp"
 #include "movement.hpp"
-
+#include "score-digit.hpp"
 namespace our
 {
 
@@ -46,6 +46,11 @@ namespace our
         {
             // if the type is "PlayerMovementControllerComponent", then create a new PlayerMovementControllerComponent and return pointer to it
             component = entity->addComponent<PlayerMovementControllerComponent>();
+        }
+        else if (type == ScoreDigitComponent::getID())
+        {
+            // if the type is "ScoreDigitComponent", then create a new ScoreDigitComponent and return pointer to it
+            component = entity->addComponent<ScoreDigitComponent>();
         }
         else
         {

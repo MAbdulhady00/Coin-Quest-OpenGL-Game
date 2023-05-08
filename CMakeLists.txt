@@ -82,6 +82,8 @@ set(COMMON_SOURCES
         source/common/components/player-movement-controller.cpp
         source/common/components/player.hpp
         source/common/components/coin.hpp
+        source/common/components/score-digit.hpp
+        source/common/components/score-digit.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
@@ -89,6 +91,7 @@ set(COMMON_SOURCES
         source/common/systems/movement.hpp
         source/common/systems/player-movement-controller.hpp
         source/common/systems/coin-generator.hpp
+        source/common/systems/score-system.hpp
 )
 
 # Define the directories in which to search for the included headers
