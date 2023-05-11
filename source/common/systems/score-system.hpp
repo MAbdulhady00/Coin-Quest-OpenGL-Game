@@ -12,6 +12,7 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
+#include <imgui_impl/imgui_impl_opengl3.h>
 
 
 namespace our
@@ -66,25 +67,33 @@ namespace our
                 }
             }
             // // Update Score Digits
-            for (auto entity : world->getEntities())
-            {
-                ScoreDigitComponent* scoreDigit = entity->getComponent<ScoreDigitComponent>();
-                if(scoreDigit)
-                {
-                    if (scoreDigit->digit == "hundreds")
-                    {
-                        setScoreDigitTexture(entity->getComponent<MeshRendererComponent>(), currentScore / 100);
-                    }
-                    else if (scoreDigit->digit == "tenths")
-                    {
-                        setScoreDigitTexture(entity->getComponent<MeshRendererComponent>(), (currentScore / 10) % 10);
-                    }
-                    else if (scoreDigit->digit == "units")
-                    {
-                        setScoreDigitTexture(entity->getComponent<MeshRendererComponent>(), currentScore % 10);
-                    }
-                }
-            }
+            // for (auto entity : world->getEntities())
+            // {
+            //     ScoreDigitComponent* scoreDigit = entity->getComponent<ScoreDigitComponent>();
+            //     if(scoreDigit)
+            //     {
+            //         if (scoreDigit->digit == "hundreds")
+            //         {
+            //             setScoreDigitTexture(entity->getComponent<MeshRendererComponent>(), currentScore / 100);
+            //         }
+            //         else if (scoreDigit->digit == "tenths")
+            //         {
+            //             setScoreDigitTexture(entity->getComponent<MeshRendererComponent>(), (currentScore / 10) % 10);
+            //         }
+            //         else if (scoreDigit->digit == "units")
+            //         {
+            //             setScoreDigitTexture(entity->getComponent<MeshRendererComponent>(), currentScore % 10);
+            //         }
+            //     }
+            // }
+
+            
+            // test drawing text using imgui
+            ImGui::GetFont()->Scale = 4.0f;
+            ImGui::PushFont(ImGui::GetFont());
+            ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+            drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(currentScore).c_str());
+            ImGui::PopFont();
             // Delete all the marked entities
             world->deleteMarkedEntities();
 

@@ -33,16 +33,16 @@
         "coin": "assets/textures/coin.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
-        "num_0" : "assets/textures/numbers/0.png",
-        "num_1" : "assets/textures/numbers/1.png",
-        "num_2" : "assets/textures/numbers/2.png",
-        "num_3" : "assets/textures/numbers/3.png",
-        "num_4" : "assets/textures/numbers/4.png",
-        "num_5" : "assets/textures/numbers/5.png",
-        "num_6" : "assets/textures/numbers/6.png",
-        "num_7" : "assets/textures/numbers/7.png",
-        "num_8" : "assets/textures/numbers/8.png",
-        "num_9" : "assets/textures/numbers/9.png"
+        "num_0": "assets/textures/numbers/0.png",
+        "num_1": "assets/textures/numbers/1.png",
+        "num_2": "assets/textures/numbers/2.png",
+        "num_3": "assets/textures/numbers/3.png",
+        "num_4": "assets/textures/numbers/4.png",
+        "num_5": "assets/textures/numbers/5.png",
+        "num_6": "assets/textures/numbers/6.png",
+        "num_7": "assets/textures/numbers/7.png",
+        "num_8": "assets/textures/numbers/8.png",
+        "num_9": "assets/textures/numbers/9.png"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -153,156 +153,6 @@
           },
           "tint": [1, 1, 1, 1],
           "texture": "coin",
-          "sampler": "default"
-        },
-        "score_0": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_0",
-          "sampler": "default"
-        },
-        "score_1": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_1",
-          "sampler": "default"
-        },
-        "score_2": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_2",
-          "sampler": "default"
-        },
-        "score_3": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_3",
-          "sampler": "default"
-        },
-        "score_4": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_4",
-          "sampler": "default"
-        },
-        "score_5": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_5",
-          "sampler": "default"
-        },
-        "score_6": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_6",
-          "sampler": "default"
-        },
-        "score_7": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_7",
-          "sampler": "default"
-        },
-        "score_8": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_8",
-          "sampler": "default"
-        },
-        "score_9": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "num_9",
           "sampler": "default"
         },
         "gem_heart": {
@@ -458,54 +308,6 @@
             "type": "Movement",
             "angularVelocity": [0, 100, 0],
             "linearVelocity": [0, 0, 0.5]
-          }
-        ]
-      },
-      {
-        "position": [-6, 10, -50],
-        "rotation": [0, 0, 0],
-        "scale": [1, 1, 1],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "score"
-          },
-          {
-            "type" : "Score Digit",
-            "digit" : "hundreds"
-          }
-        ]
-      },
-      {
-        "position": [-8, 10, -50],
-        "rotation": [0, 0, 0],
-        "scale": [1, 1, 1],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "score"
-          },
-          {
-            "type" : "Score Digit",
-            "digit" : "tenths"
-          }
-        ]
-      },
-      {
-        "position": [-10, 10, -50],
-        "rotation": [0, 0, 0],
-        "scale": [1, 1, 1],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "score"
-          },
-          {
-            "type" : "Score Digit",
-            "digit" : "units"
           }
         ]
       },
