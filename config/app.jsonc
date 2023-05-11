@@ -26,6 +26,7 @@
       },
       "textures": {
         "moon": "assets/textures/moon.jpg",
+        "ball": "assets/textures/ball.png",
         "grass": "assets/textures/grass_ground_d.jpg",
         "wood": "assets/textures/wood.jpg",
         "glass": "assets/textures/glass-panels.png",
@@ -49,6 +50,7 @@
         "monkey": "assets/models/monkey.obj",
         "plane": "assets/models/plane.obj",
         "sphere": "assets/models/sphere.obj",
+        "ball": "assets/models/ball.obj",
         "coin": "assets/models/coin.obj",
         "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj"
@@ -138,6 +140,21 @@
           },
           "tint": [1, 1, 1, 1],
           "texture": "moon",
+          "sampler": "default"
+        },
+        "ball": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "ball",
           "sampler": "default"
         },
         "coin": {
@@ -314,20 +331,20 @@
       {
         "position": [0, -1, 0],
         "rotation": [0, 0, 0],
-        "scale": [0.3, 0.3, 0.3],
+        "scale": [0.02, 0.02, 0.02],
         "name": "Player",
         "components": [
           {
             "type": "Mesh Renderer",
-            "mesh": "sphere",
-            "material": "moon"
+            "mesh": "ball",
+            "material": "ball"
           },
           {
             "type": "Player"
           },
           {
             "type": "Player Movement Controller",
-            "speedupFactor": 7.0,
+            "speedupFactor": 100.0,
             "maxHorizontalDistance": 4.0
           },
           {
