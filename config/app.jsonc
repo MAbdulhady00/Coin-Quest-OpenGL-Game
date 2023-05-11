@@ -32,6 +32,7 @@
         "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
         "coin": "assets/textures/coin.png",
+        "rock": "assets/textures/rock.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
         "num_0": "assets/textures/numbers/0.png",
@@ -52,6 +53,7 @@
         "sphere": "assets/models/sphere.obj",
         "ball": "assets/models/ball.obj",
         "coin": "assets/models/coin.obj",
+        "obstacle": "assets/models/rock.obj",
         "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj"
       },
@@ -59,6 +61,10 @@
         "default": {},
         "pixelated": {
           "MAG_FILTER": "GL_NEAREST"
+        },
+        "repeated": {
+          "WRAP_S": "GL_REPEAT",
+          "WRAP_T": "GL_REPEAT"
         }
       },
       "materials": {
@@ -110,7 +116,7 @@
           },
           "tint": [1, 1, 1, 1],
           "texture": "grass",
-          "sampler": "default"
+          "sampler": "repeated"
         },
         "monkey": {
           "type": "textured",
@@ -172,6 +178,21 @@
           "texture": "coin",
           "sampler": "default"
         },
+        "obstacle": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "rock",
+          "sampler": "default"
+        },
         "gem_heart": {
           "type": "textured",
           "shader": "textured",
@@ -226,12 +247,13 @@
       {
         "position": [0, -1, 0],
         "rotation": [-90, 0, 0],
-        "scale": [10, 10, 1],
+        "scale": [10000, 10000, 1],
         "components": [
           {
             "type": "Mesh Renderer",
             "mesh": "plane",
-            "material": "grass"
+            "material": "grass",
+            "sampler": {}
           }
         ]
       },

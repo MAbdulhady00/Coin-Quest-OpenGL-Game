@@ -5,10 +5,11 @@
 #include <ecs/world.hpp>
 #include <systems/forward-renderer.hpp>
 #include <systems/coin-generator.hpp>
+#include <systems/obstacle.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <systems/player-movement-controller.hpp>
-#include <systems/score-system.hpp>
+#include <systems/score.hpp>
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -22,6 +23,7 @@ class Playstate : public our::State
     our::MovementSystem movementSystem;
     our::CoinGeneratorSystem coinGeneratorSystem;
     our::ScoreSystem scoreSystem;
+    our::ObstacleSystem obstacleSystem;
 
     void onInitialize() override
     {
@@ -50,6 +52,7 @@ class Playstate : public our::State
         // Here, we just run a bunch of systems to control the world logic
         scoreSystem.update(&world, (float)deltaTime);
         coinGeneratorSystem.update(&world, (float)deltaTime);
+        obstacleSystem.update(&world, (float)deltaTime);
         playerMovementController.update(&world, (float)deltaTime);
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
