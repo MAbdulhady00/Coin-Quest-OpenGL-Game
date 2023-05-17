@@ -7,6 +7,7 @@
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
 #include "../components/player.hpp"
+#include "../components/heart.hpp"
 #include "../components/score-digit.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -79,6 +80,15 @@ namespace our
                     if (glm::distance(playerPosition, entity->localTransform.position) < 1.0f)
                     {
                         currentLives--;
+                    }
+                }
+
+                if (entity->getComponent<HeartComponent>())
+                {
+                    // If the obstacle is close to the player, remove it and count a point
+                    if (glm::distance(playerPosition, entity->localTransform.position) < 1.0f)
+                    {
+                        currentLives++;
                     }
                 }
             }

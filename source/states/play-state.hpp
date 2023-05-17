@@ -10,6 +10,7 @@
 #include <systems/movement.hpp>
 #include <systems/player-movement-controller.hpp>
 #include <systems/score.hpp>
+#include <systems/gems-generator.hpp>
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -24,6 +25,7 @@ class Playstate : public our::State
     our::CoinGeneratorSystem coinGeneratorSystem;
     our::ScoreSystem scoreSystem;
     our::ObstacleSystem obstacleSystem;
+    our::GemsGeneratorSystem gemGeneratorSystem;
 
     void onInitialize() override
     {
@@ -59,6 +61,7 @@ class Playstate : public our::State
         playerMovementController.update(&world, (float)deltaTime);
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
+        gemGeneratorSystem.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
         if (scoreSystem.getLives() <= 0)
