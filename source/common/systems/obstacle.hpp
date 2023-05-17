@@ -12,8 +12,8 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 
-#define MAX_obstacle 25
-#define FAR_VERTICAL_DISTANCE 50
+#define MAX_obstacle 15
+#define FAR_VERTICAL_DISTANCE 250
 #define FAR_HORIZONTAL_DISTANCE 10
 
 namespace our
@@ -21,7 +21,15 @@ namespace our
 
     class ObstacleSystem
     {
+
+    private:
+        static int last_gen;
+
     public:
+        void init()
+        {
+            ObstacleSystem::last_gen = 0;
+        }
         /**
          * @brief Create an obstacle Mesh Component object from json file
          *
@@ -33,22 +41,13 @@ namespace our
             mesh->material = AssetLoader<Material>::get("obstacle");
         }
 
-        // /**
-        //  * @brief Create a obstacle Movement Component object
-        //  *
-        //  * @param movement MovementComponent pointer
-        //  */
-        // void CreateobstacleMovementComponent(MovementComponent *movement)
-        // {
-        //     movement->linearVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
-        //     movement->angularVelocity = glm::radians(glm::vec3(0.0f, 100.0f, 0.0f));
-        // }
-
         // This should be called every frame to update all entities containing an ObstacleComponent.
         void update(World *world, float deltaTime)
         {
-            // set seed for random number generator to be the current time
-            srand(time(NULL));
+            std::random_device rand_dev;
+            std::mt19937 generator(rand_dev());
+            std::uniform_int_distribution<int> distr(last_gen, last_gen + FAR_VERTICAL_DISTANCE);
+
             // Count the number of obstacles in the world
             int count = 0;
             glm::vec3 playerPosition = glm::vec3(0, 0, 0);
@@ -81,8 +80,8 @@ namespace our
                     // If the obstacle is close to the player, remove it and count a point
                     if (glm::distance(playerPosition, entity->localTransform.position) < 1.0f)
                     {
-                        // show game over screen
-                        printf("Game Over\n");
+                        world->markForRemoval(entity);
+                        printf("Removed obstacle collided obstacle\n");
                     }
                 }
             }
@@ -95,9 +94,9 @@ namespace our
                 newObstacle->name = "obstacle";
                 // Random location for the obstacle
                 newObstacle->localTransform.position = glm::vec3(
-                    (float)(rand() % FAR_HORIZONTAL_DISTANCE - FAR_HORIZONTAL_DISTANCE / 2.0),
-                    0.0f,
-                    (float)(rand() % FAR_VERTICAL_DISTANCE * -1) + playerPosition.z);
+                    (float)(distr(generator) % FAR_HORIZONTAL_DISTANCE - FAR_HORIZONTAL_DISTANCE / 2.0),
+                    -0.5f,
+                    (float)(distr(generator) * -1) + playerPosition.z);
                 // print the obstacle position
                 printf("New obstacle Position: %f, %f, %f\n", newObstacle->localTransform.position.x, newObstacle->localTransform.position.y, newObstacle->localTransform.position.z);
                 newObstacle->localTransform.scale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -114,5 +113,6 @@ namespace our
             }
         }
     };
+    int ObstacleSystem::last_gen = 0;
 
 }

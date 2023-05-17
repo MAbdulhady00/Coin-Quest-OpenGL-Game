@@ -15,7 +15,7 @@
 
 #define MAX_COIN 100
 #define FAR_VERTICAL_DISTANCE 250
-#define FAR_HORIZONTAL_DISTANCE 10
+#define FAR_HORIZONTAL_DISTANCE 7
 
 namespace our
 {
@@ -29,6 +29,10 @@ namespace our
         static int last_gen;
 
     public:
+        void init()
+        {
+            CoinGeneratorSystem::last_gen = 0;
+        }
         /**
          * @brief Create a Coin Mesh Component object from json file
          *
@@ -103,7 +107,7 @@ namespace our
                 // Random location for the coin
                 newCoin->localTransform.position = glm::vec3(
                     (float)(distr(generator) % FAR_HORIZONTAL_DISTANCE - FAR_HORIZONTAL_DISTANCE / 2.0),
-                    -1.0f,
+                    -0.75f,
                     (float)(distr(generator) * -1) + playerPosition.z);
                 // print the coin position
                 printf("New Coin Position: %f, %f, %f\n", newCoin->localTransform.position.x, newCoin->localTransform.position.y, newCoin->localTransform.position.z);

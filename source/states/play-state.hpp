@@ -45,6 +45,9 @@ class Playstate : public our::State
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
+        obstacleSystem.init();
+        coinGeneratorSystem.init();
+        scoreSystem.init();
     }
 
     void onDraw(double deltaTime) override
@@ -58,7 +61,10 @@ class Playstate : public our::State
         cameraController.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
-
+        if (scoreSystem.getLives() <= 0)
+        {
+            getApp()->changeState("menu");
+        }
         // Get a reference to the keyboard object
         auto &keyboard = getApp()->getKeyboard();
 
