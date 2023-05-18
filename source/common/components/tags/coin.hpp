@@ -8,11 +8,5 @@ namespace our
     {
     public:
         static std::string getID() { return "CoinTag"; }
-
-        void deserialize(const nlohmann::json &data) override
-        {
-            // No data to deserialize
-            return;
-        }
     };
 }

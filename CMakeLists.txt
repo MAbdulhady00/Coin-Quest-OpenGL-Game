@@ -103,7 +103,7 @@ set(COMMON_SOURCES
         source/common/systems/hud.hpp
         source/common/systems/collision.hpp
         source/common/systems/obstacle.hpp
-        source/common/systems/generator.hpp
+        # source/common/systems/generator.hpp
 )
 
 # Define the directories in which to search for the included headers
@@ -114,7 +114,6 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
-        # vendor/sdl/include
 )
 
 
