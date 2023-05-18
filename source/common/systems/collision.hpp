@@ -15,7 +15,7 @@ namespace our
 
     class CollisionSystem
     {
-        AudioPlayer p;
+        AudioPlayer audioPlayer;
 
         /**
          * This function is called when the player collides with a coin or a heart.
@@ -26,35 +26,32 @@ namespace our
             // If the collided entity is a coin
             if (collidedEntity->getComponent<CoinTagComponent>())
             {
-                p.play("coin");
                 // Increase the score
                 playerComponent->score++;
             }
             // If the collided entity is a heart
             if (collidedEntity->getComponent<HeartTagComponent>())
             {
-                p.play("heart");
                 // Increase the lives
                 playerComponent->lives++;
             }
             // If the collided entity is an obstacle
             if (collidedEntity->getComponent<ObstacleTagComponent>())
             {
-                p.play("hit");
                 // Decrease the lives
                 playerComponent->lives--;
             }
 
+            // play sound effect
+            audioPlayer.play(collidedEntity->getComponent<CollisionComponent>()->soundPath,
+                             collidedEntity->getComponent<CollisionComponent>()->soundName);
             return true;
         }
 
     public:
         void init()
         {
-            p.init();
-            p.load("assets/audio/heart.mp3", "heart");
-            p.load("assets/audio/hit.wav", "hit");
-            p.load("assets/audio/coin.wav", "coin");
+            audioPlayer.init();
         }
         // This should be called every frame to update all entities containing a CollisionComponent.
         void update(World *world, float deltaTime)

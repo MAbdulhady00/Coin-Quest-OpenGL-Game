@@ -10,7 +10,7 @@ private:
 
 public:
     AudioPlayer() {}
-    std::unordered_map<std::string, Mix_Chunk *> sounds;
+    std::unordered_map<int, Mix_Chunk *> sounds;
     void init()
     {
         // Initialize SDL
@@ -34,7 +34,7 @@ public:
             return;
         }
     }
-    void load(std::string path, std::string name)
+    void load(std::string path, int name)
     {
 
         // Load the sound file
@@ -45,9 +45,14 @@ public:
             return;
         }
     }
-    void play(std::string name)
+    void play(std::string path, int name)
     {
-
+        auto it = sounds.find(name);
+        if (it == sounds.end())
+        {
+            // load the sound
+            load(path, name);
+        }
         // Play the sound
         if (Mix_PlayChannel(-1, sounds[name], 0) == -1)
         {

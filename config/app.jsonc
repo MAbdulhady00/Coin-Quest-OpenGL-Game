@@ -39,7 +39,9 @@
           },
           {
             "type": "Collision",
-            "detectionRadius": 1.0
+            "detectionRadius": 1.0,
+            "soundPath": "assets/sounds/coin.wav",
+            "soundName": 0
           }
         ]
       },
@@ -60,7 +62,9 @@
           },
           {
             "type": "Collision",
-            "detectionRadius": 1.0
+            "detectionRadius": 1.0,
+            "soundPath": "assets/sounds/hit.wav",
+            "soundName": 1
           }
         ]
       },
@@ -86,7 +90,9 @@
           },
           {
             "type": "Collision",
-            "detectionRadius": 1.0
+            "detectionRadius": 1.0,
+            "soundPath": "assets/sounds/heart.mp3",
+            "soundName": 2
           }
         ]
       }
@@ -96,9 +102,6 @@
       "postprocess": "assets/shaders/postprocess/vignette.frag"
     },
     "assets": {
-      "audios": {
-        "coin": "assets/audios/coin.wav"
-      },
       "shaders": {
         "tinted": {
           "vs": "assets/shaders/tinted.vert",
