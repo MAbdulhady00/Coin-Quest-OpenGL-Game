@@ -494,8 +494,9 @@
           },
           {
             "type": "Player Movement Controller",
-            "speedupFactor": 100.0,
-            "maxHorizontalDistance": 4.0
+            "speedupFactor": 50.0,
+            "maxHorizontalDistance": 4.0,
+            "jumpSpeed": 7.5
           },
           {
             "type": "Movement",

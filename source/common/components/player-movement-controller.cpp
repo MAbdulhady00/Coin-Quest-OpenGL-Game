@@ -15,5 +15,6 @@ namespace our
         positionSensitivity = data.value("positionSensitivity", positionSensitivity);
         speedupFactor = data.value("speedupFactor", speedupFactor);
         maxHorizontalDistance = data.value("maxHorizontalDistance", maxHorizontalDistance);
+        jumpSpeed = data.value("jumpSpeed", jumpSpeed);
     }
 }
