@@ -14,6 +14,9 @@
       "postprocess": "assets/shaders/postprocess/vignette.frag"
     },
     "assets": {
+      "audios": {
+        "coin": "assets/audios/coin.wav"
+      },
       "shaders": {
         "tinted": {
           "vs": "assets/shaders/tinted.vert",

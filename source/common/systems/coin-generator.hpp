@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../ecs/world.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../components/movement.hpp"
@@ -12,7 +11,7 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <random>
-
+#include <audio/audio.hpp>
 #define MAX_COIN 100
 #define FAR_VERTICAL_DISTANCE 250
 #define FAR_HORIZONTAL_DISTANCE 7

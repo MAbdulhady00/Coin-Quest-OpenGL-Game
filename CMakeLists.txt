@@ -5,7 +5,6 @@ project(GFX-LAB VERSION 0.1.0)          # Here we select the project name and ve
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 # These are the options we select for building GLFW as a library
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)        # Don't build Documentation
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)       # Don't build Tests
@@ -104,6 +103,7 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
+        # vendor/sdl/include
 )
 
 
@@ -124,9 +124,13 @@ set(STATES_SOURCES
         source/states/entity-test-state.hpp
         source/states/renderer-test-state.hpp
 )
+set(CMAKE_PREFIX_PATH "./vendor/sdl")
 
+find_package(SDL2 REQUIRED)
+set(CMAKE_PREFIX_PATH "./vendor/sdl_mixer")
+find_package(SDL2_mixer REQUIRED)
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
-target_link_libraries(GAME_APPLICATION glfw)
+target_link_libraries(GAME_APPLICATION glfw SDL2::SDL2 SDL2::SDL2main SDL2_mixer::SDL2_mixer)
