@@ -3,7 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/player.hpp"
 #include "../components/player-movement-controller.hpp"
-
+#include "../components/movement.hpp"
 #include "../application.hpp"
 
 #include <glm/glm.hpp>
@@ -47,6 +47,8 @@ namespace our
             // Get the entity that we found via getOwner of camera (we could use controller->getOwner())
             Entity *entity = player->getOwner();
 
+            MovementComponent* movement = entity->getComponent<MovementComponent>();
+
             // If the left mouse button is pressed, we lock and hide the mouse. This common in First Person Games.
             if (app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked)
             {
@@ -70,6 +72,9 @@ namespace our
                       right = glm::vec3(matrix * glm::vec4(1, 0, 0, 0));
 
             glm::vec3 current_sensitivity = controller->positionSensitivity;
+
+            float jumpSpeed = controller->jumpSpeed;
+
             // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
             current_sensitivity *= controller->speedupFactor;
 
@@ -82,6 +87,13 @@ namespace our
 
             if (app->getKeyboard().isPressed(GLFW_KEY_A))
                 position -= right * (deltaTime * current_sensitivity.x);
+
+            if(app->getKeyboard().isPressed(GLFW_KEY_W) && movement->linearVelocity.y == 0.0f)
+                movement->linearVelocity.y = jumpSpeed;
+
+            if(app->getKeyboard().isPressed(GLFW_KEY_S) && movement->linearVelocity.y == 0.0f)
+                position.y = 0.0f;
+                
             // clamp x position to -10 and 10
             if (position.x > controller->maxHorizontalDistance)
                 position.x = controller->maxHorizontalDistance;

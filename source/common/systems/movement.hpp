@@ -19,7 +19,7 @@ namespace our
     class MovementSystem
     {
         long long initialTime;
-
+        float lastDeltaTime;
     public:
         // This should be called every frame to update all entities containing a MovementComponent.
         void update(World *world, float deltaTime)
@@ -38,6 +38,12 @@ namespace our
                 {
                     // Change the position and rotation based on the linear & angular velocity and delta time.
                     entity->localTransform.position += deltaTime * movement->linearVelocity;
+                    if(entity->localTransform.position.y > 0 && player)
+                        movement->linearVelocity.y -= 9.8 * (deltaTime * 1.5);
+                    if(entity->localTransform.position.y <= 0 && player){
+                        movement->linearVelocity.y = 0;
+                        entity->localTransform.position.y =0;
+                    }
                     entity->localTransform.rotation += deltaTime * movement->angularVelocity;
                     if (player || camera)
                     {
@@ -45,6 +51,7 @@ namespace our
                     }
                 }
             }
+            lastDeltaTime = deltaTime;
         }
     };
 
