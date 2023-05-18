@@ -91,6 +91,7 @@ set(COMMON_SOURCES
         source/common/components/tags/coin.hpp
         source/common/components/tags/obstacle.hpp
         source/common/components/tags/heart.hpp
+        source/common/components/tags/generated.hpp
 
 
         source/common/systems/forward-renderer.hpp

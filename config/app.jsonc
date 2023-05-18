@@ -11,9 +11,14 @@
   "scene": {
     "generator": {
       "initialGeneration": -10,
+      "generationPlaneOffset": 150,
+      "destructionPlaneOffset": -10,
+      "horizontalDistance": 9,
+      // distance between generated objects in the z-axis
       "generationStep": 3,
+      // rng chance of generating an object
       "generationChance": 0.1,
-      // sum of all the probabilities should sum up to 1
+      // all the probabilities should sum up to 1
       "coinChance": 0.7,
       "obstacleChance": 0.25,
       "heartChance": 0.05,

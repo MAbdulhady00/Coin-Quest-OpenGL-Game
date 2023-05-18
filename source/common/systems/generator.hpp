@@ -8,6 +8,8 @@
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
 #include "../components/player.hpp"
+#include "../components/tags/generated.hpp"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
@@ -107,13 +109,27 @@ namespace our
                     {
                         Entity *generatedEntity = world->add();
                         randomEntityFactory(generatedEntity);
-                        if (generatedEntity->getComponent<ObstacleTagComponent>())
-                            std::cout << "has obstacle component";
                         generatedEntity->localTransform.position = glm::vec3(i, generatedEntity->localTransform.position.y, last_gen);
+                        generatedEntity->addComponent<GeneratedTagComponent>();
                         std::cout << "Generated entity at " << generatedEntity->localTransform.position.x << ", " << generatedEntity->localTransform.position.y << ", " << generatedEntity->localTransform.position.z << std::endl;
                     }
                 }
                 last_gen -= generationStep;
+            }
+
+            // For each generated entity in the world
+            for (auto entity : world->getEntities())
+            {
+                GeneratedTagComponent *generated = entity->getComponent<GeneratedTagComponent>();
+                if (generated)
+                {
+                    // If the entity is behind the player, mark it for removal
+                    if (entity->localTransform.position.z > playerPosition.z - destructionPlaneOffset)
+                    {
+                        world->markForRemoval(entity);
+                        std::cout << "Removed entity at " << entity->localTransform.position.x << ", " << entity->localTransform.position.y << ", " << entity->localTransform.position.z << std::endl;
+                    }
+                }
             }
         }
     };
