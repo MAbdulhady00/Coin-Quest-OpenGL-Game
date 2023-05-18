@@ -85,7 +85,6 @@ set(COMMON_SOURCES
         source/common/components/player.hpp
         source/common/components/score-digit.hpp
         source/common/components/score-digit.cpp
-        source/common/components/celestial.hpp
         source/common/components/collision.hpp
         source/common/components/collision.cpp
         
@@ -103,7 +102,7 @@ set(COMMON_SOURCES
         source/common/systems/hud.hpp
         source/common/systems/collision.hpp
         source/common/systems/obstacle.hpp
-        source/common/systems/generator.hpp
+        # source/common/systems/generator.hpp
 )
 
 # Define the directories in which to search for the included headers
@@ -114,7 +113,6 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
-        # vendor/sdl/include
 )
 
 
@@ -135,13 +133,32 @@ set(STATES_SOURCES
         source/states/entity-test-state.hpp
         source/states/renderer-test-state.hpp
 )
-set(CMAKE_PREFIX_PATH "./vendor/sdl")
 
+# sdl mixer
+set(CMAKE_PREFIX_PATH "./vendor/sdl")
 find_package(SDL2 REQUIRED)
 set(CMAKE_PREFIX_PATH "./vendor/sdl_mixer")
 find_package(SDL2_mixer REQUIRED)
+
+# Specify the DLL we want to copy to the binary folder
+set(DLL_FILES_COPY
+        ${CMAKE_SOURCE_DIR}/vendor/sdl/lib/x64/SDL2.dll
+        ${CMAKE_SOURCE_DIR}/vendor/sdl_mixer/lib/x64/SDL2_mixer.dll
+)
+
+
+
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw SDL2::SDL2 SDL2::SDL2main SDL2_mixer::SDL2_mixer)
+
+# Copy the DLL files to the binary folder during the build process
+foreach(DLL_FILE ${DLL_FILES_COPY})
+    add_custom_command(TARGET GAME_APPLICATION POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${DLL_FILE}"
+            ${PROJECT_SOURCE_DIR}/bin
+    )
+endforeach()
