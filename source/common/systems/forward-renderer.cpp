@@ -208,7 +208,7 @@ namespace our
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // define the max number of lights
-        const int MAX_LIGHT_COUNT = 4;
+        const int MAX_LIGHT_COUNT = 8;
 
         // draw all the opaque commands
         // no need to sort them because of the z-buffer
@@ -225,14 +225,16 @@ namespace our
             command.material->shader->set("VP", VP);
             // set the MVP matrix for the shader
             command.material->shader->set("transform", VP * command.localToWorld);
-
+            // set the light count
+            command.material->shader->set("light_count", static_cast<int>(lights.size()));
+            // set the light properties
             int light_index = 0;
             //add the light effects
             for(auto light: lights){
                 if (!light->enabled)
                     continue;
                 light->position = light->getOwner()->getWorldTranslation();
-                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, 0.0, 0);
+                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, 0.0, 0.0);
                 // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
                 // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
 

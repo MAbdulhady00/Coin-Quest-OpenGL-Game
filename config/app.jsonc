@@ -236,16 +236,15 @@
               }
             ]
           },
-          // Sky Light
           {
             "name": "directional_light",
             "components": [
               {
                 "type": "Light",
                 "typeLight": "directional",
-                "enabled": true,
+                "enabled": false,
                 "direction": [
-                  1,
+                  0,
                   -1,
                   0
                 ],
