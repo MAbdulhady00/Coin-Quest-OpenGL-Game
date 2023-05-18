@@ -6,6 +6,7 @@
 #include "player.hpp"
 #include "free-camera-controller.hpp"
 #include "player-movement-controller.hpp"
+#include "light.hpp"
 #include "movement.hpp"
 #include "score-digit.hpp"
 namespace our
@@ -36,6 +37,10 @@ namespace our
         {
             // if the type is "MeshRendererComponent", then create a new MeshRendererComponent and return pointer to it
             component = entity->addComponent<MeshRendererComponent>();
+        }
+        else if (type == LightComponent::getID())
+        {
+            component = entity->addComponent<LightComponent>();
         }
         else if (type == PlayerComponent::getID())
         {

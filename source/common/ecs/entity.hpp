@@ -26,7 +26,7 @@ namespace our
         Transform localTransform; // The transform of this entity relative to its parent.
 
         World *getWorld() const { return world; } // Returns the world to which this entity belongs
-
+        glm::vec3 getWorldTranslation() const;
         glm::mat4 getLocalToWorldMatrix() const;  // Computes and returns the transformation from the entities local space to the world space
         void deserialize(const nlohmann::json &); // Deserializes the entity data and components from a json object
 

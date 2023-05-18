@@ -3,9 +3,9 @@
 #include "../ecs/world.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../components/movement.hpp"
-#include "../components/coin.hpp"
 #include "../components/player.hpp"
-#include "../components/heart.hpp"
+#include "../components/tags/heart.hpp"
+#include "../components/collision.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -79,7 +79,7 @@ namespace our
             {
 
                 // check if the entity has a CoinComponent
-                if (entity->getComponent<HeartComponent>())
+                if (entity->getComponent<HeartTagComponent>())
                 {
                     count++;
 
@@ -88,12 +88,6 @@ namespace our
                     {
                         world->markForRemoval(entity);
                         printf("Removed Gem was too far\n");
-                    }
-                    // If the coin is close to the player, remove it and count a point
-                    if (glm::distance(playerPosition, entity->localTransform.position) < 1.0f)
-                    {
-                        world->markForRemoval(entity);
-                        printf("Removed Collected Gem\n");
                     }
                 }
             }
@@ -120,7 +114,9 @@ namespace our
                 MovementComponent *movement = newGem->addComponent<MovementComponent>();
                 CreateGemMovementComponent(movement);
                 // add gem component
-                HeartComponent *gem = newGem->addComponent<HeartComponent>();
+                HeartTagComponent *gem = newGem->addComponent<HeartTagComponent>();
+                // add collision component
+                CollisionComponent *collision = newGem->addComponent<CollisionComponent>();
                 count++;
                 last_gen = FAR_VERTICAL_DISTANCE;
             }
