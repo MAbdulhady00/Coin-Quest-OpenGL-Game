@@ -62,6 +62,7 @@ set(COMMON_SOURCES
         source/common/material/material.cpp
 
         source/common/ecs/component.hpp
+        source/common/ecs/tag-component.hpp
         source/common/ecs/transform.hpp
         source/common/ecs/transform.cpp
         source/common/ecs/entity.hpp
@@ -83,10 +84,16 @@ set(COMMON_SOURCES
         source/common/components/player-movement-controller.hpp
         source/common/components/player-movement-controller.cpp
         source/common/components/player.hpp
-        source/common/components/coin.hpp
-        source/common/components/obstacle.hpp
         source/common/components/score-digit.hpp
         source/common/components/score-digit.cpp
+        source/common/components/celestial.hpp
+        source/common/components/collision.hpp
+        source/common/components/collision.cpp
+        
+        source/common/components/tags/coin.hpp
+        source/common/components/tags/obstacle.hpp
+        source/common/components/tags/heart.hpp
+
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
@@ -94,8 +101,10 @@ set(COMMON_SOURCES
         source/common/systems/movement.hpp
         source/common/systems/player-movement-controller.hpp
         source/common/systems/coin-generator.hpp
+        source/common/systems/hud.hpp
+        source/common/systems/collision.hpp
         source/common/systems/obstacle.hpp
-        source/common/systems/score.hpp
+        source/common/systems/generator.hpp
 )
 
 # Define the directories in which to search for the included headers

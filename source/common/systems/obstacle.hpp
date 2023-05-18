@@ -3,10 +3,12 @@
 #include "../ecs/world.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../components/movement.hpp"
-#include "../components/obstacle.hpp"
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
 #include "../components/player.hpp"
+#include "../components/tags/obstacle.hpp"
+#include "../components/collision.hpp"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
@@ -67,7 +69,7 @@ namespace our
             for (auto entity : world->getEntities())
             {
                 // check if the entity has an obstacleComponent
-                if (entity->getComponent<ObstacleComponent>())
+                if (entity->getComponent<ObstacleTagComponent>())
                 {
                     count++;
 
@@ -108,7 +110,8 @@ namespace our
                 MovementComponent *movement = newObstacle->addComponent<MovementComponent>();
                 // CreateObstacleMovementComponent(movement);
                 // add obstacle component
-                ObstacleComponent *obstacle = newObstacle->addComponent<ObstacleComponent>();
+                ObstacleTagComponent *obstacle = newObstacle->addComponent<ObstacleTagComponent>(); // add collision component
+                CollisionComponent *collision = newObstacle->addComponent<CollisionComponent>();
                 count++;
             }
         }
