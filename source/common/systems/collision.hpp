@@ -26,6 +26,7 @@ namespace our
             // If the collided entity is a coin
             if (collidedEntity->getComponent<CoinTagComponent>())
             {
+                p.play("coin");
                 // Increase the score
                 playerComponent->score++;
             }
@@ -53,6 +54,7 @@ namespace our
             p.init();
             p.load("assets/audio/heart.mp3", "heart");
             p.load("assets/audio/hit.wav", "hit");
+            p.load("assets/audio/coin.wav", "coin");
         }
         // This should be called every frame to update all entities containing a CollisionComponent.
         void update(World *world, float deltaTime)

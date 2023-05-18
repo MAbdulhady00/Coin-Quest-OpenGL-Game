@@ -4,13 +4,10 @@
 
 #include <ecs/world.hpp>
 #include <systems/forward-renderer.hpp>
-#include <systems/coin-generator.hpp>
-#include <systems/obstacle.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <systems/player-movement-controller.hpp>
 #include <systems/hud.hpp>
-#include <systems/gems-generator.hpp>
 #include <systems/collision.hpp>
 #include <systems/generator.hpp>
 
