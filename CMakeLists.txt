@@ -98,11 +98,9 @@ set(COMMON_SOURCES
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
         source/common/systems/player-movement-controller.hpp
-        source/common/systems/coin-generator.hpp
         source/common/systems/hud.hpp
         source/common/systems/collision.hpp
-        source/common/systems/obstacle.hpp
-        # source/common/systems/generator.hpp
+        source/common/systems/generator.hpp
 )
 
 # Define the directories in which to search for the included headers
@@ -135,9 +133,9 @@ set(STATES_SOURCES
 )
 
 # sdl mixer
-set(CMAKE_PREFIX_PATH "./vendor/sdl")
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/vendor/sdl)
 find_package(SDL2 REQUIRED)
-set(CMAKE_PREFIX_PATH "./vendor/sdl_mixer")
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/vendor/sdl_mixer)
 find_package(SDL2_mixer REQUIRED)
 
 # Specify the DLL we want to copy to the binary folder

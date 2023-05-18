@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <unordered_map>
+#include <iostream>
 class AudioPlayer
 {
 private:
@@ -23,6 +24,13 @@ public:
         if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
         {
             std::cout << "SDL Mixer initialization failed: " << Mix_GetError() << std::endl;
+            return;
+        }
+
+        // set volume
+        if (Mix_Volume(-1, 64) < 0)
+        {
+            std::cout << "SDL Mixer volume set failed: " << Mix_GetError() << std::endl;
             return;
         }
     }
