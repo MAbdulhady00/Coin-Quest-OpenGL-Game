@@ -11,6 +11,7 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
+#include <time.h>
 
 #define MAX_COIN 25
 #define FAR_VERTICAL_DISTANCE 50

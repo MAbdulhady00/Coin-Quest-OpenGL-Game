@@ -128,6 +128,7 @@ namespace our
         CameraComponent *camera = nullptr;
         opaqueCommands.clear();
         transparentCommands.clear();
+
         for (auto entity : world->getEntities())
         {
             // If we hadn't found a camera yet, we look for a camera in this entity
@@ -152,6 +153,20 @@ namespace our
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
+            }
+            auto light = entity->getComponent<LightComponent>();
+            if (light && light->enabled)
+            {
+                if (light->typeLight == LightType::SKY)
+                {
+                    auto litShader = AssetLoader<ShaderProgram>::get("light");
+                    litShader->use();
+                    litShader->set("sky.top", light->sky_light.top_color);
+                    litShader->set("sky.middle", light->sky_light.middle_color);
+                    litShader->set("sky.bottom", light->sky_light.bottom_color);
+                }
+                else
+                    lights.push_back(light);
             }
         }
 
@@ -192,6 +207,9 @@ namespace our
         // clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // define the max number of lights
+        const int MAX_LIGHT_COUNT = 4;
+
         // draw all the opaque commands
         // no need to sort them because of the z-buffer
         for (auto &command : opaqueCommands)
@@ -199,6 +217,51 @@ namespace our
             command.material->setup();
             // set the MVP matrix for the shader
             command.material->shader->set("transform", VP * command.localToWorld);
+
+            int light_index = 0;
+            //add the light effects
+            for(auto light: lights){
+                if (!light->enabled)
+                    continue;
+                light->position = light->getOwner()->getWorldTranslation();
+                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, 0.0, 0);
+                // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
+                // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
+
+                std::string prefix = "lights[" + std::to_string(light_index) + "].";
+
+                command.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
+                switch (light->typeLight)
+                {
+                case LightType::DIRECTIONAL:
+                    command.material->shader->set(prefix + "direction", light->direction);
+                    command.material->shader->set(prefix + "diffuse", light->diffuse);
+                    command.material->shader->set(prefix + "specular", light->specular);
+                    break;
+                case LightType::POINT:
+                    command.material->shader->set(prefix + "position", light->position);
+                    command.material->shader->set(prefix + "diffuse", light->diffuse);
+                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
+                                                                                          light->attenuation.linear, light->attenuation.constant));
+                    break;
+                case LightType::SPOT:
+                    command.material->shader->set(prefix + "position", light->position);
+                    command.material->shader->set(prefix + "direction", light->direction);
+                    command.material->shader->set(prefix + "diffuse", light->diffuse);
+                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
+                                                                                          light->attenuation.linear, light->attenuation.constant));
+                    command.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
+                    break;
+                case LightType::SKY:
+                    break;
+                }
+                light_index++;
+                if (light_index >= MAX_LIGHT_COUNT)
+                    break;
+            }
+
             command.mesh->draw();
         }
 
