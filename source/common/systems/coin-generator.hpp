@@ -12,7 +12,6 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <random>
-#include <audio/audio.hpp>
 #include <time.h>
 
 #define MAX_COIN 100
