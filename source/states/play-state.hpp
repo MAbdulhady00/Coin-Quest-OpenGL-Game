@@ -55,6 +55,7 @@ class Playstate : public our::State
         renderer.initialize(size, config["renderer"]);
         // We initialize the generator system
         generatorSystem.initialize(config.value("generator", nlohmann::json()));
+        collisionSystem.init();
     }
 
     void onDraw(double deltaTime) override

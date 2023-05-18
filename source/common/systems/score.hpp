@@ -22,14 +22,12 @@ namespace our
     {
         int currentScore = 0;
         int currentLives = 3;
-        AudioPlayer p;
 
     public:
         void init()
         {
             currentScore = 0;
             currentLives = 3;
-            p.load("assets/audio/coin.wav");
         }
         void setScoreDigitTexture(MeshRendererComponent *Component, int score)
         {
@@ -71,7 +69,6 @@ namespace our
                     // If the coin is close to the player, remove it and count a point
                     if (glm::distance(playerPosition, entity->localTransform.position) < 1.0f)
                     {
-                        p.play();
                         world->markForRemoval(entity);
                         currentScore++;
                         printf("Current Score : %d\n", currentScore);
