@@ -180,8 +180,8 @@ namespace our
         // this is done to prevent the transparent objects from being drawn in the wrong order
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand &first, const RenderCommand &second)
                   { 
-        // get the distance from the camera to the center of the first and second commands
-        return glm::dot(first.center, cameraForward) < glm::dot(second.center, cameraForward); });
+            // get the distance from the camera to the center of the first and second commands
+            return glm::dot(first.center, cameraForward) < glm::dot(second.center, cameraForward); });
 
         // get the camera view projection matrix
         glm::mat4 VP = camera->getProjectionMatrix(windowSize) * camera->getViewMatrix();
@@ -215,6 +215,14 @@ namespace our
         for (auto &command : opaqueCommands)
         {
             command.material->setup();
+            //set the camera position
+            command.material->shader->set("camera_position", cameraForward);
+            //set the M matrix for the shader
+            command.material->shader->set("M", command.localToWorld);
+            //set the M_IT matrix for the shader
+            command.material->shader->set("M_IT", glm::transpose(glm::inverse(command.localToWorld)));
+            //set the VP matrix for the shader
+            command.material->shader->set("VP", VP);
             // set the MVP matrix for the shader
             command.material->shader->set("transform", VP * command.localToWorld);
 

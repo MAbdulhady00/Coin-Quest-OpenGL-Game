@@ -173,7 +173,7 @@
           "sampler": "default"
         },
         "coin": {
-          "type": "textured",
+          "type": "lighted",
           "shader": "light",
           "pipelineState": {
             "faceCulling": {
@@ -236,69 +236,34 @@
               }
             ]
           },
+          // Sky Light
           {
-            "type": "Light",
-            "typeLight": "spot",
-            "enabled": true,
-            "direction": [
-                0,
-                -1,
-                0
-            ],
-            "position": [
-                0,
-                0,
-                1
-            ],
-            "diffuse": [
-                0,
-                0,
-                10.0
-            ],
-            "specular": [
-                0,
-                0,
-                10.0
-            ],
-            "attenuation": {
-                "quadratic": 0.0,
-                "linear": 0.0,
-                "constant": 1.0
-            },
-            "spot_angle": {
-                "inner": 0.0,
-                "outer": 0.5
-            }
+            "name": "directional_light",
+            "components": [
+              {
+                "type": "Light",
+                "typeLight": "directional",
+                "enabled": true,
+                "direction": [
+                  1,
+                  -1,
+                  0
+                ],
+                "diffuse": [
+                  0,
+                  0,
+                  10.0
+                ],
+                "specular": [
+                  0,
+                  0,
+                  10.0
+                ]
+                
+              }
+            ]
           }
         ]
-      },
-      // Sky Light
-      {
-          "name": "sky_light",
-          "components": [
-              {
-                  "type": "Light",
-                  "typeLight": "sky",
-                  "enabled": true,
-                  "sky_light": {
-                      "top_color": [
-                          5,
-                          0,
-                          0
-                      ],
-                      "middle_color": [
-                          2.5,
-                          0,
-                          2.5
-                      ],
-                      "bottom_color": [
-                          0,
-                          0,
-                          5
-                      ]
-                  }
-              }
-          ]
       },
       {
         "rotation": [-45, 0, 0],

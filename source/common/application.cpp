@@ -297,6 +297,8 @@ std:
         keyboard.setEnabled(!io.WantCaptureKeyboard, window);
         mouse.setEnabled(!io.WantCaptureMouse, window);
 
+        // Render the ImGui commands we called (this doesn't actually draw to the screen yet.
+        ImGui::Render();
 
         // Just in case ImGui changed the OpenGL viewport (the portion of the window to which we render the geometry),
         // we set it back to cover the whole window
@@ -311,10 +313,6 @@ std:
             currentState->onDraw(current_frame_time - last_frame_time);
         last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
 
-        // Render the ImGui commands we called (this doesn't actually draw to the screen yet.
-        // We call render later in case we want to draw the ImGui on top of geometry)
-        ImGui::Render();
-        
 #if defined(ENABLE_OPENGL_DEBUG_MESSAGES)
         // Since ImGui causes many messages to be thrown, we are temporarily disabling the debug messages till we render the ImGui
         glDisable(GL_DEBUG_OUTPUT);
