@@ -7,7 +7,7 @@
 #include "../components/tags/coin.hpp"
 #include "../components/tags/heart.hpp"
 #include "../components/tags/obstacle.hpp"
-
+#include <audio/audio.hpp>
 #include <glm/glm.hpp>
 
 namespace our
@@ -15,6 +15,8 @@ namespace our
 
     class CollisionSystem
     {
+        AudioPlayer p;
+
         /**
          * This function is called when the player collides with a coin or a heart.
          * It returns true if the collided entity should be destroyed.
@@ -30,12 +32,14 @@ namespace our
             // If the collided entity is a heart
             if (collidedEntity->getComponent<HeartTagComponent>())
             {
+                p.play("heart");
                 // Increase the lives
                 playerComponent->lives++;
             }
             // If the collided entity is an obstacle
             if (collidedEntity->getComponent<ObstacleTagComponent>())
             {
+                p.play("hit");
                 // Decrease the lives
                 playerComponent->lives--;
             }
@@ -44,6 +48,12 @@ namespace our
         }
 
     public:
+        void init()
+        {
+            p.init();
+            p.load("assets/audio/heart.mp3", "heart");
+            p.load("assets/audio/hit.wav", "hit");
+        }
         // This should be called every frame to update all entities containing a CollisionComponent.
         void update(World *world, float deltaTime)
         {

@@ -52,6 +52,7 @@ class Playstate : public our::State
         renderer.initialize(size, config["renderer"]);
         obstacleSystem.init();
         coinGeneratorSystem.init();
+        collisionSystem.init();
     }
 
     void onDraw(double deltaTime) override
