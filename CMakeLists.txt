@@ -80,11 +80,22 @@ set(COMMON_SOURCES
         source/common/components/movement.hpp
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
+        source/common/components/player-movement-controller.hpp
+        source/common/components/player-movement-controller.cpp
+        source/common/components/player.hpp
+        source/common/components/coin.hpp
+        source/common/components/obstacle.hpp
+        source/common/components/score-digit.hpp
+        source/common/components/score-digit.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
+        source/common/systems/player-movement-controller.hpp
+        source/common/systems/coin-generator.hpp
+        source/common/systems/obstacle.hpp
+        source/common/systems/score.hpp
 )
 
 # Define the directories in which to search for the included headers

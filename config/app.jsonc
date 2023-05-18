@@ -30,12 +30,25 @@
       },
       "textures": {
         "moon": "assets/textures/moon.jpg",
+        "ball": "assets/textures/ball.png",
         "grass": "assets/textures/grass_ground_d.jpg",
         "wood": "assets/textures/wood.jpg",
         "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
         "coin": "assets/textures/coin.png",
+        "rock": "assets/textures/rock.png",
+        "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
+        "num_0": "assets/textures/numbers/0.png",
+        "num_1": "assets/textures/numbers/1.png",
+        "num_2": "assets/textures/numbers/2.png",
+        "num_3": "assets/textures/numbers/3.png",
+        "num_4": "assets/textures/numbers/4.png",
+        "num_5": "assets/textures/numbers/5.png",
+        "num_6": "assets/textures/numbers/6.png",
+        "num_7": "assets/textures/numbers/7.png",
+        "num_8": "assets/textures/numbers/8.png",
+        "num_9": "assets/textures/numbers/9.png",
         "albedo": "assets/textures/albedo.jpg",
         "emissive": "assets/textures/emissive.jpg",
         "roughness": "assets/textures/roughness.jpg",
@@ -47,13 +60,20 @@
         "monkey": "assets/models/monkey.obj",
         "plane": "assets/models/plane.obj",
         "sphere": "assets/models/sphere.obj",
+        "ball": "assets/models/ball.obj",
         "coin": "assets/models/coin.obj",
+        "obstacle": "assets/models/rock.obj",
+        "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj"
       },
       "samplers": {
         "default": {},
         "pixelated": {
           "MAG_FILTER": "GL_NEAREST"
+        },
+        "repeated": {
+          "WRAP_S": "GL_REPEAT",
+          "WRAP_T": "GL_REPEAT"
         }
       },
       "materials": {
@@ -105,7 +125,7 @@
           },
           "tint": [1, 1, 1, 1],
           "texture": "grass",
-          "sampler": "default"
+          "sampler": "repeated"
         },
         "monkey": {
           "type": "textured",
@@ -123,42 +143,34 @@
           "sampler": "default"
         },
         "moon": {
-          // "type": "textured",
-          // "shader": "textured",
-          // "pipelineState": {
-          //   "faceCulling": {
-          //     "enabled": false
-          //   },
-          //   "depthTesting": {
-          //     "enabled": true
-          //   }
-          // },
-          // "tint": [1, 1, 1, 1],
-          // "texture": "moon",
-          // "sampler": "default"
-          "type": "lighted", // in the materials.hpp file
+          "type": "textured",
           "shader": "textured",
           "pipelineState": {
-              "faceCulling": {
-                  "enabled": false
-              },
-              "depthTesting": {
-                  "enabled": true
-              }
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
           },
-          "tint": [
-              1,
-              1,
-              1,
-              1
-          ],
-          "texture":"moon",
-          "sampler": "default",
-          "albedo": "albedo",
-          "emissive": "emissive",
-          "roughness": "roughness",
-          "specular": "specular",
-          "ambient_occlusion": "ambient_occlusion"
+          "tint": [1, 1, 1, 1],
+          "texture": "moon",
+          "sampler": "default"
+        },
+        "ball": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "ball",
+          "sampler": "default"
         },
         "coin": {
           "type": "textured",
@@ -173,6 +185,21 @@
           },
           "tint": [1, 1, 1, 1],
           "texture": "coin",
+          "sampler": "default"
+        },
+        "obstacle": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "rock",
           "sampler": "default"
         },
         "gem_heart": {
@@ -195,17 +222,7 @@
     "world": [
       {
         "position": [0, 0, 10],
-        "components": [
-          {
-            "type": "Camera"
-          },
-          {
-            "type": "Free Camera Controller"
-          },
-          {
-            "type": "Player"
-          }
-        ],
+        "components": [],
         "children": [
           {
             "position": [1, -1, -1],
@@ -301,12 +318,13 @@
       {
         "position": [0, -1, 0],
         "rotation": [-90, 0, 0],
-        "scale": [10, 10, 1],
+        "scale": [10000, 10000, 1],
         "components": [
           {
             "type": "Mesh Renderer",
             "mesh": "plane",
-            "material": "grass"
+            "material": "grass",
+            "sampler": {}
           }
         ]
       },
@@ -400,6 +418,46 @@
             "type": "Movement",
             "angularVelocity": [0, 100, 0],
             "linearVelocity": [0, 0, 0.5]
+          }
+        ]
+      },
+      {
+        "position": [0, -1, 0],
+        "rotation": [0, 0, 0],
+        "scale": [0.02, 0.02, 0.02],
+        "name": "Player",
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "ball",
+            "material": "ball"
+          },
+          {
+            "type": "Player"
+          },
+          {
+            "type": "Player Movement Controller",
+            "speedupFactor": 100.0,
+            "maxHorizontalDistance": 4.0
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [-500, 0, 0],
+            "linearVelocity": [0, 0, -5.0]
+          }
+        ]
+      },
+      {
+        "position": [0, 3, 2],
+        "rotation": [-30, 0, 0],
+        "components": [
+          {
+            "type": "Camera"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, 0, 0],
+            "linearVelocity": [0, 0, -5.0]
           }
         ]
       },

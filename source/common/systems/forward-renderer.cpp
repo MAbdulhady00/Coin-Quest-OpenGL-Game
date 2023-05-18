@@ -180,8 +180,8 @@ namespace our
         // this is done to prevent the transparent objects from being drawn in the wrong order
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand &first, const RenderCommand &second)
                   { 
-            // get the distance from the camera to the center of the first and second commands
-            return glm::dot(first.center, cameraForward) < glm::dot(second.center, cameraForward); });
+        // get the distance from the camera to the center of the first and second commands
+        return glm::dot(first.center, cameraForward) < glm::dot(second.center, cameraForward); });
 
         // get the camera view projection matrix
         glm::mat4 VP = camera->getProjectionMatrix(windowSize) * camera->getViewMatrix();
