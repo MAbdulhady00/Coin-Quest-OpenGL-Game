@@ -5,7 +5,6 @@ project(GFX-LAB VERSION 0.1.0)          # Here we select the project name and ve
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 # These are the options we select for building GLFW as a library
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)        # Don't build Documentation
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)       # Don't build Tests
@@ -62,6 +61,7 @@ set(COMMON_SOURCES
         source/common/material/material.cpp
 
         source/common/ecs/component.hpp
+        source/common/ecs/tag-component.hpp
         source/common/ecs/transform.hpp
         source/common/ecs/transform.cpp
         source/common/ecs/entity.hpp
@@ -71,6 +71,8 @@ set(COMMON_SOURCES
 
         source/common/components/camera.hpp
         source/common/components/camera.cpp
+        source/common/components/light.hpp
+        source/common/components/light.cpp
         source/common/components/mesh-renderer.hpp
         source/common/components/mesh-renderer.cpp
         source/common/components/free-camera-controller.hpp
@@ -81,10 +83,15 @@ set(COMMON_SOURCES
         source/common/components/player-movement-controller.hpp
         source/common/components/player-movement-controller.cpp
         source/common/components/player.hpp
-        source/common/components/coin.hpp
-        source/common/components/obstacle.hpp
         source/common/components/score-digit.hpp
         source/common/components/score-digit.cpp
+        source/common/components/collision.hpp
+        source/common/components/collision.cpp
+        
+        source/common/components/tags/coin.hpp
+        source/common/components/tags/obstacle.hpp
+        source/common/components/tags/heart.hpp
+
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
@@ -92,8 +99,10 @@ set(COMMON_SOURCES
         source/common/systems/movement.hpp
         source/common/systems/player-movement-controller.hpp
         source/common/systems/coin-generator.hpp
+        source/common/systems/hud.hpp
+        source/common/systems/collision.hpp
         source/common/systems/obstacle.hpp
-        source/common/systems/score.hpp
+        # source/common/systems/generator.hpp
 )
 
 # Define the directories in which to search for the included headers
@@ -125,8 +134,31 @@ set(STATES_SOURCES
         source/states/renderer-test-state.hpp
 )
 
+# sdl mixer
+set(CMAKE_PREFIX_PATH "./vendor/sdl")
+find_package(SDL2 REQUIRED)
+set(CMAKE_PREFIX_PATH "./vendor/sdl_mixer")
+find_package(SDL2_mixer REQUIRED)
+
+# Specify the DLL we want to copy to the binary folder
+set(DLL_FILES_COPY
+        ${CMAKE_SOURCE_DIR}/vendor/sdl/lib/x64/SDL2.dll
+        ${CMAKE_SOURCE_DIR}/vendor/sdl_mixer/lib/x64/SDL2_mixer.dll
+)
+
+
+
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
-target_link_libraries(GAME_APPLICATION glfw)
+target_link_libraries(GAME_APPLICATION glfw SDL2::SDL2 SDL2::SDL2main SDL2_mixer::SDL2_mixer)
+
+# Copy the DLL files to the binary folder during the build process
+foreach(DLL_FILE ${DLL_FILES_COPY})
+    add_custom_command(TARGET GAME_APPLICATION POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${DLL_FILE}"
+            ${PROJECT_SOURCE_DIR}/bin
+    )
+endforeach()

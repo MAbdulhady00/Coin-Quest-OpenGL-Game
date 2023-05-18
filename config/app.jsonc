@@ -9,11 +9,96 @@
     "fullscreen": false
   },
   "scene": {
+    "generator": {
+      "initialGeneration": -10,
+      "generationStep": 3,
+      "generationChance": 0.1,
+      // sum of all the probabilities should sum up to 1
+      "coinChance": 0.7,
+      "obstacleChance": 0.25,
+      "heartChance": 0.05,
+      // generated coin
+      "coin": {
+        "name": "Coin",
+        "position": [0, -0.5, 0],
+        "rotation": [0, 0, 0],
+        "scale": [0.1, 0.1, 0.1],
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "coin",
+            "material": "coin"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, 100, 0],
+            "linearVelocity": [0, 0, 0.5]
+          },
+          {
+            "type": "CoinTag"
+          },
+          {
+            "type": "Collision",
+            "detectionRadius": 1.0
+          }
+        ]
+      },
+      // generated obstacle
+      "obstacle": {
+        "name": "Obstacle",
+        "position": [0, -0.5, 0],
+        "rotation": [0, 0, 0],
+        "scale": [1, 1, 1],
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "rock",
+            "material": "rock"
+          },
+          {
+            "type": "ObstacleTag"
+          },
+          {
+            "type": "Collision",
+            "detectionRadius": 1.0
+          }
+        ]
+      },
+      // generated heart
+      "heart": {
+        "name": "Heart",
+        "position": [0, -0.5, 0],
+        "rotation": [0, 0, 0],
+        "scale": [0.01, 0.01, 0.01],
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "gem_heart",
+            "material": "gem_heart"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, 100, 0],
+            "linearVelocity": [0.15, 0, 0.5]
+          },
+          {
+            "type": "HeartTag"
+          },
+          {
+            "type": "Collision",
+            "detectionRadius": 1.0
+          }
+        ]
+      }
+    },
     "renderer": {
       "sky": "assets/textures/sky.jpg",
       "postprocess": "assets/shaders/postprocess/vignette.frag"
     },
     "assets": {
+      "audios": {
+        "coin": "assets/audios/coin.wav"
+      },
       "shaders": {
         "tinted": {
           "vs": "assets/shaders/tinted.vert",
@@ -22,6 +107,10 @@
         "textured": {
           "vs": "assets/shaders/textured.vert",
           "fs": "assets/shaders/textured.frag"
+        },
+        "light": {
+          "vs": "assets/shaders/light.vert",
+          "fs": "assets/shaders/light.frag"
         }
       },
       "textures": {
@@ -44,7 +133,12 @@
         "num_6": "assets/textures/numbers/6.png",
         "num_7": "assets/textures/numbers/7.png",
         "num_8": "assets/textures/numbers/8.png",
-        "num_9": "assets/textures/numbers/9.png"
+        "num_9": "assets/textures/numbers/9.png",
+        "albedo": "assets/textures/albedo.jpg",
+        "emissive": "assets/textures/emissive.jpg",
+        "roughness": "assets/textures/roughness.jpg",
+        "specular": "assets/textures/specular.jpg",
+        "ambient_occlusion": "assets/textures/ambient_occlusion.jpg"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -53,7 +147,7 @@
         "sphere": "assets/models/sphere.obj",
         "ball": "assets/models/ball.obj",
         "coin": "assets/models/coin.obj",
-        "obstacle": "assets/models/rock.obj",
+        "rock": "assets/models/rock.obj",
         "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj"
       },
@@ -178,7 +272,7 @@
           "texture": "coin",
           "sampler": "default"
         },
-        "obstacle": {
+        "rock": {
           "type": "textured",
           "shader": "textured",
           "pipelineState": {
@@ -226,6 +320,40 @@
                 "material": "metal"
               }
             ]
+          },
+          {
+            "type": "Light",
+            "typeLight": "spot",
+            "enabled": true,
+            "direction": [0, -1, 0],
+            "position": [0, 0, 1],
+            "diffuse": [0, 0, 10.0],
+            "specular": [0, 0, 10.0],
+            "attenuation": {
+              "quadratic": 0.0,
+              "linear": 0.0,
+              "constant": 1.0
+            },
+            "spot_angle": {
+              "inner": 0.0,
+              "outer": 0.5
+            }
+          }
+        ]
+      },
+      // Sky Light
+      {
+        "name": "sky_light",
+        "components": [
+          {
+            "type": "Light",
+            "typeLight": "sky",
+            "enabled": true,
+            "sky_light": {
+              "top_color": [5, 0, 0],
+              "middle_color": [2.5, 0, 2.5],
+              "bottom_color": [0, 0, 5]
+            }
           }
         ]
       },
@@ -247,7 +375,7 @@
       {
         "position": [0, -1, 0],
         "rotation": [-90, 0, 0],
-        "scale": [10000, 10000, 1],
+        "scale": [10, 10000, 1],
         "components": [
           {
             "type": "Mesh Renderer",

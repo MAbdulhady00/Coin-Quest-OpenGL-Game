@@ -6,8 +6,14 @@
 #include "player.hpp"
 #include "free-camera-controller.hpp"
 #include "player-movement-controller.hpp"
+#include "light.hpp"
 #include "movement.hpp"
 #include "score-digit.hpp"
+#include "collision.hpp"
+#include "tags/coin.hpp"
+#include "tags/obstacle.hpp"
+#include "tags/heart.hpp"
+
 namespace our
 {
 
@@ -37,6 +43,10 @@ namespace our
             // if the type is "MeshRendererComponent", then create a new MeshRendererComponent and return pointer to it
             component = entity->addComponent<MeshRendererComponent>();
         }
+        else if (type == LightComponent::getID())
+        {
+            component = entity->addComponent<LightComponent>();
+        }
         else if (type == PlayerComponent::getID())
         {
             // if the type is "PlayerComponent", then create a new PlayerComponent and return pointer to it
@@ -51,6 +61,26 @@ namespace our
         {
             // if the type is "ScoreDigitComponent", then create a new ScoreDigitComponent and return pointer to it
             component = entity->addComponent<ScoreDigitComponent>();
+        }
+        else if (type == CoinTagComponent::getID())
+        {
+            // if the type is "CoinTagComponent", then create a new CoinTagComponent and return pointer to it
+            component = entity->addComponent<CoinTagComponent>();
+        }
+        else if (type == ObstacleTagComponent::getID())
+        {
+            // if the type is "ObstacleTagComponent", then create a new ObstacleTagComponent and return pointer to it
+            component = entity->addComponent<ObstacleTagComponent>();
+        }
+        else if (type == HeartTagComponent::getID())
+        {
+            // if the type is "HeartTagComponent", then create a new HeartTagComponent and return pointer to it
+            component = entity->addComponent<HeartTagComponent>();
+        }
+        else if (type == CollisionComponent::getID())
+        {
+            // if the type is "CollisionComponent", then create a new CollisionComponent and return pointer to it
+            component = entity->addComponent<CollisionComponent>();
         }
         else
         {

@@ -9,8 +9,12 @@
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <systems/player-movement-controller.hpp>
-#include <systems/score.hpp>
+#include <systems/hud.hpp>
 #include <systems/gems-generator.hpp>
+#include <systems/collision.hpp>
+#include <systems/generator.hpp>
+
+#include "../common/components/player.hpp"
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -22,10 +26,12 @@ class Playstate : public our::State
     our::FreeCameraControllerSystem cameraController;
     our::PlayerMovementControllerSystem playerMovementController;
     our::MovementSystem movementSystem;
-    our::CoinGeneratorSystem coinGeneratorSystem;
-    our::ScoreSystem scoreSystem;
-    our::ObstacleSystem obstacleSystem;
-    our::GemsGeneratorSystem gemGeneratorSystem;
+    // our::CoinGeneratorSystem coinGeneratorSystem;
+    our::HUDSystem hudSystem;
+    // our::ObstacleSystem obstacleSystem;
+    // our::GemsGeneratorSystem gemGeneratorSystem;
+    our::CollisionSystem collisionSystem;
+    our::GeneratorSystem generatorSystem;
 
     void onInitialize() override
     {
@@ -47,27 +53,37 @@ class Playstate : public our::State
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
-        obstacleSystem.init();
-        coinGeneratorSystem.init();
-        scoreSystem.init();
+        // We initialize the generator system
+        generatorSystem.initialize(config.value("generator", nlohmann::json()));
+        collisionSystem.init();
     }
 
     void onDraw(double deltaTime) override
     {
         // Here, we just run a bunch of systems to control the world logic
-        scoreSystem.update(&world, (float)deltaTime);
-        coinGeneratorSystem.update(&world, (float)deltaTime);
-        obstacleSystem.update(&world, (float)deltaTime);
-        playerMovementController.update(&world, (float)deltaTime);
+        // coinGeneratorSystem.update(&world, (float)deltaTime);
+        // gemGeneratorSystem.update(&world, (float)deltaTime);
+        // obstacleSystem.update(&world, (float)deltaTime);
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
-        gemGeneratorSystem.update(&world, (float)deltaTime);
+        playerMovementController.update(&world, (float)deltaTime);
+        collisionSystem.update(&world, (float)deltaTime);
+        hudSystem.update(&world, (float)deltaTime);
+        generatorSystem.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
-        if (scoreSystem.getLives() <= 0)
+
+        for (auto entity : world.getEntities())
         {
-            getApp()->changeState("menu");
+            // Get player component
+            our::PlayerComponent *player = entity->getComponent<our::PlayerComponent>();
+            if (player && player->lives <= 0)
+            {
+                getApp()->changeState("menu");
+                break;
+            }
         }
+
         // Get a reference to the keyboard object
         auto &keyboard = getApp()->getKeyboard();
 
@@ -76,6 +92,8 @@ class Playstate : public our::State
             // If the escape  key is pressed in this frame, go to the play state
             getApp()->changeState("menu");
         }
+
+        world.deleteMarkedEntities();
     }
 
     void onDestroy() override

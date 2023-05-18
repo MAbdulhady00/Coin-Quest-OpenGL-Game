@@ -1,9 +1,9 @@
 #pragma once
-
 #include "../ecs/world.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../components/movement.hpp"
-#include "../components/coin.hpp"
+#include "../components/tags/coin.hpp"
+#include "../components/collision.hpp"
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
 #include "../components/player.hpp"
@@ -12,6 +12,7 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <random>
+#include <time.h>
 
 #define MAX_COIN 100
 #define FAR_VERTICAL_DISTANCE 250
@@ -79,7 +80,7 @@ namespace our
             {
 
                 // check if the entity has a CoinComponent
-                if (entity->getComponent<CoinComponent>())
+                if (entity->getComponent<CoinTagComponent>())
                 {
                     count++;
 
@@ -88,12 +89,6 @@ namespace our
                     {
                         world->markForRemoval(entity);
                         printf("Removed Coin was too far\n");
-                    }
-                    // If the coin is close to the player, remove it and count a point
-                    if (glm::distance(playerPosition, entity->localTransform.position) < 1.0f)
-                    {
-                        world->markForRemoval(entity);
-                        printf("Removed Collected Coin\n");
                     }
                 }
             }
@@ -119,8 +114,10 @@ namespace our
                 // add movement component
                 MovementComponent *movement = newCoin->addComponent<MovementComponent>();
                 CreateCoinMovementComponent(movement);
+                // add collision component
+                CollisionComponent *collision = newCoin->addComponent<CollisionComponent>();
                 // add coin component
-                CoinComponent *coin = newCoin->addComponent<CoinComponent>();
+                CoinTagComponent *coin = newCoin->addComponent<CoinTagComponent>();
                 count++;
                 last_gen = FAR_VERTICAL_DISTANCE;
             }
