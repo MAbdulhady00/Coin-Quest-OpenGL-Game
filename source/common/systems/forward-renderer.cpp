@@ -1,6 +1,7 @@
 #include "forward-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
+#include "../components/collision.hpp"
 namespace our
 {
 
@@ -340,11 +341,15 @@ namespace our
             command.material->shader->set("transform", VP * command.localToWorld);
             command.mesh->draw();
         }
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+        int indx = -1;
         // If there is a postprocess material, apply postprocessing
-        for (int i = 0; i < int(postProcessMaterialIndices.size()) - 1; ++i)
+        for (int i = 0; i < postProcessMaterialIndices.size(); ++i)
         {
             // this was done by unbinding the postprocessFrameBuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[postProcessMaterialIndices[i + 1]]);
+            if (i + 1 < int(postProcessMaterialIndices.size()))
+                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[postProcessMaterialIndices[i + 1]]);
             // setup postprocess material
             postProcessMaterials[postProcessMaterialIndices[i]]->setup();
 
@@ -354,22 +359,46 @@ namespace our
             glBindVertexArray(postProcessVertexArrays[postProcessMaterialIndices[i]]);
             // draw the vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
+            indx = postProcessMaterialIndices[i];
         }
-        if (postProcessMaterialIndices.size() > 0)
+        // loop over the worlds entities
+        for (auto entity : world->getEntities())
         {
-            // this was done by unbinding the postprocessFrameBuffer
+            // find the collision component
+            auto collision = entity->getComponent<CollisionComponent>();
+            // if the entity has a collision component check if it is collided
+            if (!collision)
+                continue;
+            if (!collision->isCollided)
+                continue;
+            // if it is collided, check if it has a postprocess component
+            if (!collision->postProcess)
+                continue;
+
+            // if it has a postprocess component, check if it has a postprocess index
+            if (collision->postProcessIndex < postProcessMaterialIndices.size())
+            {
+                // setup postprocess material
+                postProcessMaterials[collision->postProcessIndex]->setup();
+
+                postProcessMaterials[collision->postProcessIndex]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
+
+                // bind the postprocess vertex array to draw vertices
+                glBindVertexArray(postProcessVertexArrays[postProcessMaterialIndices[collision->postProcessIndex]]);
+                // draw the vertices
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+
+                indx = collision->postProcessIndex;
+                // enough one hit per frame
+                break;
+            }
+        }
+        // draw last index
+        if (indx != -1)
+        {
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            int end = postProcessMaterialIndices.size() - 1;
-
-            postProcessMaterials[postProcessMaterialIndices[end]]->setup();
-
-            postProcessMaterials[postProcessMaterialIndices[end]]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
-
-            // bind the postprocess vertex array to draw vertices
-            glBindVertexArray(postProcessVertexArrays[postProcessMaterialIndices[end]]);
-            // draw the vertices
+            glBindVertexArray(postProcessVertexArrays[indx]);
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
     }
-
 }

@@ -92,6 +92,7 @@ namespace our
                     // Check if the player is colliding with the coin
                     if (glm::distance(playerPosition, entity->localTransform.position) <= collision->detectionRadius)
                     {
+                        collision->isCollided = true;
                         // handle collision
                         if (onCollision(player, entity))
                             world->markForRemoval(entity);

@@ -9,5 +9,7 @@ namespace our
         detectionRadius = data.value("detectionRadius", detectionRadius);
         soundName = data.value("soundName", soundName);
         soundPath = data.value("soundPath", soundPath);
+        postProcess = data.value("postProcess", postProcess);
+        postProcessIndex = data.value("postProcessIndex", postProcessIndex);
     }
 }
