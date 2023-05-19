@@ -43,7 +43,7 @@ namespace our
         // Objects used for Postprocessing
         GLuint postprocessFrameBuffer, postProcessVertexArray;
         Texture2D *colorTarget, *depthTarget;
-        TexturedMaterial *postprocessMaterial;
+        std::vector<TexturedMaterial *> postprocessMaterials;
 
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.

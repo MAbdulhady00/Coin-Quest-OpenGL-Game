@@ -119,7 +119,10 @@
     },
     "renderer": {
       "sky": "assets/textures/sky.jpg",
-      "postprocess": "assets/shaders/postprocess/fog.frag"
+      "postprocess": [
+        "assets/shaders/postprocess/fog.frag"
+        // "assets/shaders/postprocess/hit.frag"
+      ]
     },
     "assets": {
       "shaders": {
