@@ -7,6 +7,7 @@
 #include "../components/tags/coin.hpp"
 #include "../components/tags/heart.hpp"
 #include "../components/tags/obstacle.hpp"
+#include "../components/tags/powerup.hpp"
 #include <audio/audio.hpp>
 #include <glm/glm.hpp>
 
@@ -41,10 +42,14 @@ namespace our
                 // Decrease the lives
                 playerComponent->lives--;
             }
+            if (collidedEntity->getComponent<PowerupTagComponent>())
+            {
+                playerComponent->score += 5;
+            }
 
-            // play sound effect
-            audioPlayer.play(collidedEntity->getComponent<CollisionComponent>()->soundPath,
-                             collidedEntity->getComponent<CollisionComponent>()->soundName);
+                // play sound effect
+                audioPlayer.play(collidedEntity->getComponent<CollisionComponent>()->soundPath,
+                                 collidedEntity->getComponent<CollisionComponent>()->soundName);
             return true;
         }
 

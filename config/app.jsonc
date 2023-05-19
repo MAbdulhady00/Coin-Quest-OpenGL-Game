@@ -22,6 +22,7 @@
       "coinChance": 0.7,
       "obstacleChance": 0.25,
       "heartChance": 0.05,
+      "powerupChance":0.5,
       // generated ground
       "groundLength": 100,
       "ground": {
@@ -115,6 +116,42 @@
             "soundName": 2
           }
         ]
+      },
+      // generated powerup
+      "powerup": {
+        "name": "Powerup",
+        "position": [
+          0,
+          -0.5,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          10,
+          10,
+          10
+        ],
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "powerup",
+            "material": "powerup"
+          },
+          {
+            "type": "powerupTag"
+          },
+          {
+            "type": "Collision",
+            "detectionRadius": 1.0,
+            "soundPath": "assets/sounds/powerup.wav",
+            "soundName": 3
+          }
+        ]
+
       }
     },
     "renderer": {
@@ -168,6 +205,7 @@
         "rock": "assets/textures/rock.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
+        "powerup": "assets/textures/battery.png",
         "gem_heart_ambient_occlusion": "assets/textures/materials/gem_heart/ambient_occlusion.png",
         "albedo": "assets/textures/albedo.jpg",
         "emissive": "assets/textures/emissive.jpg",
@@ -185,7 +223,8 @@
         "coin": "assets/models/coin.obj",
         "rock": "assets/models/rock.obj",
         "pepsiman": "assets/models/pepsiman.obj",
-        "gem_heart": "assets/models/gem_heart.obj"
+        "gem_heart": "assets/models/gem_heart.obj",
+        "powerup": "assets/models/battery.obj"
       },
       "samplers": {
         "default": {},
@@ -333,6 +372,46 @@
           },
           "tint": [1, 1, 1, 1],
           "albedo": "rock",
+          "sampler": "default"
+        },
+        "powerup": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "texture": "powerup",
+          "sampler": "default"
+        },
+        "gem_heart": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "texture": "powerup",
           "sampler": "default"
         },
         "gem_heart": {

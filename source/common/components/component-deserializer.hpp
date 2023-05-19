@@ -12,6 +12,7 @@
 #include "collision.hpp"
 #include "tags/coin.hpp"
 #include "tags/obstacle.hpp"
+#include "tags/powerup.hpp"
 #include "tags/heart.hpp"
 
 namespace our
@@ -71,6 +72,11 @@ namespace our
         {
             // if the type is "ObstacleTagComponent", then create a new ObstacleTagComponent and return pointer to it
             component = entity->addComponent<ObstacleTagComponent>();
+        }
+        else if (type == PowerupTagComponent::getID())
+        {
+            // if the type is "ObstacleTagComponent", then create a new ObstacleTagComponent and return pointer to it
+            component = entity->addComponent<PowerupTagComponent>();
         }
         else if (type == HeartTagComponent::getID())
         {
