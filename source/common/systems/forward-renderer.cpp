@@ -153,7 +153,7 @@ namespace our
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
-            }
+            } 
             auto light = entity->getComponent<LightComponent>();
             if (light && light->enabled)
             {
@@ -161,9 +161,9 @@ namespace our
                 {
                     auto litShader = AssetLoader<ShaderProgram>::get("light");
                     litShader->use();
-                    litShader->set("sky.top", light->sky_light.top_color);
-                    litShader->set("sky.middle", light->sky_light.middle_color);
-                    litShader->set("sky.bottom", light->sky_light.bottom_color);
+                    litShader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.5f));
+                    litShader->set("sky.horizon", glm::vec3(0.3f, 0.3f, 0.3f));
+                    litShader->set("sky.bottom", glm::vec3(0.1f, 0.1f, 0.1f));
                 }
                 else
                     lights.push_back(light);
@@ -180,8 +180,8 @@ namespace our
         // this is done to prevent the transparent objects from being drawn in the wrong order
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand &first, const RenderCommand &second)
                   { 
-        // get the distance from the camera to the center of the first and second commands
-        return glm::dot(first.center, cameraForward) < glm::dot(second.center, cameraForward); });
+            // get the distance from the camera to the center of the first and second commands
+            return glm::dot(first.center, cameraForward) < glm::dot(second.center, cameraForward); });
 
         // get the camera view projection matrix
         glm::mat4 VP = camera->getProjectionMatrix(windowSize) * camera->getViewMatrix();
@@ -208,23 +208,33 @@ namespace our
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // define the max number of lights
-        const int MAX_LIGHT_COUNT = 4;
+        const int MAX_LIGHT_COUNT = 8;
 
         // draw all the opaque commands
         // no need to sort them because of the z-buffer
         for (auto &command : opaqueCommands)
         {
             command.material->setup();
+            //set the camera position
+            command.material->shader->set("camera_position", cameraForward);
+            //set the M matrix for the shader
+            command.material->shader->set("M", command.localToWorld);
+            //set the M_IT matrix for the shader
+            command.material->shader->set("M_IT", glm::transpose(glm::inverse(command.localToWorld)));
+            //set the VP matrix for the shader
+            command.material->shader->set("VP", VP);
             // set the MVP matrix for the shader
             command.material->shader->set("transform", VP * command.localToWorld);
-
+            // set the light count
+            command.material->shader->set("light_count", static_cast<int>(lights.size()));
+            // set the light properties
             int light_index = 0;
             //add the light effects
             for(auto light: lights){
                 if (!light->enabled)
                     continue;
                 light->position = light->getOwner()->getWorldTranslation();
-                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, 0.0, 0);
+                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, -1.0, 0.0);
                 // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
                 // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
 
@@ -235,21 +245,18 @@ namespace our
                 {
                 case LightType::DIRECTIONAL:
                     command.material->shader->set(prefix + "direction", light->direction);
-                    command.material->shader->set(prefix + "diffuse", light->diffuse);
-                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     break;
                 case LightType::POINT:
                     command.material->shader->set(prefix + "position", light->position);
-                    command.material->shader->set(prefix + "diffuse", light->diffuse);
-                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                           light->attenuation.linear, light->attenuation.constant));
                     break;
                 case LightType::SPOT:
                     command.material->shader->set(prefix + "position", light->position);
                     command.material->shader->set(prefix + "direction", light->direction);
-                    command.material->shader->set(prefix + "diffuse", light->diffuse);
-                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                           light->attenuation.linear, light->attenuation.constant));
                     command.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));

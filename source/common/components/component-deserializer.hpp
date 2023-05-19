@@ -5,10 +5,9 @@
 #include "mesh-renderer.hpp"
 #include "player.hpp"
 #include "free-camera-controller.hpp"
-#include "player-movement-controller.hpp"
 #include "light.hpp"
 #include "movement.hpp"
-#include "score-digit.hpp"
+
 #include "collision.hpp"
 #include "tags/coin.hpp"
 #include "tags/obstacle.hpp"
