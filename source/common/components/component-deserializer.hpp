@@ -7,7 +7,8 @@
 #include "free-camera-controller.hpp"
 #include "light.hpp"
 #include "movement.hpp"
-
+#include "player-movement-controller.hpp"
+#include "score-digit.hpp"
 #include "collision.hpp"
 #include "tags/coin.hpp"
 #include "tags/obstacle.hpp"
