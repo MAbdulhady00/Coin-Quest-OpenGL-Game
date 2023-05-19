@@ -85,7 +85,9 @@
             "type": "Collision",
             "detectionRadius": 1.0,
             "soundPath": "assets/sounds/hit.wav",
-            "soundName": 1
+            "soundName": 1,
+            "postProcessIndex": 0,
+            "postProcess": true
           }
         ]
       },
@@ -161,7 +163,7 @@
         "assets/shaders/postprocess/fog.frag",
         "assets/shaders/postprocess/radial-blur.frag"
       ],
-      "postprocess_permanent": []
+      "postprocess_permanent": [1]
     },
     "assets": {
       "shaders": {
