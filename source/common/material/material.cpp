@@ -122,9 +122,9 @@ namespace our
     // set the "tint" uniform to the value in the member variable tint
     void LightMaterial::setup() const
     {
-        TintedMaterial::setup();
-        this->shader->set("alphaThreshold", this->alphaThreshold);
-        this->sampler->bind(0);
+        TexturedMaterial::setup();
+        // this->shader->set("alphaThreshold", this->alphaThreshold);
+        // this->sampler->bind(0);
         if (albedo_map != nullptr)
         {
             // select an active texture unit -> 1

@@ -153,7 +153,7 @@ namespace our
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
-            }
+            } 
             auto light = entity->getComponent<LightComponent>();
             if (light && light->enabled)
             {
@@ -161,9 +161,9 @@ namespace our
                 {
                     auto litShader = AssetLoader<ShaderProgram>::get("light");
                     litShader->use();
-                    litShader->set("sky.top", light->sky_light.top_color);
-                    litShader->set("sky.middle", light->sky_light.middle_color);
-                    litShader->set("sky.bottom", light->sky_light.bottom_color);
+                    litShader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.5f));
+                    litShader->set("sky.horizon", glm::vec3(0.3f, 0.3f, 0.3f));
+                    litShader->set("sky.bottom", glm::vec3(0.1f, 0.1f, 0.1f));
                 }
                 else
                     lights.push_back(light);
@@ -234,7 +234,7 @@ namespace our
                 if (!light->enabled)
                     continue;
                 light->position = light->getOwner()->getWorldTranslation();
-                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, 0.0, 0.0);
+                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, -1.0, 0.0);
                 // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
                 // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
 
@@ -245,21 +245,18 @@ namespace our
                 {
                 case LightType::DIRECTIONAL:
                     command.material->shader->set(prefix + "direction", light->direction);
-                    command.material->shader->set(prefix + "diffuse", light->diffuse);
-                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     break;
                 case LightType::POINT:
                     command.material->shader->set(prefix + "position", light->position);
-                    command.material->shader->set(prefix + "diffuse", light->diffuse);
-                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                           light->attenuation.linear, light->attenuation.constant));
                     break;
                 case LightType::SPOT:
                     command.material->shader->set(prefix + "position", light->position);
                     command.material->shader->set(prefix + "direction", light->direction);
-                    command.material->shader->set(prefix + "diffuse", light->diffuse);
-                    command.material->shader->set(prefix + "specular", light->specular);
+                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                           light->attenuation.linear, light->attenuation.constant));
                     command.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));

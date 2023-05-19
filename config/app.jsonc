@@ -235,32 +235,34 @@
                 "material": "metal"
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "name": "directional_light",
+        "components": [
           {
-            "name": "directional_light",
-            "components": [
-              {
-                "type": "Light",
-                "typeLight": "directional",
-                "enabled": false,
-                "direction": [
-                  0,
-                  -1,
-                  0
-                ],
-                "diffuse": [
-                  0,
-                  0,
-                  10.0
-                ],
-                "specular": [
-                  0,
-                  0,
-                  10.0
-                ]
-                
-              }
-            ]
+            "type": "Light",
+            "typeLight": "directional",
+            "enabled": true,
+            "direction": [0, -1, 0],
+            "diffuse": [0, 0, 10.0],
+            "specular": [0, 0, 10.0]          
+          }
+        ]
+      },
+      {
+        "name": "sky_light",
+        "components": [
+          {
+            "type": "Light",
+            "typeLight": "sky",
+            "enabled": true,
+            "sky_light": {
+              "top_color": [0, -1, 0],
+              "bottom_color": [0, 0, 10.0],
+              "middle_color": [0, 0, 10.0]
+            }
           }
         ]
       },
