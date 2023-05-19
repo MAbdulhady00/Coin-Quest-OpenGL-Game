@@ -31,12 +31,14 @@ namespace our
         double coinChance = 0.25;         // The chance that a coin will be generated
         double obstacleChance = 0.25;     // The chance that an obstacle will be generated
         double heartChance = 0.25;        // The chance that a heart will be generated
+        double powerupChance = 0.25;      // The chance that a powerup will be generated
         int generationStep = 1;           // The distance between each generation attempt
         std::mt19937 rng;
         std::uniform_real_distribution<double> distribution;
         nlohmann::json coinConfig;
         nlohmann::json obstacleConfig;
         nlohmann::json heartConfig;
+        nlohmann::json powerupConfig;
 
         inline Entity *randomEntityFactory(Entity *entity)
         {
@@ -53,6 +55,11 @@ namespace our
             else if (random < currentChance + obstacleChance)
             {
                 entity->deserialize(obstacleConfig);
+            }
+            // If the random number is less than the powerup chance, generate a powerup
+            else if (random < currentChance + obstacleChance + powerupChance)
+            {
+                entity->deserialize(powerupConfig);
             }
             // must generate a heart
             else
@@ -81,11 +88,13 @@ namespace our
             generationChance = config.value("generationChance", generationChance);
             generationStep = config.value("generationStep", generationStep);
             coinChance = config.value("coinChance", coinChance);
+            powerupChance = config.value("powerupChance", powerupChance);
             obstacleChance = config.value("obstacleChance", obstacleChance);
             heartChance = config.value("heartChance", heartChance);
             coinConfig = config.value("coin", nlohmann::json());
             obstacleConfig = config.value("obstacle", nlohmann::json());
             heartConfig = config.value("heart", nlohmann::json());
+            powerupConfig = config.value("powerup", nlohmann::json());
         }
 
         // This should be called every frame to update all entities containing a CoinComponent.
