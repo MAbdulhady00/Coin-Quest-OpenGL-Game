@@ -41,14 +41,13 @@ namespace our
                 return;
             }
 
-            // test drawing text using imgui
-            // TODO: fix this
-            // ImGui::GetFont()->Scale = 4.0f;
-            // ImGui::PushFont(ImGui::GetFont());
-            // ImDrawList *drawList = ImGui::GetBackgroundDrawList();
-            // drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(player->score).c_str());
-            // drawList->AddText(ImVec2(1230, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(player->lives).c_str());
-            // ImGui::PopFont();
+            // Draw hud on screen
+            ImGui::GetFont()->Scale = 4.0f;
+            ImGui::PushFont(ImGui::GetFont());
+            ImDrawList *drawList = ImGui::GetBackgroundDrawList();
+            drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(player->score).c_str());
+            drawList->AddText(ImVec2(1230, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(player->lives).c_str());
+            ImGui::PopFont();
         }
     };
 
