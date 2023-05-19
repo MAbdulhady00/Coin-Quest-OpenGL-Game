@@ -114,12 +114,12 @@ namespace our
             // }
 
             // test drawing text using imgui
-            ImGui::GetFont()->Scale = 4.0f;
-            ImGui::PushFont(ImGui::GetFont());
-            ImDrawList *drawList = ImGui::GetBackgroundDrawList();
-            drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(currentScore).c_str());
-            drawList->AddText(ImVec2(1230, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(currentLives).c_str());
-            ImGui::PopFont();
+            // ImGui::GetFont()->Scale = 4.0f;
+            // ImGui::PushFont(ImGui::GetFont());
+            // ImDrawList *drawList = ImGui::GetBackgroundDrawList();
+            // drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(currentScore).c_str());
+            // drawList->AddText(ImVec2(1230, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(currentLives).c_str());
+            // ImGui::PopFont();
             // Delete all the marked entities
             world->deleteMarkedEntities();
         }
