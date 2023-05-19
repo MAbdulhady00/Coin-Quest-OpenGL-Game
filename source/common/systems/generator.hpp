@@ -60,7 +60,7 @@ namespace our
                 entity->deserialize(obstacleConfig);
             }
             // If the random number is less than the powerup chance, generate a powerup
-            else if (random < currentChance + obstacleChance + powerupChance)
+            else if (random < currentChance + powerupChance)
             {
                 entity->deserialize(powerupConfig);
             }
