@@ -14,8 +14,7 @@ namespace our
         if (typeLocal == "directional")
         {
             typeLight = LightType::DIRECTIONAL;
-            diffuse = data["diffuse"];
-            specular = data["specular"];
+            direction = data["direction"];
         }
         else if (typeLocal == "point")
         {

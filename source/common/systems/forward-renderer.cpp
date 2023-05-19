@@ -231,10 +231,12 @@ namespace our
             int light_index = 0;
             //add the light effects
             for(auto light: lights){
+                if(light->typeLight == LightType::SKY)
+                    continue;
                 if (!light->enabled)
                     continue;
                 light->position = light->getOwner()->getWorldTranslation();
-                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, -1.0, 0.0);
+                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 0.0);
                 // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
                 // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
 
@@ -245,7 +247,7 @@ namespace our
                 {
                 case LightType::DIRECTIONAL:
                     command.material->shader->set(prefix + "direction", light->direction);
-                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
+                    command.material->shader->set(prefix + "color", glm::vec3(253.0 / 256.0, 184.0/256.0, 19.0/256.0));
                     break;
                 case LightType::POINT:
                     command.material->shader->set(prefix + "position", light->position);
