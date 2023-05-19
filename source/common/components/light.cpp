@@ -10,7 +10,8 @@ namespace our
         if (!data.is_object())
             return;
         std::string typeLocal = data.value("typeLight", "");
-        enabled = data.value("enabled", true);
+        enabled = data.value("enabled", enabled);
+        color = data.value("color", color);
         if (typeLocal == "directional")
         {
             typeLight = LightType::DIRECTIONAL;
@@ -19,8 +20,6 @@ namespace our
         else if (typeLocal == "point")
         {
             typeLight = LightType::POINT;
-            diffuse = data["diffuse"];
-            specular = data["specular"];
             attenuation.constant = data["attenuation"]["constant"];
             attenuation.linear = data["attenuation"]["linear"];
             attenuation.quadratic = data["attenuation"]["quadratic"];
@@ -28,8 +27,6 @@ namespace our
         else if (typeLocal == "spot")
         {
             typeLight = LightType::SPOT;
-            diffuse = data["diffuse"];
-            specular = data["specular"];
             attenuation.constant = data["attenuation"]["constant"];
             attenuation.linear = data["attenuation"]["linear"];
             attenuation.quadratic = data["attenuation"]["quadratic"];

@@ -85,7 +85,6 @@ namespace our
             ShaderProgram *postprocessShader = new ShaderProgram();
             postprocessShader->attach("assets/shaders/fullscreen.vert", GL_VERTEX_SHADER);
             postprocessShader->attach(config.value<std::string>("postprocess", ""), GL_FRAGMENT_SHADER);
-            
 
             postprocessShader->link();
 
@@ -156,7 +155,7 @@ namespace our
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
-            } 
+            }
             auto light = entity->getComponent<LightComponent>();
             if (light && light->enabled)
             {
@@ -218,13 +217,13 @@ namespace our
         for (auto &command : opaqueCommands)
         {
             command.material->setup();
-            //set the camera position
+            // set the camera position
             command.material->shader->set("camera_position", cameraForward);
-            //set the M matrix for the shader
+            // set the M matrix for the shader
             command.material->shader->set("M", command.localToWorld);
-            //set the M_IT matrix for the shader
+            // set the M_IT matrix for the shader
             command.material->shader->set("M_IT", glm::transpose(glm::inverse(command.localToWorld)));
-            //set the VP matrix for the shader
+            // set the VP matrix for the shader
             command.material->shader->set("VP", VP);
             // set the MVP matrix for the shader
             command.material->shader->set("transform", VP * command.localToWorld);
@@ -232,9 +231,10 @@ namespace our
             command.material->shader->set("light_count", static_cast<int>(lights.size()));
             // set the light properties
             int light_index = 0;
-            //add the light effects
-            for(auto light: lights){
-                if(light->typeLight == LightType::SKY)
+            // add the light effects
+            for (auto light : lights)
+            {
+                if (light->typeLight == LightType::SKY)
                     continue;
                 if (!light->enabled)
                     continue;
@@ -246,24 +246,22 @@ namespace our
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
                 command.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
+                command.material->shader->set(prefix + "color", light->color);
                 switch (light->typeLight)
                 {
                 case LightType::DIRECTIONAL:
                     command.material->shader->set(prefix + "direction", light->direction);
-                    command.material->shader->set(prefix + "color", glm::vec3(253.0 / 256.0, 184.0/256.0, 19.0/256.0));
                     break;
                 case LightType::POINT:
                     command.material->shader->set(prefix + "position", light->position);
-                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
-                                                                                          light->attenuation.linear, light->attenuation.constant));
+                                                                                    light->attenuation.linear, light->attenuation.constant));
                     break;
                 case LightType::SPOT:
                     command.material->shader->set(prefix + "position", light->position);
                     command.material->shader->set(prefix + "direction", light->direction);
-                    command.material->shader->set(prefix + "color", glm::vec3(1.0f, 1.0f, 1.0f));
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
-                                                                                          light->attenuation.linear, light->attenuation.constant));
+                                                                                    light->attenuation.linear, light->attenuation.constant));
                     command.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:
