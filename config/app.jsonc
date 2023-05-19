@@ -23,6 +23,21 @@
       "obstacleChance": 0.25,
       "heartChance": 0.05,
       "powerupChance":0.5,
+      // generated ground
+      "groundLength": 100,
+      "ground": {
+        "position": [0, -2, 0],
+        "rotation": [0, 0, 0],
+        "scale": [6, 1, 100],
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "cube",
+            "material": "asphalt",
+            "sampler": "repeated"
+          }
+        ]
+      },
       // generated coin
       "coin": {
         "name": "Coin",
@@ -38,7 +53,7 @@
           {
             "type": "Movement",
             "angularVelocity": [0, 100, 0],
-            "linearVelocity": [0, 0, 0.5]
+            "linearVelocity": [0, 0, 0]
           },
           {
             "type": "CoinTag"
@@ -89,7 +104,7 @@
           {
             "type": "Movement",
             "angularVelocity": [0, 100, 0],
-            "linearVelocity": [0.15, 0, 0.5]
+            "linearVelocity": [0, 0, 0]
           },
           {
             "type": "HeartTag"
@@ -141,7 +156,12 @@
     },
     "renderer": {
       "sky": "assets/textures/sky.jpg",
-      "postprocess": "assets/shaders/postprocess/fog.frag"
+      "postprocess_load": [
+        "assets/shaders/postprocess/hit.frag",
+        "assets/shaders/postprocess/fog.frag",
+        "assets/shaders/postprocess/radial-blur.frag"
+      ],
+      "postprocess_permanent": []
     },
     "assets": {
       "shaders": {
@@ -156,6 +176,12 @@
         "light": {
           "vs": "assets/shaders/light.vert",
           "fs": "assets/shaders/light.frag"
+        },
+        // repeats the texture based on world position
+        // useful for plane and cube meshes that stretch the texture
+        "light_repeated": {
+          "vs": "assets/shaders/light_repeated.vert",
+          "fs": "assets/shaders/light.frag"
         }
       },
       "textures": {
@@ -165,26 +191,28 @@
         "wood": "assets/textures/wood.jpg",
         "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
+        "monkey_ambient_occlusion": "assets/textures/materials/monkey/ambient_occlusion.jpg",
+        "asphalt_albedo": "assets/textures/materials/asphalt/albedo.jpg",
+        "asphalt_roughness": "assets/textures/materials/asphalt/roughness.jpg",
+        "metal_albedo": "assets/textures/materials/metal/albedo.jpg",
+        "metal_specular": "assets/textures/materials/metal/specular.jpg",
+        "metal_roughness": "assets/textures/materials/metal/roughness.jpg",
+        "gold_albedo": "assets/textures/materials/gold/albedo.png",
+        "gold_specular": "assets/textures/materials/gold/specular.png",
+        "gold_roughness": "assets/textures/materials/gold/roughness.png",
         "coin": "assets/textures/coin.png",
+        "coin_ambient_occlusion": "assets/textures/materials/coin/ambient_occlusion.png",
         "rock": "assets/textures/rock.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
         "powerup": "assets/textures/battery.png",
-        "num_0": "assets/textures/numbers/0.png",
-        "num_1": "assets/textures/numbers/1.png",
-        "num_2": "assets/textures/numbers/2.png",
-        "num_3": "assets/textures/numbers/3.png",
-        "num_4": "assets/textures/numbers/4.png",
-        "num_5": "assets/textures/numbers/5.png",
-        "num_6": "assets/textures/numbers/6.png",
-        "num_7": "assets/textures/numbers/7.png",
-        "num_8": "assets/textures/numbers/8.png",
-        "num_9": "assets/textures/numbers/9.png",
+        "gem_heart_ambient_occlusion": "assets/textures/materials/gem_heart/ambient_occlusion.png",
         "albedo": "assets/textures/albedo.jpg",
         "emissive": "assets/textures/emissive.jpg",
         "roughness": "assets/textures/roughness.jpg",
         "specular": "assets/textures/specular.jpg",
-        "ambient_occlusion": "assets/textures/ambient_occlusion.jpg"
+        "white": "assets/textures/white.png",
+        "black": "assets/textures/black.png"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -209,19 +237,6 @@
         }
       },
       "materials": {
-        "metal": {
-          "type": "tinted",
-          "shader": "tinted",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [0.45, 0.4, 0.5, 1]
-        },
         "glass": {
           "type": "textured",
           "shader": "textured",
@@ -245,8 +260,8 @@
           "sampler": "pixelated"
         },
         "grass": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "light",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -259,9 +274,9 @@
           "texture": "grass",
           "sampler": "repeated"
         },
-        "monkey": {
-          "type": "textured",
-          "shader": "textured",
+        "asphalt": {
+          "type": "lit",
+          "shader": "light_repeated",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -271,12 +286,31 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "texture": "monkey",
+          "albedo": "asphalt_albedo",
+          "roughness": "asphalt_roughness",
+          "sampler": "repeated"
+        },
+        "monkey": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "albedo": "metal_albedo",
+          "specular": "metal_specular",
+          "roughness": "metal_roughness",
+          "ambient_occlusion": "monkey_ambient_occlusion",
           "sampler": "default"
         },
         "moon": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "light",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -290,7 +324,7 @@
           "sampler": "default"
         },
         "ball": {
-          "type": "lighted",
+          "type": "lit",
           "shader": "light",
           "pipelineState": {
             "faceCulling": {
@@ -301,11 +335,13 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "texture": "ball",
+          "albedo": "ball",
+          "specular": "asphalt_specular",
+          "roughness": "asphalt_roughness",
           "sampler": "default"
         },
         "coin": {
-          "type": "lighted",
+          "type": "lit",
           "shader": "light",
           "pipelineState": {
             "faceCulling": {
@@ -317,10 +353,14 @@
           },
           "tint": [1, 1, 1, 1],
           "texture": "coin",
-          "sampler": "default"
+          "sampler": "default",
+          "albedo": "coin",
+          "specular": "metal_specular",
+          "roughness": "metal_roughness",
+          "ambient_occlusion": "coin_ambient_occlusion"
         },
         "rock": {
-          "type": "lighted",
+          "type": "lit",
           "shader": "light",
           "pipelineState": {
             "faceCulling": {
@@ -331,7 +371,7 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "texture": "rock",
+          "albedo": "rock",
           "sampler": "default"
         },
         "powerup": {
@@ -355,8 +395,28 @@
           "sampler": "default"
         },
         "gem_heart": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "texture": "powerup",
+          "sampler": "default"
+        },
+        "gem_heart": {
+          "type": "lit",
+          "shader": "light",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -366,30 +426,13 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "texture": "gem_heart",
+          "albedo": "gem_heart",
+          "ambient_occlusion": "gem_heart_ambient_occlusion",
           "sampler": "default"
         }
       }
     },
     "world": [
-      {
-        "position": [0, 0, 10],
-        "components": [],
-        "children": [
-          {
-            "position": [1, -1, -1],
-            "rotation": [45, 45, 0],
-            "scale": [0.1, 0.1, 1.0],
-            "components": [
-              {
-                "type": "Mesh Renderer",
-                "mesh": "cube",
-                "material": "metal"
-              }
-            ]
-          }
-        ]
-      },
       {
         "name": "directional_light",
         "components": [
@@ -397,7 +440,19 @@
             "type": "Light",
             "typeLight": "directional",
             "enabled": true,
-            "direction": [-1, -1, 0]         
+            "direction": [-1, -1, 0],
+            "color": [0.1, 0.1, 0.1]
+          }
+        ]
+      },
+      {
+        "components": [
+          {
+            "type": "Light",
+            "typeLight": "directional",
+            "enabled": true,
+            "direction": [-0.25, 1, 0],
+            "color": [0.1, 0.1, 0.1]
           }
         ]
       },
@@ -431,83 +486,23 @@
           }
         ]
       },
-      {
-        "position": [0, -1, 0],
-        "rotation": [-90, 0, 0],
-        "scale": [10, 10000, 1],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "grass",
-            "sampler": {}
-          }
-        ]
-      },
-      {
-        "position": [0, 1, 2],
-        "rotation": [0, 0, 0],
-        "scale": [2, 2, 2],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "glass"
-          }
-        ]
-      },
-      {
-        "position": [0, 1, -2],
-        "rotation": [0, 0, 0],
-        "scale": [2, 2, 2],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "glass"
-          }
-        ]
-      },
-      {
-        "position": [2, 1, 0],
-        "rotation": [0, 90, 0],
-        "scale": [2, 2, 2],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "glass"
-          }
-        ]
-      },
-      {
-        "position": [-2, 1, 0],
-        "rotation": [0, 90, 0],
-        "scale": [2, 2, 2],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "glass"
-          }
-        ]
-      },
-      {
-        "position": [0, 3, 0],
-        "rotation": [90, 0, 0],
-        "scale": [2, 2, 2],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "plane",
-            "material": "glass"
-          }
-        ]
-      },
+      // {
+      //   "position": [0, -2, 0],
+      //   "rotation": [0, 0, 0],
+      //   "scale": [10, 1, 100],
+      //   "components": [
+      //     {
+      //       "type": "Mesh Renderer",
+      //       "mesh": "cube",
+      //       "material": "asphalt",
+      //       "sampler": "repeated"
+      //     }
+      //   ]
+      // },
       {
         "position": [0, 10, 0],
         "rotation": [45, 45, 0],
-        "scale": [5, 5, 5],
+        "scale": [0.05, 0.05, 0.05],
         "components": [
           {
             "type": "Mesh Renderer",
@@ -554,7 +549,7 @@
           {
             "type": "Player Movement Controller",
             "speedupFactor": 50.0,
-            "maxHorizontalDistance": 4.0,
+            "maxHorizontalDistance": 3.5,
             "jumpSpeed": 7.5
           },
           {
@@ -571,6 +566,9 @@
           {
             "type": "Camera"
           },
+          // {
+          //   "type": "Free Camera Controller"
+          // },
           {
             "type": "Movement",
             "angularVelocity": [0, 0, 0],

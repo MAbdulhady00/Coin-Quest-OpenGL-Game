@@ -47,11 +47,11 @@ namespace our
                         entity->localTransform.position.y = 0;
                     }
                     entity->localTransform.rotation += deltaTime * movement->angularVelocity;
-                    if (player || camera)
+                    if (player || camera && movement->linearVelocity.z >= -80.0)
                     {
-                        movement->linearVelocity[2] -= deltaTime;
+                        movement->linearVelocity[2] -= deltaTime * 0.25;
                         if (player)
-                            movement->angularVelocity[0] -= deltaTime;
+                            movement->angularVelocity[0] -= deltaTime * 0.0625;
                     }
                 }
             }

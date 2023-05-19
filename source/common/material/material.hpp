@@ -58,9 +58,10 @@ namespace our
         void deserialize(const nlohmann::json &data) override;
     };
 
-    class LightMaterial : public TexturedMaterial
+    class LitMaterial : public TintedMaterial
     {
     public:
+        Sampler *sampler;
         Texture2D *albedo_map;
         Texture2D *specular_map;
         Texture2D *ambient_occlusion_map;
@@ -82,9 +83,9 @@ namespace our
         {
             return new TexturedMaterial();
         }
-        else if(type == "lighted")
+        else if (type == "lit")
         {
-            return new LightMaterial();
+            return new LitMaterial();
         }
         else
         {

@@ -86,7 +86,7 @@ namespace our
         texture->bind();
         if (sampler)
             sampler->bind(0);
-        if(!depthTexture)
+        if (!depthTexture)
             return;
         glActiveTexture(GL_TEXTURE1);
         shader->set("depth_sampler", 1);
@@ -94,7 +94,6 @@ namespace our
         // If there is a sampler, bind it to texture unit 0
         if (sampler)
             sampler->bind(1);
-        
     }
 
     /**
@@ -114,23 +113,24 @@ namespace our
     }
 
     // This function read the material data from a json object
-    void LightMaterial::deserialize(const nlohmann::json &data)
+    void LitMaterial::deserialize(const nlohmann::json &data)
     {
-        TexturedMaterial::deserialize(data);
+        TintedMaterial::deserialize(data);
         if (!data.is_object())
             return;
-        albedo_map = AssetLoader<Texture2D>::get(data.value("albedo", ""));
-        specular_map = AssetLoader<Texture2D>::get(data.value("specular", ""));
-        emissive_map = AssetLoader<Texture2D>::get(data.value("emissive", ""));
-        roughness_map = AssetLoader<Texture2D>::get(data.value("roughness", ""));
-        ambient_occlusion_map = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
+        sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
+        albedo_map = AssetLoader<Texture2D>::get(data.value("albedo", "albedo"));
+        specular_map = AssetLoader<Texture2D>::get(data.value("specular", "black"));
+        emissive_map = AssetLoader<Texture2D>::get(data.value("emissive", "black"));
+        roughness_map = AssetLoader<Texture2D>::get(data.value("roughness", "white"));
+        ambient_occlusion_map = AssetLoader<Texture2D>::get(data.value("ambient_occlusion", "black"));
     }
 
     // This function should call the setup of its parent and
     // set the "tint" uniform to the value in the member variable tint
-    void LightMaterial::setup() const
+    void LitMaterial::setup() const
     {
-        TexturedMaterial::setup();
+        TintedMaterial::setup();
         // this->shader->set("alphaThreshold", this->alphaThreshold);
         // this->sampler->bind(0);
         if (albedo_map != nullptr)
@@ -141,7 +141,7 @@ namespace our
             this->albedo_map->bind();
             // bind the sampler to unit 1
             this->sampler->bind(0);
-            shader->set("material.diffuse", 0);
+            shader->set("material.albedo", 0);
         }
         if (specular_map != nullptr)
         {

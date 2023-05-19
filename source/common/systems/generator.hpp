@@ -23,22 +23,25 @@ namespace our
     class GeneratorSystem
     {
     private:
-        int last_gen = 0;
-        int generationPlaneOffset = 100;  // The distance from the player at which generated entitites are generated
-        int destructionPlaneOffset = -10; // The distance from the player at which generated entities are destroyed
-        int horizontalDistance = 7;       // The horizontal distance from the player at which generated entities are generated
-        double generationChance = 0.25;   // The chance that an entity will be generated
-        double coinChance = 0.25;         // The chance that a coin will be generated
-        double obstacleChance = 0.25;     // The chance that an obstacle will be generated
-        double heartChance = 0.25;        // The chance that a heart will be generated
+        double lastGeneration = 0.0;
+        int generationPlaneOffset = 100;   // The distance from the player at which generated entitites are generated
+        int destructionPlaneOffset = -10;  // The distance from the player at which generated entities are destroyed
+        int horizontalDistance = 7;        // The horizontal distance from the player at which generated entities are generated
+        double generationChance = 0.25;    // The chance that an entity will be generated
+        double coinChance = 0.25;          // The chance that a coin will be generated
+        double obstacleChance = 0.25;      // The chance that an obstacle will be generated
+        double heartChance = 0.25;         // The chance that a heart will be generated
         double powerupChance = 0.25;      // The chance that a powerup will be generated
-        int generationStep = 1;           // The distance between each generation attempt
+        double generationStep = 1.0;       // The distance between each generation attempt
+        double groundLength = 100.0;       // The length of the ground
+        double lastGroundGeneration = 0.0; // The last ground generated
         std::mt19937 rng;
         std::uniform_real_distribution<double> distribution;
         nlohmann::json coinConfig;
         nlohmann::json obstacleConfig;
         nlohmann::json heartConfig;
         nlohmann::json powerupConfig;
+        nlohmann::json groundConfig;
 
         inline Entity *randomEntityFactory(Entity *entity)
         {
@@ -81,7 +84,8 @@ namespace our
 
         void initialize(const nlohmann::json &config)
         {
-            last_gen = config.value("initialGeneration", last_gen);
+            lastGeneration = config.value("initialGeneration", lastGeneration);
+            lastGroundGeneration = config.value("initialGeneration", lastGroundGeneration);
             generationPlaneOffset = config.value("generationPlaneOffset", generationPlaneOffset);
             destructionPlaneOffset = config.value("destructionPlaneOffset", destructionPlaneOffset);
             horizontalDistance = config.value("horizontalDistance", horizontalDistance);
@@ -95,6 +99,8 @@ namespace our
             obstacleConfig = config.value("obstacle", nlohmann::json());
             heartConfig = config.value("heart", nlohmann::json());
             powerupConfig = config.value("powerup", nlohmann::json());
+            groundConfig = config.value("ground", nlohmann::json());
+            groundLength = config.value("groundLength", groundLength);
         }
 
         // This should be called every frame to update all entities containing a CoinComponent.
@@ -110,20 +116,28 @@ namespace our
             }
 
             // If the number of coins is less than the max number of coins, add a new coin
-            while (last_gen > playerPosition.z - generationPlaneOffset)
+            while (lastGeneration > playerPosition.z - generationPlaneOffset)
             {
+                if (lastGroundGeneration > playerPosition.z - groundLength)
+                {
+                    Entity *generatedGroundEntity = world->add();
+                    generatedGroundEntity->deserialize(groundConfig);
+                    generatedGroundEntity->localTransform.position = glm::vec3(0, generatedGroundEntity->localTransform.position.y, lastGroundGeneration);
+                    generatedGroundEntity->addComponent<GeneratedTagComponent>();
+                    lastGroundGeneration -= groundLength;
+                }
                 for (int i = -horizontalDistance / 2; i <= horizontalDistance / 2; ++i)
                 {
                     if (distribution(rng) <= generationChance)
                     {
                         Entity *generatedEntity = world->add();
                         randomEntityFactory(generatedEntity);
-                        generatedEntity->localTransform.position = glm::vec3(i, generatedEntity->localTransform.position.y, last_gen);
+                        generatedEntity->localTransform.position = glm::vec3(i, generatedEntity->localTransform.position.y, lastGeneration);
                         generatedEntity->addComponent<GeneratedTagComponent>();
                         std::cout << "Generated entity at " << generatedEntity->localTransform.position.x << ", " << generatedEntity->localTransform.position.y << ", " << generatedEntity->localTransform.position.z << std::endl;
                     }
                 }
-                last_gen -= generationStep;
+                lastGeneration -= generationStep;
             }
 
             // For each generated entity in the world

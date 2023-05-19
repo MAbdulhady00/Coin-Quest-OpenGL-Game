@@ -18,15 +18,15 @@ namespace our
     {
     public:
         LightType typeLight;
-        bool enabled = false;
+        bool enabled = true;
         // Note that we removed the 3 components and replaced it with color.
         // This is a bit more realistic since light color shouldn't differ between diffuse and specular.
         // But you may want to keep them separate if you want extra artistic control where you may want to ignore realism.
         // Also, we no longer have an ambient term in the  We will keep the ambient in a separate struct called "SkyLight".
-        glm::vec3 diffuse;
-        glm::vec3 specular;
-        glm::vec3 position;  // Used for Point and Spot Lights only
-        glm::vec3 direction; // Used for Directional and Spot Lights only
+
+        glm::vec3 color = {1.0f, 1.0f, 1.0f}; // The color of the light, we do not need separate diffuse and specular colors because it is unrealistic.
+        glm::vec3 position;                   // Used for Point and Spot Lights only
+        glm::vec3 direction;                  // Used for Directional and Spot Lights only
         struct
         {
             float quadratic, linear, constant;
@@ -45,6 +45,5 @@ namespace our
         virtual std::string getIDPolymorphic() { return getID(); }
         // Reads linearVelocity & angularVelocity from the given json object
         void deserialize(const nlohmann::json &data) override;
-
     };
 } // namespace our
