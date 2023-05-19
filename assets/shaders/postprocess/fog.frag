@@ -13,10 +13,10 @@ uniform mat4 inverse_projection;
 // This determines the fog color.
 vec3 fog_color = vec3(0.5f, 0.5f, 0.5f);
 // This determines how much the fog affect the scene (0: no fog, 1: background will no longer be visible). Range [0,1]
-float fog_power =0.8f;
+float fog_power = 0.9f;
 // The fog exponent is 1/D where D is the distance at which the fog color will dominate 63.2% of the output color. This used to affect the density of the fog.
 // Since D ranges from 0 to infinity, fog exponent ranges from infinity (nothing will show up) to 0 (no fog).
-float fog_exponent = 0.1f;
+float fog_exponent = 0.03f;
 
 out vec4 frag_color;
 
