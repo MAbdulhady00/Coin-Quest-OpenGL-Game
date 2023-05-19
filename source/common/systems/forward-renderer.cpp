@@ -127,10 +127,16 @@ namespace our
             delete skyMaterial;
         }
         // Delete all objects related to post processing
-        if (postprocessMaterials.size() > 0)
+        if (!postprocessMaterials.empty())
         {
-            // glDeleteFramebuffers(1, postprocessFrameBuffer);
-            // glDeleteVertexArrays(1, postProcessVertexArray);
+            for (auto postprocessFrameBuffer : postProcessFrameBuffers)
+            {
+                glDeleteFramebuffers(1, &postprocessFrameBuffer);
+            }
+            for (auto postProcessVertexArray : postProcessVertexArrays)
+            {
+                glDeleteVertexArrays(1, &postProcessVertexArray);
+            }
             delete colorTarget;
             delete depthTarget;
         }
@@ -140,6 +146,8 @@ namespace our
             delete postprocessMaterial->shader;
             delete postprocessMaterial;
         }
+
+        postprocessMaterials.clear();
     }
 
     void ForwardRenderer::render(World *world)
@@ -148,6 +156,7 @@ namespace our
         CameraComponent *camera = nullptr;
         opaqueCommands.clear();
         transparentCommands.clear();
+        lights.clear();
 
         for (auto entity : world->getEntities())
         {
@@ -328,7 +337,7 @@ namespace our
         for (int i = 0; i < postprocessMaterials.size() - 1; ++i)
         {
             // this was done by unbinding the postprocessFrameBuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[i+1]);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[i + 1]);
             // setup postprocess material
             postprocessMaterials[i]->setup();
 
