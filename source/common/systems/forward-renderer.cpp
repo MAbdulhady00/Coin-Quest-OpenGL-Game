@@ -1,6 +1,7 @@
 #include "forward-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
+#include "../components/collision.hpp"
 namespace our
 {
 
@@ -355,6 +356,37 @@ namespace our
             // draw the vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
+        // loop over the worlds entities
+        for (auto entity : world->getEntities())
+        {
+            // find the collision component
+            auto collision = entity->getComponent<CollisionComponent>();
+            // if the entity has a collision component check if it is collided
+            if (!collision)
+                continue;
+            if (!collision->isCollided)
+                continue;
+            // if it is collided, check if it has a postprocess component
+            if (!collision->postProcess)
+                continue;
+
+            // if it has a postprocess component, check if it has a postprocess index
+            if (collision->postProcessIndex < postProcessMaterialIndices.size())
+            {
+                // if it has a postprocess index, apply postprocessing
+                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[collision->postProcessIndex]);
+                // setup postprocess material
+                postProcessMaterials[collision->postProcessIndex]->setup();
+
+                postProcessMaterials[collision->postProcessIndex]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
+
+                // bind the postprocess vertex array to draw vertices
+                glBindVertexArray(postProcessVertexArrays[postProcessMaterialIndices[collision->postProcessIndex]]);
+                // draw the vertices
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+            }
+        }
+
         if (postProcessMaterialIndices.size() > 0)
         {
             // this was done by unbinding the postprocessFrameBuffer
@@ -370,6 +402,6 @@ namespace our
             // draw the vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
-
 }
