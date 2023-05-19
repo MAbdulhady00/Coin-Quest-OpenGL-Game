@@ -57,28 +57,32 @@ namespace our
         {
             if (const auto &shaders = config["postprocess"]; shaders.is_array())
             {
-                // use postprocessframebuffer of forwardrenderer as our framebuffer
-                glGenFramebuffers(1, &postprocessFrameBuffer);
-
-                //  Hints: The color format can be (Red, Green, Blue and Alpha components with 8 bits for each channel).
-                //  The depth format can be (Depth component with 24 bits).
-                // the enums of GL_RGBA8 and GL_DEPTH_COMPONENT24 didn't work, so I used GL_RGBA and GL_DEPTH_COMPONENT instead
-                this->depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT, this->windowSize);
-                this->colorTarget = texture_utils::empty(GL_RGBA, this->windowSize);
-
-                // bind the framebuffer before attach our textures
-                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
-                // attach the color and depth texture to the framebuffer
-                glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->colorTarget->getOpenGLName(), 0);
-                glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this->depthTarget->getOpenGLName(), 0);
-                // Unbind the framebuffer just to be safe
-                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-                // Create a vertex array to use for drawing the texture
-                glGenVertexArrays(1, &postProcessVertexArray);
                 int i = 0;
                 for (auto &shader : shaders)
                 {
+                    GLuint postProcessFrameBuffer;
+                    // use postprocessframebuffer of forwardrenderer as our framebuffer
+                    glGenFramebuffers(1, &postProcessFrameBuffer);
+                    this->postProcessFrameBuffers.push_back(postProcessFrameBuffer);
+
+                    //  Hints: The color format can be (Red, Green, Blue and Alpha components with 8 bits for each channel).
+                    //  The depth format can be (Depth component with 24 bits).
+                    // the enums of GL_RGBA8 and GL_DEPTH_COMPONENT24 didn't work, so I used GL_RGBA and GL_DEPTH_COMPONENT instead
+                    this->depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT, this->windowSize);
+                    this->colorTarget = texture_utils::empty(GL_RGBA, this->windowSize);
+
+                    // bind the framebuffer before attach our textures
+                    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffer);
+                    // attach the color and depth texture to the framebuffer
+                    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->colorTarget->getOpenGLName(), 0);
+                    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this->depthTarget->getOpenGLName(), 0);
+                    // Unbind the framebuffer just to be safe
+                    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+                    GLuint postProcessVertexArray;
+                    // Create a vertex array to use for drawing the texture
+                    glGenVertexArrays(1, &postProcessVertexArray);
+                    this->postProcessVertexArrays.push_back(postProcessVertexArray);
 
                     // Create a sampler to use for sampling the scene texture in the post processing shader
                     Sampler *postprocessSampler = new Sampler();
@@ -125,8 +129,8 @@ namespace our
         // Delete all objects related to post processing
         if (postprocessMaterials.size() > 0)
         {
-            glDeleteFramebuffers(1, &postprocessFrameBuffer);
-            glDeleteVertexArrays(1, &postProcessVertexArray);
+            // glDeleteFramebuffers(1, postprocessFrameBuffer);
+            // glDeleteVertexArrays(1, postProcessVertexArray);
             delete colorTarget;
             delete depthTarget;
         }
@@ -217,7 +221,7 @@ namespace our
         if (postprocessMaterials.size() > 0)
         {
             // bind the framebuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[0]);
         }
 
         // clear the color and depth buffers
@@ -324,38 +328,29 @@ namespace our
         for (int i = 0; i < postprocessMaterials.size() - 1; ++i)
         {
             // this was done by unbinding the postprocessFrameBuffer
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[i+1]);
             // setup postprocess material
             postprocessMaterials[i]->setup();
 
             postprocessMaterials[i]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
 
             // bind the postprocess vertex array to draw vertices
-            glBindVertexArray(postProcessVertexArray);
+            glBindVertexArray(postProcessVertexArrays[i]);
             // draw the vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
-            this->colorTarget = postprocessMaterials[i]->texture;
-            this->depthTarget = postprocessMaterials[i]->depthTexture;
-            // cascade the textures to the next postprocess material
-            if (i + 1 < postprocessMaterials.size())
-            {
-                postprocessMaterials[i + 1]->texture = this->colorTarget;
-                // postprocessMaterials[i + 1]->depthTexture = this->depthTarget;
-            }
         }
         if (postprocessMaterials.size() > 0)
         {
             // this was done by unbinding the postprocessFrameBuffer
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             int end = postprocessMaterials.size() - 1;
-            postprocessMaterials[end]->texture = this->colorTarget;
-            postprocessMaterials[end]->depthTexture = this->depthTarget;
 
             postprocessMaterials[end]->setup();
 
             postprocessMaterials[end]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
 
             // bind the postprocess vertex array to draw vertices
-            glBindVertexArray(postProcessVertexArray);
+            glBindVertexArray(postProcessVertexArrays[end]);
             // draw the vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }

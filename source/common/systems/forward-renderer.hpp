@@ -41,7 +41,7 @@ namespace our
         Mesh *skySphere;
         TexturedMaterial *skyMaterial;
         // Objects used for Postprocessing
-        GLuint postprocessFrameBuffer, postProcessVertexArray;
+        std::vector<GLuint> postProcessFrameBuffers, postProcessVertexArrays;
         Texture2D *colorTarget, *depthTarget;
         std::vector<TexturedMaterial *> postprocessMaterials;
 
