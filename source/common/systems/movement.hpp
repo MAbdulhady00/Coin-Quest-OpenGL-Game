@@ -47,7 +47,7 @@ namespace our
                         entity->localTransform.position.y = 0;
                     }
                     entity->localTransform.rotation += deltaTime * movement->angularVelocity;
-                    if (player || camera && movement->linearVelocity.z >= -80.0)
+                    if ((player || camera) && movement->linearVelocity.z >= -80.0)
                     {
                         movement->linearVelocity[2] -= deltaTime * 0.25;
                         if (player)
