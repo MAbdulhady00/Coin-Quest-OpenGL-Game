@@ -90,7 +90,7 @@ namespace our
 
             if(app->getKeyboard().isPressed(GLFW_KEY_W) && movement->linearVelocity.y == 0.0f)
                 movement->linearVelocity.y = jumpSpeed;
-
+            
             if(app->getKeyboard().isPressed(GLFW_KEY_S) && movement->linearVelocity.y == 0.0f)
                 position.y = 0.0f;
                 

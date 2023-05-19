@@ -131,9 +131,9 @@
           0
         ],
         "scale": [
-          10,
-          10,
-          10
+          0.03,
+          0.03,
+          0.03
         ],
         "components": [
           {
@@ -205,7 +205,7 @@
         "rock": "assets/textures/rock.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
-        "powerup": "assets/textures/battery.png",
+        "powerup": "assets/textures/powerup.png",
         "gem_heart_ambient_occlusion": "assets/textures/materials/gem_heart/ambient_occlusion.png",
         "albedo": "assets/textures/albedo.jpg",
         "emissive": "assets/textures/emissive.jpg",
@@ -224,7 +224,7 @@
         "rock": "assets/models/rock.obj",
         "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj",
-        "powerup": "assets/models/battery.obj"
+        "powerup": "assets/models/powerup.obj"
       },
       "samplers": {
         "default": {},

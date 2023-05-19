@@ -44,7 +44,7 @@ namespace our
             }
             if (collidedEntity->getComponent<PowerupTagComponent>())
             {
-                playerComponent->score += 5;
+                playerComponent->score += 10;
             }
 
                 // play sound effect
