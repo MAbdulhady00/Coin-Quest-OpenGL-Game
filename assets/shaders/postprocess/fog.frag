@@ -1,26 +1,33 @@
 #version 330 core
 
-
 in vec2 tex_coord;
+
+// This will be used to sample a color from the off-screen framebuffer on which we draw our scene.
+uniform sampler2D tex;
+// We will also use the scene depth to determine the amount of fog to apply.
+uniform sampler2D depth_sampler;
+
+// We will use the inverse projection to get the fragment coordinate in the camera (view/eye) space.
+uniform mat4 inverse_projection;
+
+// This determines the fog color.
+vec3 fog_color = vec3(0.5f, 0.5f, 0.5f);
+// This determines how much the fog affect the scene (0: no fog, 1: background will no longer be visible). Range [0,1]
+float fog_power =0.8f;
+// The fog exponent is 1/D where D is the distance at which the fog color will dominate 63.2% of the output color. This used to affect the density of the fog.
+// Since D ranges from 0 to infinity, fog exponent ranges from infinity (nothing will show up) to 0 (no fog).
+float fog_exponent = 0.1f;
 
 out vec4 frag_color;
 
-
-uniform sampler2D tex;
-float fogDensity = 0.1;
-vec3 fogColor = vec3(0.5,0.5,0.5);
-
-void main()
-{
-    // Sample the color of the current pixel from the scene texture
-    vec4 sceneColor = texture(tex, tex_coord);
-    
-    // Calculate the fog factor based on the distance from the camera
-    float fogFactor = exp(-fogDensity * gl_FragCoord.z);
-    
-    // Mix the scene color with the fog color based on the fog factor
-    vec3 finalColor = mix(sceneColor.rgb, fogColor, fogFactor);
-    
-    // Set the alpha value of the final color to the scene color's alpha
-    frag_color = vec4(finalColor, sceneColor.a);
+void main() {
+    float depth = texture(depth_sampler, tex_coord).r; // First we sample the pixel depth (value ranges from 0 to 1).
+    vec4 ndc_position = vec4(2.0f * tex_coord - 1.0f, 2.0f * depth - 1.0f, 1.0f); // Convert pixel from screenspace to NDC.
+    vec4 view_position = inverse_projection * ndc_position; // transform from NDC to camera (view/eye) space.
+    float distance = length(view_position.xyz / view_position.w); // Normalize w then calculate distance in view space.
+    float fog_mix_factor = fog_power * (1.0f - exp(- distance * fog_exponent)); // Calculate the fog factor using the exponential fog formula.
+    vec4 color = texture(tex, tex_coord); // Sample the scene color. This could be further optimized to use "texelFetch".
+    color.rgb = mix(color.rgb, fog_color, fog_mix_factor); // Mix the fog and the scene color.
+    frag_color = color; // Output the result.
+    // frag_color = texture(tex, tex_coord);
 }

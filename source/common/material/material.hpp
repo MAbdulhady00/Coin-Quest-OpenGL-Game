@@ -50,6 +50,7 @@ namespace our
     {
     public:
         Texture2D *texture;
+        Texture2D *depthTexture;
         Sampler *sampler;
         float alphaThreshold;
 

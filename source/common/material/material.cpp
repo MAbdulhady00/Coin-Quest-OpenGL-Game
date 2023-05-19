@@ -84,9 +84,17 @@ namespace our
         // Bind texture to texture unit 0
         shader->set("tex", 0);
         texture->bind();
-        // If there is a sampler, bind it to texture unit 0
         if (sampler)
             sampler->bind(0);
+        if(!depthTexture)
+            return;
+        glActiveTexture(GL_TEXTURE1);
+        shader->set("depth_sampler", 1);
+        depthTexture->bind();
+        // If there is a sampler, bind it to texture unit 0
+        if (sampler)
+            sampler->bind(1);
+        
     }
 
     /**

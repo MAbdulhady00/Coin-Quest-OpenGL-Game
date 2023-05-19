@@ -6,7 +6,7 @@ out/
 bin/
 
 # imgui saved state
-imgui.ini
+imgui.iniq
 
 # Since ".obj" are ignored by default, we force them to be added
 !assets/models/**/*.obj

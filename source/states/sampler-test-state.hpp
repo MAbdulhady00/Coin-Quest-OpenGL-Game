@@ -58,6 +58,7 @@ class SamplerTestState: public our::State {
         sampler->bind(0);
         // Then we send 0 (the index of the texture unit we used above) to the "tex" uniform
         shader->set("tex", 0);
+        shader->set("depth_sampler", 1);
         mesh->draw();
     }
 

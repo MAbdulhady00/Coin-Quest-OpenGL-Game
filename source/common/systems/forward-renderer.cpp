@@ -85,12 +85,15 @@ namespace our
             ShaderProgram *postprocessShader = new ShaderProgram();
             postprocessShader->attach("assets/shaders/fullscreen.vert", GL_VERTEX_SHADER);
             postprocessShader->attach(config.value<std::string>("postprocess", ""), GL_FRAGMENT_SHADER);
+            
+
             postprocessShader->link();
 
             // Create a post processing material
             postprocessMaterial = new TexturedMaterial();
             postprocessMaterial->shader = postprocessShader;
             postprocessMaterial->texture = colorTarget;
+            postprocessMaterial->depthTexture = depthTarget;
             postprocessMaterial->sampler = postprocessSampler;
             // The default options are fine but we don't need to interact with the depth buffer
             // so it is more performant to disable the depth mask
@@ -311,6 +314,8 @@ namespace our
 
             // setup postprocess material
             postprocessMaterial->setup();
+
+            postprocessMaterial->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
             // bind the postprocess vertex array to draw vertices
             glBindVertexArray(postProcessVertexArray);
             // draw the vertices
