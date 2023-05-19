@@ -53,9 +53,9 @@ namespace our
         }
 
         // Then we check if there is a postprocessing shader in the configuration
-        if (config.contains("postprocess"))
+        if (config.contains("postprocess_load"))
         {
-            if (const auto &shaders = config["postprocess"]; shaders.is_array())
+            if (const auto &shaders = config["postprocess_load"]; shaders.is_array())
             {
                 int i = 0;
                 for (auto &shader : shaders)
@@ -100,18 +100,24 @@ namespace our
                     postprocessShader->link();
 
                     // Create a post processing material
-                    this->postprocessMaterials.push_back(new TexturedMaterial());
-                    this->postprocessMaterials[i]->shader = postprocessShader;
-                    this->postprocessMaterials[i]->texture = this->colorTarget;
-                    this->postprocessMaterials[i]->depthTexture = this->depthTarget;
-                    this->postprocessMaterials[i]->sampler = postprocessSampler;
+                    this->postProcessMaterials.push_back(new TexturedMaterial());
+                    this->postProcessMaterials[i]->shader = postprocessShader;
+                    this->postProcessMaterials[i]->texture = this->colorTarget;
+                    this->postProcessMaterials[i]->depthTexture = this->depthTarget;
+                    this->postProcessMaterials[i]->sampler = postprocessSampler;
 
                     // The default options are fine but we don't need to interact with the depth buffer
                     // so it is more performant to disable the depth mask
-                    this->postprocessMaterials[i]->pipelineState.depthMask = false;
+                    this->postProcessMaterials[i]->pipelineState.depthMask = false;
                     i++;
                 }
             }
+        }
+        if (config.contains("postprocess_permanent"))
+        {
+            if (const auto &indicies = config["postprocess_permanent"]; indicies.is_array())
+                for (const auto &index : indicies)
+                    this->postProcessMaterialIndices.push_back(index);
         }
     }
 
@@ -127,7 +133,7 @@ namespace our
             delete skyMaterial;
         }
         // Delete all objects related to post processing
-        if (!postprocessMaterials.empty())
+        if (!postProcessMaterials.empty())
         {
             for (auto postprocessFrameBuffer : postProcessFrameBuffers)
             {
@@ -140,14 +146,15 @@ namespace our
             delete colorTarget;
             delete depthTarget;
         }
-        for (auto postprocessMaterial : postprocessMaterials)
+        for (auto postprocessMaterial : postProcessMaterials)
         {
             delete postprocessMaterial->sampler;
             delete postprocessMaterial->shader;
             delete postprocessMaterial;
         }
 
-        postprocessMaterials.clear();
+        postProcessMaterials.clear();
+        postProcessMaterialIndices.clear();
     }
 
     void ForwardRenderer::render(World *world)
@@ -227,10 +234,10 @@ namespace our
         glDepthMask(true);
 
         // If there is a postprocess material, bind the framebuffer
-        if (postprocessMaterials.size() > 0)
+        if (postProcessMaterialIndices.size() > 0)
         {
             // bind the framebuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[0]);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[postProcessMaterialIndices[0]]);
         }
 
         // clear the color and depth buffers
@@ -334,32 +341,32 @@ namespace our
             command.mesh->draw();
         }
         // If there is a postprocess material, apply postprocessing
-        for (int i = 0; i < postprocessMaterials.size() - 1; ++i)
+        for (int i = 0; i < int(postProcessMaterialIndices.size()) - 1; ++i)
         {
             // this was done by unbinding the postprocessFrameBuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[i + 1]);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[postProcessMaterialIndices[i + 1]]);
             // setup postprocess material
-            postprocessMaterials[i]->setup();
+            postProcessMaterials[postProcessMaterialIndices[i]]->setup();
 
-            postprocessMaterials[i]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
+            postProcessMaterials[postProcessMaterialIndices[i]]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
 
             // bind the postprocess vertex array to draw vertices
-            glBindVertexArray(postProcessVertexArrays[i]);
+            glBindVertexArray(postProcessVertexArrays[postProcessMaterialIndices[i]]);
             // draw the vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
-        if (postprocessMaterials.size() > 0)
+        if (postProcessMaterialIndices.size() > 0)
         {
             // this was done by unbinding the postprocessFrameBuffer
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            int end = postprocessMaterials.size() - 1;
+            int end = postProcessMaterialIndices.size() - 1;
 
-            postprocessMaterials[end]->setup();
+            postProcessMaterials[postProcessMaterialIndices[end]]->setup();
 
-            postprocessMaterials[end]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
+            postProcessMaterials[postProcessMaterialIndices[end]]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
 
             // bind the postprocess vertex array to draw vertices
-            glBindVertexArray(postProcessVertexArrays[end]);
+            glBindVertexArray(postProcessVertexArrays[postProcessMaterialIndices[end]]);
             // draw the vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
