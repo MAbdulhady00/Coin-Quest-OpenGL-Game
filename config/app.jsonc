@@ -469,7 +469,7 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "albedo": "rock",
+          "albedo": "lamp",
           "sampler": "default"
         },
         "powerup": {
@@ -514,7 +514,7 @@
             "typeLight": "directional",
             "enabled": true,
             "direction": [-1, -1, 0],
-            "color": [0.8, 0.4, 0.4]
+            "color": [0.6, 0.6, 0.4]
           }
         ]
       },
@@ -634,7 +634,7 @@
           {
             "type": "LightSpectrum",
             "typeLight": "point",
-            "color": [1.5, 0.2, 0.2],
+            "color": [0.5, 0.0, 0.0],
             "attenuation": {
               "constant": 0.0,
               "linear": 0.0,
