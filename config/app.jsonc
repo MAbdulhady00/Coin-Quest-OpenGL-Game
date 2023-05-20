@@ -12,7 +12,7 @@
     "generator": {
       "initialGeneration": -10,
       "generationPlaneOffset": 150,
-      "destructionPlaneOffset": -10,
+      "destructionPlaneOffset": -25,
       "horizontalDistance": 9,
       // distance between generated objects in the z-axis
       "generationStep": 3,
@@ -54,18 +54,23 @@
             "children": [
               {
                 "name": "Lamp Light",
-                "position": [-3.5, 2.75, 0],
+                "position": [0.8, 2.75, 0],
                 "rotation": [0, 0, 0],
                 "components": [
                   {
                     "type": "Light",
-                    "typeLight": "point",
-                    "color": [1.0, 1.0, 1.0],
+                    "typeLight": "spot",
+                    "color": [0.0, 0.0, 1.0],
                     "attenuation": {
-                      "constant": 0.0,
+                      "constant": 1.0,
                       "linear": 0.0,
-                      "quadratic": 0.25
-                    }
+                      "quadratic": 0.0
+                    },
+                    "spot_angle": {
+                      "inner": 5.0,
+                      "outer": 75.0
+                    },
+                    "direction": [-0.2, -1.0, 0.05]
                   }
                 ]
               }
@@ -86,18 +91,23 @@
             "children": [
               {
                 "name": "Lamp Light",
-                "position": [3.5, 2.75, 0],
+                "position": [-0.8, 2.75, 0],
                 "rotation": [0, 0, 0],
                 "components": [
                   {
                     "type": "Light",
-                    "typeLight": "point",
-                    "color": [1.0, 1.0, 1.0],
+                    "typeLight": "spot",
+                    "color": [1.0, 0.0, 0.0],
                     "attenuation": {
-                      "constant": 0.0,
+                      "constant": 1.0,
                       "linear": 0.0,
-                      "quadratic": 0.25
-                    }
+                      "quadratic": 0.0
+                    },
+                    "spot_angle": {
+                      "inner": 5.0,
+                      "outer": 75.0
+                    },
+                    "direction": [0.2, -1.0, 0.05]
                   }
                 ]
               }
@@ -235,6 +245,10 @@
           "vs": "assets/shaders/light.vert",
           "fs": "assets/shaders/light.frag"
         },
+        "light_spectrum": {
+          "vs": "assets/shaders/light.vert",
+          "fs": "assets/shaders/light_spectrum.frag"
+        },
         // repeats the texture based on world position
         // useful for plane and cube meshes that stretch the texture
         "light_repeated": {
@@ -245,6 +259,9 @@
       "textures": {
         "moon": "assets/textures/moon.jpg",
         "ball": "assets/textures/ball.png",
+        "ball_albedo": "assets/textures/materials/ball/albedo.png",
+        "ball_emissive": "assets/textures/materials/ball/emissive.png",
+        "ball_ambient_occlusion": "assets/textures/materials/ball/ambient_occlusion.png",
         "grass": "assets/textures/grass_ground_d.jpg",
         "wood": "assets/textures/wood.jpg",
         "glass": "assets/textures/glass-panels.png",
@@ -387,7 +404,7 @@
         },
         "ball": {
           "type": "lit",
-          "shader": "light",
+          "shader": "light_spectrum",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -397,10 +414,11 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "albedo": "ball",
+          "albedo": "ball_albedo",
           "specular": "black",
           "roughness": "white",
-          "emissive": "ball",
+          "emissive": "ball_emissive",
+          "ambient_occlusion": "ball_ambient_occlusion",
           "sampler": "default"
         },
         "coin": {
@@ -613,7 +631,7 @@
             "linearVelocity": [0, 0, -5.0]
           },
           {
-            "type": "Light",
+            "type": "LightSpectrum",
             "typeLight": "point",
             "color": [1.5, 0.2, 0.2],
             "attenuation": {
@@ -621,29 +639,18 @@
               "linear": 0.0,
               "quadratic": 0.25
             }
-          }
-        ],
-        "children": [
-          {
-            "position": [0, 0.5, 0],
-            "components": [
-              {
-                "type": "Light",
-                "enabled": false,
-                "typeLight": "spot",
-                "color": [1.0, 0.5, 1.0],
-                "attenuation": {
-                  "constant": 1.0,
-                  "linear": 0.0,
-                  "quadratic": 0.0
-                },
-                "direction": [0, 0, -1],
-                "spot_angle": {
-                  "inner": 20,
-                  "outer": 50
-                }
-              }
-            ]
+            // "typeLight": "spot",
+            // "color": [1.0, 1.0, 1.0],
+            // "attenuation": {
+            //   "constant": 0.5,
+            //   "linear": 0.0,
+            //   "quadratic": 0.0
+            // },
+            // "spot_angle": {
+            //   "inner": 0.0,
+            //   "outer": 45.0
+            // },
+            // "direction": [-1.0, 0.0, -1.0]
           }
         ]
       },

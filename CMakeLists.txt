@@ -73,6 +73,8 @@ set(COMMON_SOURCES
         source/common/components/camera.cpp
         source/common/components/light.hpp
         source/common/components/light.cpp
+        source/common/components/light_spectrum.hpp
+        source/common/components/light_spectrum.cpp
         source/common/components/mesh-renderer.hpp
         source/common/components/mesh-renderer.cpp
         source/common/components/free-camera-controller.hpp

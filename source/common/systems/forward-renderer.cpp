@@ -2,6 +2,7 @@
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 #include "../components/postprocess.hpp"
+#include "../components/light_spectrum.hpp"
 #include <ctime>
 namespace our
 {
@@ -288,6 +289,8 @@ namespace our
             command.material->shader->set("transform", VP * command.localToWorld);
             // set the light count
             command.material->shader->set("light_count", static_cast<int>(lights.size()));
+            // set the time
+            command.material->shader->set("time", static_cast<float>(time));
             // set the light properties
             int light_index = 0;
             // add the light effects
@@ -307,7 +310,10 @@ namespace our
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
                 command.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
-                command.material->shader->set(prefix + "color", light->color);
+                if (dynamic_cast<LightSpectrumComponent *>(light) != nullptr)
+                    command.material->shader->set(prefix + "color", ((LightSpectrumComponent *)light)->getColor(time));
+                else
+                    command.material->shader->set(prefix + "color", light->color);
                 switch (light->typeLight)
                 {
                 case LightType::DIRECTIONAL:

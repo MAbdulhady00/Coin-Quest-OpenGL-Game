@@ -6,6 +6,7 @@
 #include "player.hpp"
 #include "free-camera-controller.hpp"
 #include "light.hpp"
+#include "light_spectrum.hpp"
 #include "movement.hpp"
 #include "player-movement-controller.hpp"
 #include "score-digit.hpp"
@@ -102,6 +103,10 @@ namespace our
         else if (type == WarnTagComponent::getID())
         {
             component = entity->addComponent<WarnTagComponent>();
+        }
+        else if (type == LightSpectrumComponent::getID())
+        {
+            component = entity->addComponent<LightSpectrumComponent>();
         }
         else
         {
