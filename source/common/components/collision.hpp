@@ -15,9 +15,6 @@ namespace our
         double detectionRadius = 1.0;
         int soundName;
         std::string soundPath;
-        bool postProcess = false;
-        int postProcessIndex = 0;
-        bool isCollided = false;
         // The ID of this component type is "Collision"
         static std::string getID() { return "Collision"; }
 

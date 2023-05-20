@@ -17,7 +17,7 @@
       // distance between generated objects in the z-axis
       "generationStep": 3,
       // rng chance of generating an object
-      "generationChance": 0.1,
+      "generationChance": 0.2,
       // all the probabilities should sum up to 1
       "coinChance": 0.7,
       "obstacleChance": 0.25,
@@ -579,6 +579,16 @@
             "type": "Movement",
             "angularVelocity": [0, 100, 0],
             "linearVelocity": [0.15, 0, 0.5]
+          }
+        ]
+      },
+      {
+        "name": "hitPostProcess",
+        "components": [
+          {
+            "type": "PostProcess",
+            "postProcessIndex": 0,
+            "isEnabled": false
           }
         ]
       }

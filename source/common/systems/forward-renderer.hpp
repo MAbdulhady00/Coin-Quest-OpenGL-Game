@@ -45,6 +45,7 @@ namespace our
         Texture2D *colorTarget, *depthTarget;
         std::vector<TexturedMaterial *> postProcessMaterials;
         std::vector<int> postProcessMaterialIndices;
+        float time = 0.0f;
 
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.
@@ -53,7 +54,7 @@ namespace our
         // Clean up the renderer
         void destroy();
         // This function should be called every frame to draw the given world
-        void render(World *world);
+        void render(World *world, float deltaTime);
     };
 
 }
