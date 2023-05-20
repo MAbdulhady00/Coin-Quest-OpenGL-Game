@@ -24,4 +24,17 @@ namespace our
         }
     }
 
+    Entity *World::deserializeEntity(const nlohmann::json &data, Entity *parent)
+    {
+        if (!data.is_object())
+            return nullptr;
+        Entity *entity = add();
+        entity->parent = parent;
+        entity->deserialize(data);
+        if (data.contains("children"))
+        {
+            deserialize(data["children"], entity);
+        }
+        return entity;
+    }
 }

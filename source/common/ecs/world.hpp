@@ -20,6 +20,11 @@ namespace our
         // If any of the entities has children, this function will be called recursively for these children
         void deserialize(const nlohmann::json &data, Entity *parent = nullptr);
 
+        // helper function to deserialize a single entity
+        // This will deserialize a json object of an entity and its children and add the new entity to the current world
+        // If parent pointer is not null, the new entity will be have its parent set to that given pointer
+        Entity *deserializeEntity(const nlohmann::json &data, Entity *parent = nullptr);
+
         // This adds an entity to the entities set and returns a pointer to that entity
         // WARNING The entity is owned by this world so don't use "delete" to delete it, instead, call "markForRemoval"
         // to put it in the "markedForRemoval" set. The elements in the "markedForRemoval" set will be removed and
@@ -50,8 +55,8 @@ namespace our
             if (entities.find(entity) != entities.end())
             {
                 markedForRemoval.insert(entity);
-                for (Entity* child : entities)
-                    if(child->parent == entity)
+                for (Entity *child : entities)
+                    if (child->parent == entity)
                         markForRemoval(child);
             }
         }

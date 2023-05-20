@@ -31,7 +31,7 @@ namespace our
         double coinChance = 0.25;          // The chance that a coin will be generated
         double obstacleChance = 0.25;      // The chance that an obstacle will be generated
         double heartChance = 0.25;         // The chance that a heart will be generated
-        double powerupChance = 0.25;      // The chance that a powerup will be generated
+        double powerupChance = 0.25;       // The chance that a powerup will be generated
         double generationStep = 1.0;       // The distance between each generation attempt
         double groundLength = 100.0;       // The length of the ground
         double lastGroundGeneration = 0.0; // The last ground generated
@@ -43,23 +43,23 @@ namespace our
         nlohmann::json powerupConfig;
         nlohmann::json groundConfig;
 
-        void deserializeEntityConfig(const nlohmann::json &data, World* world, Entity *parent)
-        {
-            if (!data.is_array())
-                return;
-            for (const auto &entityData : data)
-            {
-                // Create an entity, make its parent "parent" and call its deserialize with "entityData".
-                Entity *entity = world->add();
-                entity->parent = parent;
-                entity->deserialize(entityData);
-                if (entityData.contains("children"))
-                {
-                    // If the entity has children, call this function recursively with the children data and the entity as parent
-                    deserializeEntityConfig(entityData["children"], world, entity);
-                }
-            }
-        }
+        // void deserializeEntityConfig(const nlohmann::json &data, World* world, Entity *parent)
+        // {
+        //     if (!data.is_array())
+        //         return;
+        //     for (const auto &entityData : data)
+        //     {
+        //         // Create an entity, make its parent "parent" and call its deserialize with "entityData".
+        //         Entity *entity = world->add();
+        //         entity->parent = parent;
+        //         entity->deserialize(entityData);
+        //         if (entityData.contains("children"))
+        //         {
+        //             // If the entity has children, call this function recursively with the children data and the entity as parent
+        //             deserializeEntityConfig(entityData["children"], world, entity);
+        //         }
+        //     }
+        // }
 
         inline Entity *randomEntityFactory(World *world, Entity *entity)
         {
@@ -70,46 +70,23 @@ namespace our
             // If the random number is less than the coin chance, generate a coin
             if (random < currentChance)
             {
-                entity->deserialize(coinConfig);
-                if (coinConfig.contains("children"))
-                {
-                    // If the entity has children, call this function recursively with the children data and the entity as parent
-                    deserializeEntityConfig(coinConfig["children"], world, entity);
-                }
+                return world->deserializeEntity(coinConfig);
             }
             // If the random number is less than the obstacle chance, generate an obstacle
             else if (random < currentChance + obstacleChance)
             {
-                entity->deserialize(obstacleConfig);
-                if (obstacleConfig.contains("children"))
-                {
-                    // If the entity has children, call this function recursively with the children data and the entity as parent
-                    deserializeEntityConfig(obstacleConfig["children"], world, entity);
-                }
+                return world->deserializeEntity(obstacleConfig);
             }
             // If the random number is less than the powerup chance, generate a powerup
             else if (random < currentChance + obstacleChance + powerupChance)
             {
-                entity->deserialize(powerupConfig);
-                if (powerupConfig.contains("children"))
-                {
-                    // If the entity has children, call this function recursively with the children data and the entity as parent
-                    deserializeEntityConfig(powerupConfig["children"], world, entity);
-                }
+                return world->deserializeEntity(powerupConfig);
             }
             // must generate a heart
             else
             {
-                entity->deserialize(heartConfig);
-                if (heartConfig.contains("children"))
-                {
-                    // If the entity has children, call this function recursively with the children data and the entity as parent
-                    deserializeEntityConfig(heartConfig["children"], world, entity);
-                }
+                return world->deserializeEntity(heartConfig);
             }
-
-            // for cascading
-            return entity;
         }
 
     public:
@@ -158,13 +135,7 @@ namespace our
             {
                 if (lastGroundGeneration > playerPosition.z - groundLength)
                 {
-                    Entity *generatedGroundEntity = world->add();
-                    generatedGroundEntity->deserialize(groundConfig);
-                    if (groundConfig.contains("children"))
-                    {
-                        // If the entity has children, call this function recursively with the children data and the entity as parent
-                        deserializeEntityConfig(groundConfig["children"], world, generatedGroundEntity);
-                    }
+                    Entity *generatedGroundEntity = world->deserializeEntity(groundConfig);
                     generatedGroundEntity->localTransform.position = glm::vec3(0, generatedGroundEntity->localTransform.position.y, lastGroundGeneration);
                     generatedGroundEntity->addComponent<GeneratedTagComponent>();
                     lastGroundGeneration -= groundLength;
@@ -173,8 +144,7 @@ namespace our
                 {
                     if (distribution(rng) <= generationChance)
                     {
-                        Entity *generatedEntity = world->add();
-                        randomEntityFactory(world, generatedEntity);
+                        Entity *generatedEntity = randomEntityFactory(world, generatedEntity);
                         generatedEntity->localTransform.position = glm::vec3(i, generatedEntity->localTransform.position.y, lastGeneration);
                         generatedEntity->addComponent<GeneratedTagComponent>();
                         std::cout << "Generated entity at " << generatedEntity->localTransform.position.x << ", " << generatedEntity->localTransform.position.y << ", " << generatedEntity->localTransform.position.z << std::endl;
