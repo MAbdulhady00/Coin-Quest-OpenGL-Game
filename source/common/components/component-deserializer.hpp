@@ -15,6 +15,8 @@
 #include "tags/obstacle.hpp"
 #include "tags/powerup.hpp"
 #include "tags/heart.hpp"
+#include "tags/blur-post-process.hpp"
+#include "tags/warn-post-process.hpp"
 
 namespace our
 {
@@ -92,6 +94,14 @@ namespace our
         else if (type == PostProcessComponent::getID())
         {
             component = entity->addComponent<PostProcessComponent>();
+        }
+        else if (type == BlurTagComponent::getID())
+        {
+            component = entity->addComponent<BlurTagComponent>();
+        }
+        else if (type == WarnTagComponent::getID())
+        {
+            component = entity->addComponent<WarnTagComponent>();
         }
         else
         {

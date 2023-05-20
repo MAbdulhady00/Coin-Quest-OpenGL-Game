@@ -9,6 +9,8 @@
 #include "../components/tags/obstacle.hpp"
 #include "../components/tags/powerup.hpp"
 #include "../components/postprocess.hpp"
+#include "../components/tags/warn-post-process.hpp"
+#include "../components/tags/blur-post-process.hpp"
 #include <audio/audio.hpp>
 #include <glm/glm.hpp>
 
@@ -41,9 +43,25 @@ namespace our
                     for (auto entity : collidedEntity->getWorld()->getEntities())
                     {
                         PostProcessComponent *postProcessComponent = entity->getComponent<PostProcessComponent>();
-                        if (postProcessComponent)
+                        WarnTagComponent *warnTagComponent = entity->getComponent<WarnTagComponent>();
+                        if (postProcessComponent && warnTagComponent)
                         {
                             postProcessComponent->isEnabled = false;
+                            break;
+                        }
+                    }
+                }
+                else if (playerComponent->lives == 4)
+                {
+
+                    // search for the post process component and enable it
+                    for (auto entity : collidedEntity->getWorld()->getEntities())
+                    {
+                        PostProcessComponent *postProcessComponent = entity->getComponent<PostProcessComponent>();
+                        BlurTagComponent *blurTagComponent = entity->getComponent<BlurTagComponent>();
+                        if (postProcessComponent && blurTagComponent)
+                        {
+                            postProcessComponent->isEnabled = true;
                             break;
                         }
                     }
@@ -55,13 +73,28 @@ namespace our
             {
                 if (playerComponent->lives == 2)
                 {
-                    // search for the post process component and enable it
+                    // search for the warn post process component and enable it
                     for (auto entity : collidedEntity->getWorld()->getEntities())
                     {
                         PostProcessComponent *postProcessComponent = entity->getComponent<PostProcessComponent>();
-                        if (postProcessComponent)
+                        WarnTagComponent *warnTagComponent = entity->getComponent<WarnTagComponent>();
+                        if (postProcessComponent && warnTagComponent)
                         {
                             postProcessComponent->isEnabled = true;
+                            break;
+                        }
+                    }
+                }
+                else if (playerComponent->lives == 5)
+                {
+                    // search for the post process component and disable it
+                    for (auto entity : collidedEntity->getWorld()->getEntities())
+                    {
+                        PostProcessComponent *postProcessComponent = entity->getComponent<PostProcessComponent>();
+                        BlurTagComponent *blurTagComponent = entity->getComponent<BlurTagComponent>();
+                        if (postProcessComponent && blurTagComponent)
+                        {
+                            postProcessComponent->isEnabled = false;
                             break;
                         }
                     }

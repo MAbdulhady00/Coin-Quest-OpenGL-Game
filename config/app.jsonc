@@ -38,7 +38,7 @@
             "sampler": "repeated"
           }
         ],
-        "children" : [
+        "children": [
           {
             "name": "Lamp",
             "position": [-0.8, 1.0, 0],
@@ -51,7 +51,7 @@
                 "material": "lamp"
               }
             ],
-            "children" : [
+            "children": [
               {
                 "name": "Lamp Light",
                 "position": [-3.5, 2.75, 0],
@@ -83,7 +83,7 @@
                 "material": "lamp"
               }
             ],
-            "children" : [
+            "children": [
               {
                 "name": "Lamp Light",
                 "position": [3.5, 2.75, 0],
@@ -215,7 +215,9 @@
       "postprocess_load": [
         "assets/shaders/postprocess/hit.frag",
         "assets/shaders/postprocess/fog.frag",
-        "assets/shaders/postprocess/radial-blur.frag"
+        "assets/shaders/postprocess/radial-blur.frag",
+        "assets/shaders/postprocess/chromatic-aberration.frag",
+        "assets/shaders/postprocess/grayscale.frag"
       ],
       "postprocess_permanent": [1]
     },
@@ -282,7 +284,7 @@
         "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj",
         "powerup": "assets/models/powerup.obj",
-        "lamp" : "assets/models/lamp.obj"
+        "lamp": "assets/models/lamp.obj"
       },
       "samplers": {
         "default": {},
@@ -617,7 +619,7 @@
           // }
           {
             "type": "Light",
-            "enabled" : false,
+            "enabled": false,
             "typeLight": "spot",
             "color": [1.0, 0.5, 1.0],
             "attenuation": {
@@ -668,12 +670,28 @@
         ]
       },
       {
-        "name": "hitPostProcess",
+        "name": "warnPostProcess",
         "components": [
           {
             "type": "PostProcess",
             "postProcessIndex": 0,
             "isEnabled": false
+          },
+          {
+            "type": "WarnTag"
+          }
+        ]
+      },
+      {
+        "name": "blurPostProcess",
+        "components": [
+          {
+            "type": "PostProcess",
+            "postProcessIndex": 2,
+            "isEnabled": false
+          },
+          {
+            "type": "BlurTag"
           }
         ]
       }
