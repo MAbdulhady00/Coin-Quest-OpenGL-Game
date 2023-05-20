@@ -68,7 +68,7 @@ class Playstate : public our::State
         hudSystem.update(&world, (float)deltaTime);
         generatorSystem.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
-        renderer.render(&world);
+        renderer.render(&world, (float)deltaTime);
 
         for (auto entity : world.getEntities())
         {

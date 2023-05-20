@@ -10,6 +10,7 @@
 #include "player-movement-controller.hpp"
 #include "score-digit.hpp"
 #include "collision.hpp"
+#include "postprocess.hpp"
 #include "tags/coin.hpp"
 #include "tags/obstacle.hpp"
 #include "tags/powerup.hpp"
@@ -87,6 +88,10 @@ namespace our
         {
             // if the type is "CollisionComponent", then create a new CollisionComponent and return pointer to it
             component = entity->addComponent<CollisionComponent>();
+        }
+        else if (type == PostProcessComponent::getID())
+        {
+            component = entity->addComponent<PostProcessComponent>();
         }
         else
         {

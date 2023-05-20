@@ -2,7 +2,7 @@
 
 // The texture holding the scene pixels
 uniform sampler2D tex;
-
+uniform float time;
 // Read "assets/shaders/fullscreen.vert" to know what "tex_coord" holds;
 in vec2 tex_coord;
 
@@ -30,5 +30,5 @@ void main() {
   col = ndc_length_sq * col;
 
   // Apply the vignette effect to the scene color
-  frag_color = texture(tex, tex_coord) + col;
+  frag_color = texture(tex, tex_coord) + col * pow(sin(2 * time), 2);
 }

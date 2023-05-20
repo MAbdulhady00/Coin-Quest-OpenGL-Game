@@ -8,6 +8,7 @@
 #include "../components/tags/heart.hpp"
 #include "../components/tags/obstacle.hpp"
 #include "../components/tags/powerup.hpp"
+#include "../components/postprocess.hpp"
 #include <audio/audio.hpp>
 #include <glm/glm.hpp>
 
@@ -41,15 +42,28 @@ namespace our
             {
                 // Decrease the lives
                 playerComponent->lives--;
+                if(playerComponent->lives <= 1)
+                {
+                    // search for the post process component and enable it
+                    for (auto entity : collidedEntity->getWorld()->getEntities())
+                    {
+                        PostProcessComponent *postProcessComponent = entity->getComponent<PostProcessComponent>();
+                        if (postProcessComponent)
+                        {
+                            postProcessComponent->isEnabled = true;
+                            break;
+                        }
+                    }
+                }
             }
             if (collidedEntity->getComponent<PowerupTagComponent>())
             {
                 playerComponent->score += 10;
             }
 
-                // play sound effect
-                audioPlayer.play(collidedEntity->getComponent<CollisionComponent>()->soundPath,
-                                 collidedEntity->getComponent<CollisionComponent>()->soundName);
+            // play sound effect
+            audioPlayer.play(collidedEntity->getComponent<CollisionComponent>()->soundPath,
+                             collidedEntity->getComponent<CollisionComponent>()->soundName);
             return true;
         }
 
@@ -92,7 +106,6 @@ namespace our
                     // Check if the player is colliding with the coin
                     if (glm::distance(playerPosition, entity->localTransform.position) <= collision->detectionRadius)
                     {
-                        collision->isCollided = true;
                         // handle collision
                         if (onCollision(player, entity))
                             world->markForRemoval(entity);
