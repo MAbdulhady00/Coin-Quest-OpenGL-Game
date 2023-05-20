@@ -22,7 +22,7 @@
       "coinChance": 0.7,
       "obstacleChance": 0.25,
       "heartChance": 0.05,
-      "powerupChance":0.5,
+      "powerupChance": 0.5,
       // generated ground
       "groundLength": 100,
       "ground": {
@@ -41,9 +41,9 @@
       // generated coin
       "coin": {
         "name": "Coin",
-        "position": [0, -0.5, 0],
+        "position": [0, -0.25, 0],
         "rotation": [0, 0, 0],
-        "scale": [0.1, 0.1, 0.1],
+        "scale": [1.5, 1.5, 1.5],
         "components": [
           {
             "type": "Mesh Renderer",
@@ -122,21 +122,9 @@
       // generated powerup
       "powerup": {
         "name": "Powerup",
-        "position": [
-          0,
-          -0.5,
-          0
-        ],
-        "rotation": [
-          0,
-          0,
-          0
-        ],
-        "scale": [
-          0.03,
-          0.03,
-          0.03
-        ],
+        "position": [0, -0.5, 0],
+        "rotation": [0, 0, 0],
+        "scale": [0.03, 0.03, 0.03],
         "components": [
           {
             "type": "Mesh Renderer",
@@ -153,7 +141,6 @@
             "soundName": 3
           }
         ]
-
       }
     },
     "renderer": {
@@ -387,32 +374,7 @@
               "enabled": true
             }
           },
-          "tint": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "texture": "powerup",
-          "sampler": "default"
-        },
-        "gem_heart": {
-          "type": "lit",
-          "shader": "light",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [
-            1,
-            1,
-            1,
-            1
-          ],
+          "tint": [1, 1, 1, 1],
           "texture": "powerup",
           "sampler": "default"
         },
@@ -443,7 +405,7 @@
             "typeLight": "directional",
             "enabled": true,
             "direction": [-1, -1, 0],
-            "color": [0.1, 0.1, 0.1]
+            "color": [0.8, 0.8, 0.8]
           }
         ]
       },
@@ -558,6 +520,31 @@
             "type": "Movement",
             "angularVelocity": [-500, 0, 0],
             "linearVelocity": [0, 0, -5.0]
+          },
+          // {
+          //   "type": "Light",
+          //   "typeLight": "point",
+          //   "color": [1.5, 1.5, 0.2],
+          //   "attenuation": {
+          //     "constant": 0.0,
+          //     "linear": 0.0,
+          //     "quadratic": 0.5
+          //   }
+          // }
+          {
+            "type": "Light",
+            "typeLight": "spot",
+            "color": [1.0, 1.0, 1.0],
+            "attenuation": {
+              "constant": 1.0,
+              "linear": 0.0,
+              "quadratic": 0.0
+            },
+            "direction": [0, 0, -1],
+            "spot_angle": {
+              "inner": 2.5,
+              "outer": 12.5
+            }
           }
         ]
       },

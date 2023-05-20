@@ -27,11 +27,12 @@ namespace our
         else if (typeLocal == "spot")
         {
             typeLight = LightType::SPOT;
+            direction = data["direction"];
             attenuation.constant = data["attenuation"]["constant"];
             attenuation.linear = data["attenuation"]["linear"];
             attenuation.quadratic = data["attenuation"]["quadratic"];
-            spot_angle.inner = data["spot_angle"]["inner"];
-            spot_angle.outer = data["spot_angle"]["outer"];
+            spot_angle.inner = glm::radians(data["spot_angle"].value("inner", 0.0f));
+            spot_angle.outer = glm::radians(data["spot_angle"].value("outer", 0.0f));
         }
         else if (typeLocal == "sky")
         {
