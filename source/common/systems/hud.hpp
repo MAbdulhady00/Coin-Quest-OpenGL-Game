@@ -45,9 +45,9 @@ namespace our
             ImGui::GetFont()->Scale = 4.0f;
             ImGui::PushFont(ImGui::GetFont());
             ImDrawList *drawList = ImGui::GetBackgroundDrawList();
-            drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(player->score).c_str());
-            drawList->AddText(ImVec2(1100, 25), ImColor(1.0f, 1.0f, 0.0f), std::to_string(player->lives).c_str());
-            drawList->AddText(ImVec2(1100, 75), ImColor(1.0f, 1.0f, 0.0f), std::to_string(abs((long long)player->getOwner()->localTransform.position.z)).c_str());
+            drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), ("Score: " + std::to_string(player->score)).c_str());
+            drawList->AddText(ImVec2(1000, 25), ImColor(1.0f, 1.0f, 0.0f), ("Lives: " + std::to_string(player->lives)).c_str());
+            drawList->AddText(ImVec2(500, 25), ImColor(1.0f, 1.0f, 0.0f), ("Distance: " + std::to_string(abs((long long)player->getOwner()->localTransform.position.z))).c_str());
             ImGui::PopFont();
         }
     };
