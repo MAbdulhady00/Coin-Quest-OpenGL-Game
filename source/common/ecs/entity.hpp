@@ -6,7 +6,6 @@
 #include <iterator>
 #include <string>
 #include <glm/glm.hpp>
-
 namespace our
 {
 
