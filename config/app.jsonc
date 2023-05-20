@@ -19,10 +19,10 @@
       // rng chance of generating an object
       "generationChance": 0.1,
       // all the probabilities should sum up to 1
-      "coinChance": 0.7,
+      "coinChance": 0.65,
       "obstacleChance": 0.25,
       "heartChance": 0.05,
-      "powerupChance": 0.5,
+      "powerupChance": 0.05,
       // generated ground
       "groundLength": 100,
       "ground": {
@@ -536,14 +536,14 @@
             "typeLight": "spot",
             "color": [1.0, 1.0, 1.0],
             "attenuation": {
-              "constant": 1.0,
+              "constant": 2.0,
               "linear": 0.0,
               "quadratic": 0.0
             },
             "direction": [0, 0, -1],
             "spot_angle": {
-              "inner": 2.5,
-              "outer": 12.5
+              "inner": 0.5,
+              "outer": 3.14
             }
           }
         ]

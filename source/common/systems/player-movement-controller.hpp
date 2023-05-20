@@ -82,17 +82,14 @@ namespace our
             // S & W moves the player back and forth
 
             // A & D moves the player left or right
-            if (app->getKeyboard().isPressed(GLFW_KEY_D))
+            if (app->getKeyboard().isPressed(GLFW_KEY_D) || app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
                 position += right * (deltaTime * current_sensitivity.x);
 
-            if (app->getKeyboard().isPressed(GLFW_KEY_A))
+            if (app->getKeyboard().isPressed(GLFW_KEY_A) || app->getKeyboard().isPressed(GLFW_KEY_LEFT))
                 position -= right * (deltaTime * current_sensitivity.x);
 
-            if(app->getKeyboard().isPressed(GLFW_KEY_W) && movement->linearVelocity.y == 0.0f)
+            if((app->getKeyboard().isPressed(GLFW_KEY_W) || app->getKeyboard().isPressed(GLFW_KEY_UP)) && movement->linearVelocity.y == 0.0f)
                 movement->linearVelocity.y = jumpSpeed;
-            
-            if(app->getKeyboard().isPressed(GLFW_KEY_S) && movement->linearVelocity.y == 0.0f)
-                position.y = 0.0f;
                 
             // clamp x position to -10 and 10
             if (position.x > controller->maxHorizontalDistance)
