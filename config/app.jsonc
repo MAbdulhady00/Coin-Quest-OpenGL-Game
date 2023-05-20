@@ -520,7 +520,7 @@
             "type": "Movement",
             "angularVelocity": [-500, 0, 0],
             "linearVelocity": [0, 0, -5.0]
-          },
+          }
           // {
           //   "type": "Light",
           //   "typeLight": "point",
@@ -531,21 +531,21 @@
           //     "quadratic": 0.5
           //   }
           // }
-          {
-            "type": "Light",
-            "typeLight": "spot",
-            "color": [1.0, 1.0, 1.0],
-            "attenuation": {
-              "constant": 2.0,
-              "linear": 0.0,
-              "quadratic": 0.0
-            },
-            "direction": [0, 0, -1],
-            "spot_angle": {
-              "inner": 0.5,
-              "outer": 3.14
-            }
-          }
+          // {
+          //   "type": "Light",
+          //   "typeLight": "spot",
+          //   "color": [1.0, 1.0, 1.0],
+          //   "attenuation": {
+          //     "constant": 1.0,
+          //     "linear": 0.0,
+          //     "quadratic": 0.0
+          //   },
+          //   "direction": [0, 0, -1],
+          //   "spot_angle": {
+          //     "inner": 20,
+          //     "outer": 50
+          //   }
+          // }
         ]
       },
       {

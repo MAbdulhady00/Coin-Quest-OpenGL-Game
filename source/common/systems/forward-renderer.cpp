@@ -298,7 +298,9 @@ namespace our
                 if (!light->enabled)
                     continue;
                 light->position = light->getOwner()->getWorldTranslation();
-                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 0.0);
+                // light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 0.0);
+                light->direction = glm::normalize(light->direction);
+
                 // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
                 // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
 
