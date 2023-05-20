@@ -1,5 +1,6 @@
 {
   "start-scene": "menu",
+  "scoreFile": "score.txt",
   "window": {
     "title": "Default Game Window",
     "size": {

@@ -69,14 +69,18 @@ class Playstate : public our::State
         generatorSystem.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world, (float)deltaTime);
-
+        our::PlayerComponent *player = nullptr;
         for (auto entity : world.getEntities())
         {
             // Get player component
-            our::PlayerComponent *player = entity->getComponent<our::PlayerComponent>();
-            if (player && player->lives <= 0)
+            player = entity->getComponent<our::PlayerComponent>();
+            if (player)
             {
-                getApp()->changeState("menu");
+                if (player->lives <= 0)
+                {
+                    writeMaxScore(player->score);
+                    getApp()->changeState("menu");
+                }
                 break;
             }
         }
@@ -86,11 +90,38 @@ class Playstate : public our::State
 
         if (keyboard.justPressed(GLFW_KEY_ESCAPE))
         {
+            if (player)
+                writeMaxScore(player->score);
             // If the escape  key is pressed in this frame, go to the play state
             getApp()->changeState("menu");
         }
 
         world.deleteMarkedEntities();
+    }
+    void writeMaxScore(int maxScore)
+    {
+        auto &config = getApp()->getConfig();
+        // read the max score from the file
+        std::ifstream inputFile(config.value("scoreFile", "score.txt"));
+        int mx = 0;
+        if (inputFile.is_open())
+        {
+            std::string line;
+            if (std::getline(inputFile, line))
+            {
+                mx = std::stoi(line);
+            }
+            inputFile.close();
+        }
+        mx = std::max(mx, maxScore);
+        // write the max score to the file
+        std::ofstream outputFile;
+        outputFile.open(config.value("scoreFile", "score.txt"));
+        if (outputFile.is_open())
+        {
+            outputFile << std::to_string(mx);
+            outputFile.close();
+        }
     }
 
     void onDestroy() override
