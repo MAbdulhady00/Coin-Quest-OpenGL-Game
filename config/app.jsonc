@@ -21,8 +21,8 @@
       // all the probabilities should sum up to 1
       "coinChance": 0.65,
       "obstacleChance": 0.25,
-      "heartChance": 0.05,
-      "powerupChance": 0.05,
+      "powerupChance": 0.09,
+      "heartChance": 0.01,
       // generated ground
       "groundLength": 100,
       "ground": {
@@ -136,9 +136,9 @@
       // generated obstacle
       "obstacle": {
         "name": "Obstacle",
-        "position": [0, -0.5, 0],
-        "rotation": [0, 0, 0],
-        "scale": [1, 1, 1],
+        "position": [0, -1, 0],
+        "rotation": [0, 180, 0],
+        "scale": [0.0025, 0.004, 0.0025],
         "components": [
           {
             "type": "Mesh Renderer",
@@ -150,7 +150,7 @@
           },
           {
             "type": "Collision",
-            "detectionRadius": 1.0,
+            "detectionRadius": 1.25,
             "soundPath": "assets/sounds/hit.wav",
             "soundName": 1,
             "postProcessIndex": 0,
@@ -180,7 +180,7 @@
           },
           {
             "type": "Collision",
-            "detectionRadius": 1.0,
+            "detectionRadius": 0.8,
             "soundPath": "assets/sounds/heart.mp3",
             "soundName": 2
           }
@@ -261,6 +261,8 @@
         "coin": "assets/textures/coin.png",
         "coin_ambient_occlusion": "assets/textures/materials/coin/ambient_occlusion.png",
         "rock": "assets/textures/rock.png",
+        "rock_albedo": "assets/textures/materials/rock/albedo.png",
+        "rock_emissive": "assets/textures/materials/rock/emissive.png",
         "lamp": "assets/textures/lamp.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
@@ -396,8 +398,9 @@
           },
           "tint": [1, 1, 1, 1],
           "albedo": "ball",
-          "specular": "asphalt_specular",
-          "roughness": "asphalt_roughness",
+          "specular": "black",
+          "roughness": "white",
+          "emissive": "ball",
           "sampler": "default"
         },
         "coin": {
@@ -431,7 +434,8 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "albedo": "rock",
+          "albedo": "rock_albedo",
+          "emissive": "rock_emissive",
           "sampler": "default"
         },
         "lamp": {
@@ -491,7 +495,7 @@
             "typeLight": "directional",
             "enabled": true,
             "direction": [-1, -1, 0],
-            "color": [0.8, 0.8, 0.8]
+            "color": [0.8, 0.4, 0.4]
           }
         ]
       },
@@ -583,7 +587,7 @@
         ]
       },
       {
-        "position": [0, -1, 0],
+        "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "scale": [0.02, 0.02, 0.02],
         "name": "Player",
@@ -594,7 +598,8 @@
             "material": "ball"
           },
           {
-            "type": "Player"
+            "type": "Player",
+            "lives": 3
           },
           {
             "type": "Player Movement Controller",
@@ -607,31 +612,38 @@
             "angularVelocity": [-500, 0, 0],
             "linearVelocity": [0, 0, -5.0]
           },
-          // {
-          //   "type": "Light",
-          //   "typeLight": "point",
-          //   "color": [1.5, 1.5, 0.2],
-          //   "attenuation": {
-          //     "constant": 0.0,
-          //     "linear": 0.0,
-          //     "quadratic": 0.5
-          //   }
-          // }
           {
             "type": "Light",
-            "enabled": false,
-            "typeLight": "spot",
-            "color": [1.0, 0.5, 1.0],
+            "typeLight": "point",
+            "color": [1.5, 0.2, 0.2],
             "attenuation": {
-              "constant": 1.0,
+              "constant": 0.0,
               "linear": 0.0,
-              "quadratic": 0.0
-            },
-            "direction": [0, 0, -1],
-            "spot_angle": {
-              "inner": 20,
-              "outer": 50
+              "quadratic": 0.25
             }
+          }
+        ],
+        "children": [
+          {
+            "position": [0, 0.5, 0],
+            "components": [
+              {
+                "type": "Light",
+                "enabled": false,
+                "typeLight": "spot",
+                "color": [1.0, 0.5, 1.0],
+                "attenuation": {
+                  "constant": 1.0,
+                  "linear": 0.0,
+                  "quadratic": 0.0
+                },
+                "direction": [0, 0, -1],
+                "spot_angle": {
+                  "inner": 20,
+                  "outer": 50
+                }
+              }
+            ]
           }
         ]
       },
@@ -687,7 +699,7 @@
         "components": [
           {
             "type": "PostProcess",
-            "postProcessIndex": 2,
+            "postProcessIndex": 3,
             "isEnabled": false
           },
           {
