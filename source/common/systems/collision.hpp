@@ -35,14 +35,25 @@ namespace our
             if (collidedEntity->getComponent<HeartTagComponent>())
             {
                 // Increase the lives
+                if (playerComponent->lives == 1)
+                {
+                    // search for the post process component and disable it
+                    for (auto entity : collidedEntity->getWorld()->getEntities())
+                    {
+                        PostProcessComponent *postProcessComponent = entity->getComponent<PostProcessComponent>();
+                        if (postProcessComponent)
+                        {
+                            postProcessComponent->isEnabled = false;
+                            break;
+                        }
+                    }
+                }
                 playerComponent->lives++;
             }
             // If the collided entity is an obstacle
             if (collidedEntity->getComponent<ObstacleTagComponent>())
             {
-                // Decrease the lives
-                playerComponent->lives--;
-                if(playerComponent->lives <= 1)
+                if (playerComponent->lives == 2)
                 {
                     // search for the post process component and enable it
                     for (auto entity : collidedEntity->getWorld()->getEntities())
@@ -55,6 +66,8 @@ namespace our
                         }
                     }
                 }
+                // Decrease the lives
+                playerComponent->lives--;
             }
             if (collidedEntity->getComponent<PowerupTagComponent>())
             {
