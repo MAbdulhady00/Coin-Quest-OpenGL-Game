@@ -50,6 +50,9 @@ namespace our
             if (entities.find(entity) != entities.end())
             {
                 markedForRemoval.insert(entity);
+                for (Entity* child : entities)
+                    if(child->parent == entity)
+                        markForRemoval(child);
             }
         }
 

@@ -26,6 +26,7 @@
       // generated ground
       "groundLength": 100,
       "ground": {
+        "name": "Ground",
         "position": [0, -2, 0],
         "rotation": [0, 0, 0],
         "scale": [6, 1, 100],
@@ -35,6 +36,72 @@
             "mesh": "cube",
             "material": "asphalt",
             "sampler": "repeated"
+          }
+        ],
+        "children" : [
+          {
+            "name": "Lamp",
+            "position": [-0.8, 1.0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [0.0167, 0.1, 0.001],
+            "components": [
+              {
+                "type": "Mesh Renderer",
+                "mesh": "lamp",
+                "material": "lamp"
+              }
+            ],
+            "children" : [
+              {
+                "name": "Lamp Light",
+                "position": [-3.5, 2.75, 0],
+                "rotation": [0, 0, 0],
+                "components": [
+                  {
+                    "type": "Light",
+                    "typeLight": "point",
+                    "color": [1.0, 1.0, 1.0],
+                    "attenuation": {
+                      "constant": 0.0,
+                      "linear": 0.0,
+                      "quadratic": 0.25
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Lamp",
+            "position": [0.8, 1.0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [0.0167, 0.1, 0.001],
+            "components": [
+              {
+                "type": "Mesh Renderer",
+                "mesh": "lamp",
+                "material": "lamp"
+              }
+            ],
+            "children" : [
+              {
+                "name": "Lamp Light",
+                "position": [3.5, 2.75, 0],
+                "rotation": [0, 0, 0],
+                "components": [
+                  {
+                    "type": "Light",
+                    "typeLight": "point",
+                    "color": [1.0, 1.0, 1.0],
+                    "attenuation": {
+                      "constant": 0.0,
+                      "linear": 0.0,
+                      "quadratic": 0.25
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -71,8 +138,7 @@
         "name": "Obstacle",
         "position": [0, -0.5, 0],
         "rotation": [0, 0, 0],
-        "scale": [0.1, 0.1, 0.1],
-
+        "scale": [1, 1, 1],
         "components": [
           {
             "type": "Mesh Renderer",
@@ -193,6 +259,7 @@
         "coin": "assets/textures/coin.png",
         "coin_ambient_occlusion": "assets/textures/materials/coin/ambient_occlusion.png",
         "rock": "assets/textures/rock.png",
+        "lamp": "assets/textures/lamp.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
         "powerup": "assets/textures/powerup.png",
@@ -214,7 +281,8 @@
         "rock": "assets/models/rock.obj",
         "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj",
-        "powerup": "assets/models/powerup.obj"
+        "powerup": "assets/models/powerup.obj",
+        "lamp" : "assets/models/lamp.obj"
       },
       "samplers": {
         "default": {},
@@ -350,6 +418,21 @@
           "ambient_occlusion": "coin_ambient_occlusion"
         },
         "rock": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "albedo": "rock",
+          "sampler": "default"
+        },
+        "lamp": {
           "type": "lit",
           "shader": "light",
           "pipelineState": {
@@ -534,6 +617,7 @@
           // }
           {
             "type": "Light",
+            "enabled" : false,
             "typeLight": "spot",
             "color": [1.0, 0.5, 1.0],
             "attenuation": {
