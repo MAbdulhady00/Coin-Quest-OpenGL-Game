@@ -19,11 +19,12 @@
 
 namespace our
 {
-
+    // the generator system is responsible for generating entities in the world
+    // this system allows for the generationg and destroying of various entities
     class GeneratorSystem
     {
     private:
-        double lastGeneration = 0.0;
+        double lastGeneration = 0.0;             // The last generation attempt position
         int generationPlaneOffset = 100;         // The distance from the player at which generated entitites are generated
         int destructionPlaneOffset = -10;        // The distance from the player at which generated entities are destroyed
         int horizontalDistance = 7;              // The horizontal distance from the player at which generated entities are generated
@@ -38,15 +39,19 @@ namespace our
         double groundLength = 100.0;             // The length of the ground
         double lastGroundGeneration = 0.0;       // The last ground generated
         double groundDestructionOffset = -100.0; // The distance from the player at which ground is destroyed
+
         std::mt19937 rng;
         std::uniform_real_distribution<double> distribution;
-        nlohmann::json coinConfig;
-        nlohmann::json obstacleConfig;
-        nlohmann::json heartConfig;
-        nlohmann::json powerupConfig;
-        nlohmann::json groundConfig;
-        glm::vec3 currentCoinRotation;
 
+        nlohmann::json coinConfig;     // The config for the coin
+        nlohmann::json obstacleConfig; // The config for the obstacle
+        nlohmann::json heartConfig;    // The config for the heart
+        nlohmann::json powerupConfig;  // The config for the powerup
+        nlohmann::json groundConfig;   // The config for the ground
+
+        glm::vec3 currentCoinRotation; // The current rotation of the coin
+
+        //  Generates a random entity based on rng and the current chances
         inline Entity *randomEntityFactory(World *world)
         {
             // Generate a random number between 0 and 1
@@ -95,6 +100,7 @@ namespace our
         {
             std::random_device rand_dev;
             rng = std::mt19937(rand_dev());
+            // initialize the distribution to be between 0 and 1
             distribution = std::uniform_real_distribution<double>(0.0, 1.0);
         }
 
@@ -142,22 +148,31 @@ namespace our
             // If the number of coins is less than the max number of coins, add a new coin
             while (lastGeneration > playerPosition.z - generationPlaneOffset)
             {
+                // generate ground if the last ground is too far away
                 if (lastGroundGeneration > playerPosition.z - groundLength)
                 {
                     Entity *generatedGroundEntity = world->deserializeEntity(groundConfig);
+                    // set the position of the ground
                     generatedGroundEntity->localTransform.position = glm::vec3(0, generatedGroundEntity->localTransform.position.y, lastGroundGeneration);
                     generatedGroundEntity->addComponent<GeneratedComponent>()->destructionOffset = groundDestructionOffset;
+                    // Move the ground generation plane forward
                     lastGroundGeneration -= groundLength;
                 }
+
+                // generate entities in a grid pattern
                 for (int i = -horizontalDistance / 2; i <= horizontalDistance / 2; ++i)
                 {
+                    // If the random number is less than the generation chance, generate an entity
                     if (distribution(rng) <= generationChance)
                     {
                         Entity *generatedEntity = randomEntityFactory(world);
+                        // set the position of the entity
                         generatedEntity->localTransform.position = glm::vec3(i, generatedEntity->localTransform.position.y, lastGeneration);
                         generatedEntity->addComponent<GeneratedComponent>()->destructionOffset = destructionPlaneOffset;
                     }
                 }
+
+                // Move the generation plane forward
                 lastGeneration -= generationStep;
             }
 
