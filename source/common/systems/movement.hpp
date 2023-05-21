@@ -52,7 +52,10 @@ namespace our
                     // entity has mass and is on the ground
                     else if (movement->mass > 0)
                     {
+                        // set the linear velocity of y axis to 0
                         movement->linearVelocity.y = 0;
+                        // set the position to zero this will be useful to reset the position of the local transform after 
+                        // the player jumps to avoid that the position decrease than zero
                         entity->localTransform.position.y = 0;
                     }
                 }
