@@ -46,6 +46,8 @@ namespace our
         std::vector<TexturedMaterial *> postProcessMaterials;
         std::vector<int> postProcessMaterialIndices;
         float time = 0.0f;
+        void postProcessInitialFrame(std::vector<int> &extraPostProcessMaterialIndices, World *world);
+        void drawPostProcess(std::vector<int> &extraPostProcessMaterialIndices, CameraComponent *camera);
 
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.

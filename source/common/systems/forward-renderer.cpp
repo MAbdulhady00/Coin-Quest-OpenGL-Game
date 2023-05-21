@@ -116,6 +116,7 @@ namespace our
                 }
             }
         }
+        // check if there is permanent postprocess effects
         if (config.contains("postprocess_permanent"))
         {
             if (const auto &indicies = config["postprocess_permanent"]; indicies.is_array())
@@ -156,6 +157,7 @@ namespace our
             delete postprocessMaterial;
         }
 
+        // clear all the vectors
         postProcessMaterials.clear();
         postProcessMaterialIndices.clear();
     }
@@ -193,6 +195,7 @@ namespace our
                     opaqueCommands.push_back(command);
                 }
             }
+            // If this entity has a light component and it is enabled we add it to the lights list (if it is a sky light, we don't add it)
             auto light = entity->getComponent<LightComponent>();
             if (light && light->enabled)
             {
@@ -236,35 +239,9 @@ namespace our
         glColorMask(true, true, true, true);
         glDepthMask(true);
 
-        // If there is a postprocess material, bind the framebuffer
+        // If there is postprocessing material, bind the framebuffer
         std::vector<int> extraPostProcessMaterialIndices;
-        // loop over the worlds entities
-        for (auto entity : world->getEntities())
-        {
-            // find the collision component
-            auto component = entity->getComponent<PostProcessComponent>();
-            // if the entity has a PostProcessComponent component check if it is enabled
-            if (!component)
-                continue;
-            if (!component->isEnabled)
-                continue;
-
-            // if it has a postprocess component, check if it has a postprocess index
-            if (component->postProcessIndex < postProcessMaterials.size())
-            {
-                extraPostProcessMaterialIndices.push_back(component->postProcessIndex);
-            }
-        }
-        if (!postProcessMaterialIndices.empty())
-        {
-            // bind the framebuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[postProcessMaterialIndices[0]]);
-        }
-        else if (!extraPostProcessMaterialIndices.empty())
-        {
-            // bind the framebuffer
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[extraPostProcessMaterialIndices[0]]);
-        }
+        postProcessInitialFrame(extraPostProcessMaterialIndices, world);
 
         // clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -373,9 +350,47 @@ namespace our
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
         // draw postprocess
-        int indx = -1;
+        drawPostProcess(extraPostProcessMaterialIndices, camera);
 
+        time += deltaTime;
+    }
+
+    void ForwardRenderer::postProcessInitialFrame(std::vector<int> &extraPostProcessMaterialIndices, World *world)
+    {
+        // loop over the worlds entities
+        for (auto entity : world->getEntities())
+        {
+            // find the postprocess component
+            auto component = entity->getComponent<PostProcessComponent>();
+            // if the entity has a PostProcessComponent component check if it is enabled
+            if (!component)
+                continue;
+            if (!component->isEnabled)
+                continue;
+
+            // if it has a postprocess component, check if it has a postprocess index
+            if (component->postProcessIndex < postProcessMaterials.size())
+            {
+                extraPostProcessMaterialIndices.push_back(component->postProcessIndex);
+            }
+        }
+        // If there is a postprocess material, bind the framebuffer
+        if (!postProcessMaterialIndices.empty())
+        {
+            // bind the framebuffer
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[postProcessMaterialIndices[0]]);
+        }
+        else if (!extraPostProcessMaterialIndices.empty())
+        {
+            // bind the framebuffer
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[extraPostProcessMaterialIndices[0]]);
+        }
+    }
+    void ForwardRenderer::drawPostProcess(std::vector<int> &extraPostProcessMaterialIndices, CameraComponent *camera)
+    {
+        int indx = -1;
         // If there is a postprocess material, apply postprocessing
+        // Permanent postprocess effects
         for (int i = 0; i < postProcessMaterialIndices.size(); ++i)
         {
             // this was done by unbinding the postprocessFrameBuffer
@@ -386,7 +401,7 @@ namespace our
 
             // setup postprocess material
             postProcessMaterials[postProcessMaterialIndices[i]]->setup();
-
+            // send shader uniforms
             postProcessMaterials[postProcessMaterialIndices[i]]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
             postProcessMaterials[postProcessMaterialIndices[i]]->shader->set("time", time);
 
@@ -398,6 +413,7 @@ namespace our
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
         }
         // If there is an extra postprocess material, apply postprocessing
+        // game state postprocess effects
         for (int i = 0; i < extraPostProcessMaterialIndices.size(); ++i)
         {
             // this was done by unbinding the postprocessFrameBuffer
@@ -406,7 +422,7 @@ namespace our
 
             // setup postprocess material
             postProcessMaterials[extraPostProcessMaterialIndices[i]]->setup();
-
+            // send shader uniforms
             postProcessMaterials[extraPostProcessMaterialIndices[i]]->shader->set("inverse_projection", glm::inverse(camera->getProjectionMatrix(windowSize)));
             postProcessMaterials[extraPostProcessMaterialIndices[i]]->shader->set("time", time);
 
@@ -417,9 +433,5 @@ namespace our
             indx = extraPostProcessMaterialIndices[i];
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
         }
-
-        // draw last index
-
-        time += deltaTime;
     }
 }
