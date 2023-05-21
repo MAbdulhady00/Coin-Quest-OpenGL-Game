@@ -664,78 +664,83 @@
         ]
       },
       {
-        "position": [0, 0, 0],
-        "rotation": [0, 0, 0],
-        "scale": [0.02, 0.02, 0.02],
         "name": "Player",
         "components": [
           {
-            "type": "Mesh Renderer",
-            "mesh": "ball",
-            "material": "ball"
-          },
-          {
-            "type": "Player",
-            "lives": 3
-          },
-          {
-            "type": "Player Movement Controller",
-            "speedupFactor": 50.0,
-            "maxHorizontalDistance": 3.5,
-            "jumpSpeed": 7.5
-          },
-          {
             "type": "Movement",
             "mass": 1.5,
-            "angularVelocity": [-500, 0, 0],
-            "linearVelocity": [0, 0, -5.0],
-            "linearAcceleration": [0, 0, -0.25],
-            "angularAcceleration": [-0.0625, 0, 0],
-            "maxLinearVelocityComponent": 80.0,
-            "maxAngularVelocityComponent": 600
-          },
-          {
-            "type": "LightSpectrum",
-            "typeLight": "point",
-            "color": [0.5, 0.0, 0.0],
-            "attenuation": {
-              "constant": 0.0,
-              "linear": 0.0,
-              "quadratic": 0.25
-            }
-          }
-          // {
-          //   "type": "Light",
-          //   "typeLight": "spot",
-          //   "color": [4.0, 4.0, 4.0],
-          //   "attenuation": {
-          //     "constant": 1.0,
-          //     "linear": 0.0,
-          //     "quadratic": 0.0
-          //   },
-          //   "spot_angle": {
-          //     "inner": 0.0,
-          //     "outer": 45.0
-          //   },
-          //   "direction": [0.0, 0.0, -1.0]
-          // }
-        ]
-      },
-      {
-        "position": [0, 3, 2],
-        "rotation": [-30, 0, 0],
-        "components": [
-          {
-            "type": "Camera"
-          },
-          // {
-          //   "type": "Free Camera Controller"
-          // },
-          {
-            "type": "Movement",
             "linearVelocity": [0, 0, -5.0],
             "linearAcceleration": [0, 0, -0.25],
             "maxLinearVelocityComponent": 80.0
+          }
+        ],
+        "children": [
+          {
+            "position": [0, 0, 0],
+            "rotation": [0, 0, 0],
+            "scale": [0.02, 0.02, 0.02],
+            "name": "ball",
+            "components": [
+              {
+                "type": "Mesh Renderer",
+                "mesh": "ball",
+                "material": "ball"
+              },
+              {
+                "type": "Player",
+                "lives": 3
+              },
+              {
+                "type": "Player Movement Controller",
+                "speedupFactor": 50.0,
+                "maxHorizontalDistance": 3.5,
+                "jumpSpeed": 7.5
+              },
+              {
+                "type": "Movement",
+                "mass": 1.5,
+                "angularVelocity": [-500, 0, 0],
+                "angularAcceleration": [-0.0625, 0, 0],
+                "maxAngularVelocityComponent": 600
+              },
+              {
+                "type": "LightSpectrum",
+                "typeLight": "point",
+                "color": [0.5, 0.0, 0.0],
+                "attenuation": {
+                  "constant": 0.0,
+                  "linear": 0.0,
+                  "quadratic": 0.25
+                }
+              }
+              // {
+              //   "type": "LightSpectrum",
+              //   "typeLight": "spot",
+              //   "color": [2.0, 0, 0],
+              //   "attenuation": {
+              //     "constant": 1.0,
+              //     "linear": 0.0,
+              //     "quadratic": 0.0
+              //   },
+              //   "spot_angle": {
+              //     "inner": 0.0,
+              //     "outer": 60.0
+              //   },
+              //   "direction": [0.0, 0.0, -1.0]
+              // }
+            ]
+          },
+          {
+            "position": [0, 3, 2],
+            "rotation": [-30, 0, 0],
+            "components": [
+              {
+                "type": "Camera"
+              }
+              // {
+              //   "type": "Free Camera Controller"
+              // },
+            ]
           }
         ]
       },

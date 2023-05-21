@@ -138,7 +138,7 @@ namespace our
             {
                 PlayerComponent *player = entity->getComponent<PlayerComponent>();
                 if (player)
-                    playerPosition = player->getOwner()->localTransform.position;
+                    playerPosition = player->getOwner()->getWorldTranslation();
 
                 CoinComponent *coin = entity->getComponent<CoinComponent>();
                 if (coin)
@@ -183,7 +183,7 @@ namespace our
                 if (generated)
                 {
                     // If the entity is behind the player, mark it for removal
-                    if (entity->localTransform.position.z > playerPosition.z - generated->destructionOffset)
+                    if (entity->getWorldTranslation().z > playerPosition.z - generated->destructionOffset)
                     {
                         world->markForRemoval(entity);
                     }

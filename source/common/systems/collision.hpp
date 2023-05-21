@@ -140,7 +140,7 @@ namespace our
                 return;
             }
 
-            playerPosition = player->getOwner()->localTransform.position;
+            playerPosition = player->getOwner()->getWorldTranslation();
 
             CollisionComponent *collision = nullptr;
             // For each entity in the world get the coins
@@ -151,7 +151,7 @@ namespace our
                 if (collision)
                 {
                     // Check if the player is colliding with the coin
-                    if (glm::distance(playerPosition, entity->localTransform.position) <= collision->detectionRadius)
+                    if (glm::distance(playerPosition, entity->getWorldTranslation()) <= collision->detectionRadius)
                     {
                         // handle collision
                         if (onCollision(player, entity))
