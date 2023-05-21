@@ -5,7 +5,7 @@
 
 namespace our
 {
-    // this component denos that the object is a collision body
+    // this component denotes that the object is a collidable body
     class CollisionComponent : public Component
     {
 
@@ -13,7 +13,9 @@ namespace our
         // the radius at which the object will be detected
         // as a collided body by other objects
         double detectionRadius = 1.0;
+        // enum of the sound that will be played when the object collides
         int soundName;
+        // path to the sound file
         std::string soundPath;
         // The ID of this component type is "Collision"
         static std::string getID() { return "Collision"; }

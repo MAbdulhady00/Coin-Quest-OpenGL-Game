@@ -8,6 +8,8 @@ namespace our
     {
 
     public:
+        // score associated with the coin
+        // this will be added to the player's score when the coin is collected
         int score = 1;
         void deserialize(const nlohmann::json &data)
         {
