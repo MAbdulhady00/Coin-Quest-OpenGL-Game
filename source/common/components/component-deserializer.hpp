@@ -49,6 +49,7 @@ namespace our
         }
         else if (type == LightComponent::getID())
         {
+            // if the type is "LightComponent", then create a new LightComponent and return pointer to it
             component = entity->addComponent<LightComponent>();
         }
         else if (type == PlayerComponent::getID())
@@ -88,18 +89,22 @@ namespace our
         }
         else if (type == PostProcessComponent::getID())
         {
+            // if the type is "PostProcessComponent", then create a new PostProcessComponent and return pointer to it
             component = entity->addComponent<PostProcessComponent>();
         }
         else if (type == BlurTagComponent::getID())
         {
+            // if the type is "BlurTagComponent", then create a new BlurTagComponent and return pointer to it
             component = entity->addComponent<BlurTagComponent>();
         }
         else if (type == WarnTagComponent::getID())
         {
+            // if the type is "WarnTagComponent", then create a new WarnTagComponent and return pointer to it
             component = entity->addComponent<WarnTagComponent>();
         }
         else if (type == LightSpectrumComponent::getID())
         {
+            // if the type is "LightSpectrumComponent", then create a new LightSpectrumComponent and return pointer to it
             component = entity->addComponent<LightSpectrumComponent>();
         }
         else

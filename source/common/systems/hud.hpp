@@ -40,10 +40,13 @@ namespace our
                 return;
             }
 
-            // Draw hud on screen
+            // Set the font scale
             ImGui::GetFont()->Scale = 4.0f;
+            // Push the font
             ImGui::PushFont(ImGui::GetFont());
+            // Get the draw list
             ImDrawList *drawList = ImGui::GetBackgroundDrawList();
+            // Draw the score, lives and distance on the screen
             drawList->AddText(ImVec2(25, 25), ImColor(1.0f, 1.0f, 0.0f), ("Score: " + std::to_string(player->score)).c_str());
             drawList->AddText(ImVec2(1000, 25), ImColor(1.0f, 1.0f, 0.0f), ("Lives: " + std::to_string(player->lives)).c_str());
             drawList->AddText(ImVec2(500, 25), ImColor(1.0f, 1.0f, 0.0f), ("Distance: " + std::to_string(abs((long long)player->getOwner()->localTransform.position.z))).c_str());
