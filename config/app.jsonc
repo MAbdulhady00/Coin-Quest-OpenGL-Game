@@ -290,7 +290,8 @@
         "assets/shaders/postprocess/fog.frag",
         "assets/shaders/postprocess/radial-blur.frag",
         "assets/shaders/postprocess/chromatic-aberration.frag",
-        "assets/shaders/postprocess/grayscale.frag"
+        "assets/shaders/postprocess/grayscale.frag",
+        "assets/shaders/postprocess/motion-blur.frag"
       ],
       "postprocess_permanent": [1]
     },
