@@ -301,11 +301,8 @@ namespace our
                 if (!light->enabled)
                     continue;
                 light->position = light->getOwner()->getWorldTranslation();
-                // light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 0.0);
-                light->direction = glm::normalize(light->direction);
-
-                // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
-                // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
+                glm::vec3 lightDirection = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 0.0f);
+                lightDirection = glm::normalize(lightDirection);
 
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
@@ -317,7 +314,7 @@ namespace our
                 switch (light->typeLight)
                 {
                 case LightType::DIRECTIONAL:
-                    command.material->shader->set(prefix + "direction", light->direction);
+                    command.material->shader->set(prefix + "direction", lightDirection);
                     break;
                 case LightType::POINT:
                     command.material->shader->set(prefix + "position", light->position);
@@ -326,7 +323,7 @@ namespace our
                     break;
                 case LightType::SPOT:
                     command.material->shader->set(prefix + "position", light->position);
-                    command.material->shader->set(prefix + "direction", light->direction);
+                    command.material->shader->set(prefix + "direction", lightDirection);
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                     light->attenuation.linear, light->attenuation.constant));
                     command.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));

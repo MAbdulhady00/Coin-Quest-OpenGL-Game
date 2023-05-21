@@ -8,7 +8,7 @@
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
 #include "../components/player.hpp"
-#include "../components/tags/generated.hpp"
+#include "../components/generated.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -24,17 +24,18 @@ namespace our
     {
     private:
         double lastGeneration = 0.0;
-        int generationPlaneOffset = 100;   // The distance from the player at which generated entitites are generated
-        int destructionPlaneOffset = -10;  // The distance from the player at which generated entities are destroyed
-        int horizontalDistance = 7;        // The horizontal distance from the player at which generated entities are generated
-        double generationChance = 0.25;    // The chance that an entity will be generated
-        double coinChance = 0.25;          // The chance that a coin will be generated
-        double obstacleChance = 0.25;      // The chance that an obstacle will be generated
-        double heartChance = 0.25;         // The chance that a heart will be generated
-        double powerupChance = 0.25;       // The chance that a powerup will be generated
-        double generationStep = 1.0;       // The distance between each generation attempt
-        double groundLength = 100.0;       // The length of the ground
-        double lastGroundGeneration = 0.0; // The last ground generated
+        int generationPlaneOffset = 100;         // The distance from the player at which generated entitites are generated
+        int destructionPlaneOffset = -10;        // The distance from the player at which generated entities are destroyed
+        int horizontalDistance = 7;              // The horizontal distance from the player at which generated entities are generated
+        double generationChance = 0.25;          // The chance that an entity will be generated
+        double coinChance = 0.25;                // The chance that a coin will be generated
+        double obstacleChance = 0.25;            // The chance that an obstacle will be generated
+        double heartChance = 0.25;               // The chance that a heart will be generated
+        double powerupChance = 0.25;             // The chance that a powerup will be generated
+        double generationStep = 1.0;             // The distance between each generation attempt
+        double groundLength = 100.0;             // The length of the ground
+        double lastGroundGeneration = 0.0;       // The last ground generated
+        double groundDestructionOffset = -100.0; // The distance from the player at which ground is destroyed
         std::mt19937 rng;
         std::uniform_real_distribution<double> distribution;
         nlohmann::json coinConfig;
@@ -42,24 +43,7 @@ namespace our
         nlohmann::json heartConfig;
         nlohmann::json powerupConfig;
         nlohmann::json groundConfig;
-
-        // void deserializeEntityConfig(const nlohmann::json &data, World* world, Entity *parent)
-        // {
-        //     if (!data.is_array())
-        //         return;
-        //     for (const auto &entityData : data)
-        //     {
-        //         // Create an entity, make its parent "parent" and call its deserialize with "entityData".
-        //         Entity *entity = world->add();
-        //         entity->parent = parent;
-        //         entity->deserialize(entityData);
-        //         if (entityData.contains("children"))
-        //         {
-        //             // If the entity has children, call this function recursively with the children data and the entity as parent
-        //             deserializeEntityConfig(entityData["children"], world, entity);
-        //         }
-        //     }
-        // }
+        glm::vec3 currentCoinRotation;
 
         inline Entity *randomEntityFactory(World *world, Entity *entity)
         {
@@ -70,7 +54,9 @@ namespace our
             // If the random number is less than the coin chance, generate a coin
             if (random < currentChance)
             {
-                return world->deserializeEntity(coinConfig);
+                Entity *coin = world->deserializeEntity(coinConfig);
+                coin->localTransform.rotation = currentCoinRotation;
+                return coin;
             }
             // If the random number is less than the obstacle chance, generate an obstacle
             else if (random < currentChance + obstacleChance)
@@ -103,6 +89,7 @@ namespace our
             lastGroundGeneration = config.value("initialGeneration", lastGroundGeneration);
             generationPlaneOffset = config.value("generationPlaneOffset", generationPlaneOffset);
             destructionPlaneOffset = config.value("destructionPlaneOffset", destructionPlaneOffset);
+            groundDestructionOffset = config.value("groundDestructionOffset", groundDestructionOffset);
             horizontalDistance = config.value("horizontalDistance", horizontalDistance);
             generationChance = config.value("generationChance", generationChance);
             generationStep = config.value("generationStep", generationStep);
@@ -122,12 +109,17 @@ namespace our
         void update(World *world, float deltaTime)
         {
             glm::vec3 playerPosition = glm::vec3(0, 0, 0);
+            currentCoinRotation = glm::vec3(0, 0, 0);
             // For each entity in the world get the player position
             for (auto entity : world->getEntities())
             {
                 PlayerComponent *player = entity->getComponent<PlayerComponent>();
                 if (player)
                     playerPosition = player->getOwner()->localTransform.position;
+
+                CoinTagComponent *coin = entity->getComponent<CoinTagComponent>();
+                if (coin)
+                    currentCoinRotation = coin->getOwner()->localTransform.rotation;
             }
 
             // If the number of coins is less than the max number of coins, add a new coin
@@ -137,7 +129,7 @@ namespace our
                 {
                     Entity *generatedGroundEntity = world->deserializeEntity(groundConfig);
                     generatedGroundEntity->localTransform.position = glm::vec3(0, generatedGroundEntity->localTransform.position.y, lastGroundGeneration);
-                    generatedGroundEntity->addComponent<GeneratedTagComponent>();
+                    generatedGroundEntity->addComponent<GeneratedComponent>()->destructionOffset = groundDestructionOffset;
                     lastGroundGeneration -= groundLength;
                 }
                 for (int i = -horizontalDistance / 2; i <= horizontalDistance / 2; ++i)
@@ -146,8 +138,7 @@ namespace our
                     {
                         Entity *generatedEntity = randomEntityFactory(world, generatedEntity);
                         generatedEntity->localTransform.position = glm::vec3(i, generatedEntity->localTransform.position.y, lastGeneration);
-                        generatedEntity->addComponent<GeneratedTagComponent>();
-                        std::cout << "Generated entity at " << generatedEntity->localTransform.position.x << ", " << generatedEntity->localTransform.position.y << ", " << generatedEntity->localTransform.position.z << std::endl;
+                        generatedEntity->addComponent<GeneratedComponent>()->destructionOffset = destructionPlaneOffset;
                     }
                 }
                 lastGeneration -= generationStep;
@@ -156,14 +147,13 @@ namespace our
             // For each generated entity in the world
             for (auto entity : world->getEntities())
             {
-                GeneratedTagComponent *generated = entity->getComponent<GeneratedTagComponent>();
+                GeneratedComponent *generated = entity->getComponent<GeneratedComponent>();
                 if (generated)
                 {
                     // If the entity is behind the player, mark it for removal
-                    if (entity->localTransform.position.z > playerPosition.z - destructionPlaneOffset)
+                    if (entity->localTransform.position.z > playerPosition.z - generated->destructionOffset)
                     {
                         world->markForRemoval(entity);
-                        std::cout << "Removed entity at " << entity->localTransform.position.x << ", " << entity->localTransform.position.y << ", " << entity->localTransform.position.z << std::endl;
                     }
                 }
             }

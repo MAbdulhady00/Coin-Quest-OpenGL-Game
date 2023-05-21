@@ -85,15 +85,13 @@ set(COMMON_SOURCES
         source/common/components/player-movement-controller.hpp
         source/common/components/player-movement-controller.cpp
         source/common/components/player.hpp
-        source/common/components/score-digit.hpp
-        source/common/components/score-digit.cpp
         source/common/components/collision.hpp
         source/common/components/collision.cpp
+        source/common/components/generated.hpp
         
         source/common/components/tags/coin.hpp
         source/common/components/tags/obstacle.hpp
         source/common/components/tags/heart.hpp
-        source/common/components/tags/generated.hpp
 
 
         source/common/systems/forward-renderer.hpp

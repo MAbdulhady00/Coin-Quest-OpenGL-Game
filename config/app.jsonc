@@ -13,7 +13,8 @@
     "generator": {
       "initialGeneration": -10,
       "generationPlaneOffset": 150,
-      "destructionPlaneOffset": -25,
+      "destructionPlaneOffset": -3,
+      "groundDestructionOffset": -105,
       "horizontalDistance": 9,
       // distance between generated objects in the z-axis
       "generationStep": 3,
@@ -30,11 +31,11 @@
         "name": "Ground",
         "position": [0, -2, 0],
         "rotation": [0, 0, 0],
-        "scale": [6, 1, 100],
+        "scale": [1, 1, 1],
         "components": [
           {
             "type": "Mesh Renderer",
-            "mesh": "cube",
+            "mesh": "road",
             "material": "asphalt",
             "sampler": "repeated"
           }
@@ -42,36 +43,36 @@
         "children": [
           {
             "name": "Lamp",
-            "position": [-0.8, 1.0, 0],
-            "rotation": [0, 0, 0],
-            "scale": [0.0167, 0.1, 0.001],
+            "position": [-5.5, 1.375, 0],
+            "rotation": [0, -15, 0],
+            "scale": [1, 1, 1],
             "components": [
               {
                 "type": "Mesh Renderer",
-                "mesh": "lamp",
-                "material": "lamp"
+                "mesh": "stagelight",
+                "material": "stagelight"
               }
             ],
             "children": [
               {
                 "name": "Lamp Light",
-                "position": [0.8, 2.75, 0],
+                "position": [0, 0, 0],
                 "rotation": [0, 0, 0],
                 "components": [
                   {
                     "type": "Light",
                     "typeLight": "spot",
-                    "color": [0.0, 0.0, 1.0],
+                    "color": [5.0, 5.0, 5.0],
                     "attenuation": {
                       "constant": 1.0,
                       "linear": 0.0,
-                      "quadratic": 0.0
+                      "quadratic": 0.05
                     },
                     "spot_angle": {
-                      "inner": 5.0,
-                      "outer": 75.0
+                      "inner": 0.0,
+                      "outer": 60.0
                     },
-                    "direction": [-0.2, -1.0, 0.05]
+                    "direction": [0.5, 0.0, -0.866]
                   }
                 ]
               }
@@ -79,36 +80,36 @@
           },
           {
             "name": "Lamp",
-            "position": [0.8, 1.0, 0],
-            "rotation": [0, 0, 0],
-            "scale": [0.0167, 0.1, 0.001],
+            "position": [5.5, 1.375, 0],
+            "rotation": [0, 60, 0],
+            "scale": [1, 1, 1],
             "components": [
               {
                 "type": "Mesh Renderer",
-                "mesh": "lamp",
-                "material": "lamp"
+                "mesh": "stagelight",
+                "material": "stagelight"
               }
             ],
             "children": [
               {
                 "name": "Lamp Light",
-                "position": [-0.8, 2.75, 0],
+                "position": [0, 0, 0],
                 "rotation": [0, 0, 0],
                 "components": [
                   {
                     "type": "Light",
                     "typeLight": "spot",
-                    "color": [1.0, 0.0, 0.0],
+                    "color": [5.0, 5.0, 5.0],
                     "attenuation": {
                       "constant": 1.0,
                       "linear": 0.0,
-                      "quadratic": 0.0
+                      "quadratic": 0.05
                     },
                     "spot_angle": {
-                      "inner": 5.0,
-                      "outer": 75.0
+                      "inner": 0.0,
+                      "outer": 60.0
                     },
-                    "direction": [0.2, -1.0, 0.05]
+                    "direction": [0.5, 0.0, -0.866]
                   }
                 ]
               }
@@ -122,6 +123,7 @@
         "position": [0, -0.25, 0],
         "rotation": [0, 0, 0],
         "scale": [1.5, 1.5, 1.5],
+        // "scale": [0.1, 0.1, 0.1],
         "components": [
           {
             "type": "Mesh Renderer",
@@ -282,6 +284,7 @@
         "rock_albedo": "assets/textures/materials/rock/albedo.png",
         "rock_emissive": "assets/textures/materials/rock/emissive.png",
         "lamp": "assets/textures/lamp.png",
+        "stagelight": "assets/textures/stagelight.png",
         "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
         "powerup": "assets/textures/powerup.png",
@@ -295,6 +298,7 @@
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
+        "road": "assets/models/road.obj",
         "monkey": "assets/models/monkey.obj",
         "plane": "assets/models/plane.obj",
         "sphere": "assets/models/sphere.obj",
@@ -304,7 +308,8 @@
         "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj",
         "powerup": "assets/models/powerup.obj",
-        "lamp": "assets/models/lamp.obj"
+        "lamp": "assets/models/lamp.obj",
+        "stagelight": "assets/models/stagelight.obj"
       },
       "samplers": {
         "default": {},
@@ -314,6 +319,12 @@
         "repeated": {
           "WRAP_S": "GL_REPEAT",
           "WRAP_T": "GL_REPEAT"
+        },
+        "smooth": {
+          "MAG_FILTER": "GL_LINEAR",
+          "MIN_FILTER": "GL_LINEAR_MIPMAP_LINEAR",
+          "MIPMAP_FILTER": "GL_LINEAR",
+          "MAX_ANISOTROPY": 16
         }
       },
       "materials": {
@@ -388,6 +399,21 @@
           "ambient_occlusion": "monkey_ambient_occlusion",
           "sampler": "default"
         },
+        "stagelight": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "albedo": "stagelight",
+          "sampler": "default"
+        },
         "moon": {
           "type": "lit",
           "shader": "light",
@@ -427,7 +453,8 @@
           "shader": "light",
           "pipelineState": {
             "faceCulling": {
-              "enabled": false
+              "enabled": true,
+              "mode": "GL_BACK"
             },
             "depthTesting": {
               "enabled": true
@@ -437,7 +464,7 @@
           "texture": "coin",
           "sampler": "default",
           "albedo": "coin",
-          "specular": "metal_specular",
+          "specular": "white",
           "roughness": "metal_roughness",
           "ambient_occlusion": "coin_ambient_occlusion"
         },
@@ -640,19 +667,22 @@
               "linear": 0.0,
               "quadratic": 0.25
             }
-            // "typeLight": "spot",
-            // "color": [1.0, 1.0, 1.0],
-            // "attenuation": {
-            //   "constant": 0.5,
-            //   "linear": 0.0,
-            //   "quadratic": 0.0
-            // },
-            // "spot_angle": {
-            //   "inner": 0.0,
-            //   "outer": 45.0
-            // },
-            // "direction": [-1.0, 0.0, -1.0]
           }
+          // {
+          //   "type": "Light",
+          //   "typeLight": "spot",
+          //   "color": [4.0, 4.0, 4.0],
+          //   "attenuation": {
+          //     "constant": 1.0,
+          //     "linear": 0.0,
+          //     "quadratic": 0.0
+          //   },
+          //   "spot_angle": {
+          //     "inner": 0.0,
+          //     "outer": 45.0
+          //   },
+          //   "direction": [0.0, 0.0, -1.0]
+          // }
         ]
       },
       {

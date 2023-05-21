@@ -6,7 +6,6 @@
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
 #include "../components/player.hpp"
-#include "../components/score-digit.hpp"
 #include "../components/tags/heart.hpp"
 
 #include <glm/glm.hpp>
