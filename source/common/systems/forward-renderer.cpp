@@ -170,6 +170,9 @@ namespace our
         transparentCommands.clear();
         lights.clear();
 
+        // store extra postprocess material indices
+        std::vector<int> extraPostProcessMaterialIndices;
+
         for (auto entity : world->getEntities())
         {
             // If we hadn't found a camera yet, we look for a camera in this entity
@@ -210,6 +213,20 @@ namespace our
                 else
                     lights.push_back(light);
             }
+
+            // find the postprocess component
+            auto component = entity->getComponent<PostProcessComponent>();
+            // if the entity has a PostProcessComponent component check if it is enabled
+            if (!component)
+                continue;
+            if (!component->isEnabled)
+                continue;
+
+            // if it has a postprocess component, check if it has a postprocess index
+            if (component->postProcessIndex < postProcessMaterials.size())
+            {
+                extraPostProcessMaterialIndices.push_back(component->postProcessIndex);
+            }
         }
 
         // If there is no camera, we return (we cannot render without a camera)
@@ -240,7 +257,6 @@ namespace our
         glDepthMask(true);
 
         // If there is postprocessing material, bind the framebuffer
-        std::vector<int> extraPostProcessMaterialIndices;
         postProcessInitialFrame(extraPostProcessMaterialIndices, world);
 
         // clear the color and depth buffers
@@ -355,25 +371,9 @@ namespace our
         time += deltaTime;
     }
 
-    void ForwardRenderer::postProcessInitialFrame(std::vector<int> &extraPostProcessMaterialIndices, World *world)
+    inline void ForwardRenderer::postProcessInitialFrame(std::vector<int> &extraPostProcessMaterialIndices, World *world)
     {
-        // loop over the worlds entities
-        for (auto entity : world->getEntities())
-        {
-            // find the postprocess component
-            auto component = entity->getComponent<PostProcessComponent>();
-            // if the entity has a PostProcessComponent component check if it is enabled
-            if (!component)
-                continue;
-            if (!component->isEnabled)
-                continue;
 
-            // if it has a postprocess component, check if it has a postprocess index
-            if (component->postProcessIndex < postProcessMaterials.size())
-            {
-                extraPostProcessMaterialIndices.push_back(component->postProcessIndex);
-            }
-        }
         // If there is a postprocess material, bind the framebuffer
         if (!postProcessMaterialIndices.empty())
         {
@@ -386,7 +386,7 @@ namespace our
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postProcessFrameBuffers[extraPostProcessMaterialIndices[0]]);
         }
     }
-    void ForwardRenderer::drawPostProcess(std::vector<int> &extraPostProcessMaterialIndices, CameraComponent *camera)
+    inline void ForwardRenderer::drawPostProcess(std::vector<int> &extraPostProcessMaterialIndices, CameraComponent *camera)
     {
         int indx = -1;
         // If there is a postprocess material, apply postprocessing
