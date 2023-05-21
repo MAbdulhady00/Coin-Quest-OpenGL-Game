@@ -4,7 +4,6 @@
 #include <iostream>
 namespace our
 {
-    // Reads linearVelocity & angularVelocity from the given json object
     void LightComponent::deserialize(const nlohmann::json &data)
     {
         if (!data.is_object())
@@ -15,31 +14,38 @@ namespace our
         if (typeLocal == "directional")
         {
             typeLight = LightType::DIRECTIONAL;
-            direction = data["direction"];
+            direction = data.value("direction", direction);
         }
         else if (typeLocal == "point")
         {
             typeLight = LightType::POINT;
-            attenuation.constant = data["attenuation"]["constant"];
-            attenuation.linear = data["attenuation"]["linear"];
-            attenuation.quadratic = data["attenuation"]["quadratic"];
+            const nlohmann::json &attenuationData = data.value("attenuation", nlohmann::json::object());
+            attenuation.constant = attenuationData.value("constant", 1.0f);
+            attenuation.linear = attenuationData.value("linear", 0.0f);
+            attenuation.quadratic = attenuationData.value("quadratic", 0.0f);
         }
         else if (typeLocal == "spot")
         {
             typeLight = LightType::SPOT;
-            direction = data["direction"];
-            attenuation.constant = data["attenuation"]["constant"];
-            attenuation.linear = data["attenuation"]["linear"];
-            attenuation.quadratic = data["attenuation"]["quadratic"];
-            spot_angle.inner = glm::radians(data["spot_angle"].value("inner", 0.0f));
-            spot_angle.outer = glm::radians(data["spot_angle"].value("outer", 0.0f));
+            direction = data.value("direction", direction);
+
+            const nlohmann::json &spotAngleData = data.value("spot_angle", nlohmann::json::object());
+            spot_angle.inner = glm::radians(spotAngleData.value("inner", 0.0f));
+            spot_angle.outer = glm::radians(spotAngleData.value("outer", 0.0f));
+
+            const nlohmann::json &attenuationData = data.value("attenuation", nlohmann::json::object());
+            attenuation.constant = attenuationData.value("constant", 1.0f);
+            attenuation.linear = attenuationData.value("linear", 0.0f);
+            attenuation.quadratic = attenuationData.value("quadratic", 0.0f);
         }
         else if (typeLocal == "sky")
         {
             typeLight = LightType::SKY;
-            sky_light.top_color = data["sky_light"]["top_color"];
-            sky_light.bottom_color = data["sky_light"]["bottom_color"];
-            sky_light.middle_color = data["sky_light"]["middle_color"];
+
+            const nlohmann::json &skyLightData = data.value("sky_light", nlohmann::json::object());
+            sky_light.top_color = skyLightData.value("top_color", glm::vec3(0.0f, 0.0f, 0.0f));
+            sky_light.middle_color = skyLightData.value("middle_color", glm::vec3(0.0f, 0.0f, 0.0f));
+            sky_light.bottom_color = skyLightData.value("bottom_color", glm::vec3(0.0f, 0.0f, 0.0f));
         }
         else
         {
