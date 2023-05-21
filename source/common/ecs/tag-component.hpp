@@ -6,8 +6,9 @@
 namespace our
 {
     // A tag component is a component that does not have any data associated with it.
+    // As such it has no deserialize method.
     // It is used to mark an entity as having a certain property.
-    // For example, a coin entity would have a CoinComponent to mark it as a coin.
+    // For example, an obstacle entity would have a ObstacleTagComponent to mark it as an obstacle.
     class TagComponent : public Component
     {
     public:
