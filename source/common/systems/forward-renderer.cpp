@@ -234,31 +234,43 @@ namespace our
             // add the light effects
             for (auto light : lights)
             {
+                // skip the sky light
                 if (light->typeLight == LightType::SKY)
                     continue;
+                // skip the light if it is disabled
                 if (!light->enabled)
                     continue;
+
+                // get the light position in world space (for point and spot lights)
                 light->position = light->getOwner()->getWorldTranslation();
+                // get the light direction in world space (for directional and spot lights)
                 glm::vec3 lightDirection = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 0.0f);
                 lightDirection = glm::normalize(lightDirection);
 
+                // set the light properties in the shader
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
-
                 command.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
+
+                // set the light color for spectrum lights in shader
                 if (dynamic_cast<LightSpectrumComponent *>(light) != nullptr)
                     command.material->shader->set(prefix + "color", ((LightSpectrumComponent *)light)->getColor(time));
                 else
                     command.material->shader->set(prefix + "color", light->color);
+
+                // set the light properties based on its type (directional, point, spot)
                 switch (light->typeLight)
                 {
+                    // set the light direction for directional lights
                 case LightType::DIRECTIONAL:
                     command.material->shader->set(prefix + "direction", lightDirection);
                     break;
+                    // set the light position and attenuation for point lights
                 case LightType::POINT:
                     command.material->shader->set(prefix + "position", light->position);
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                     light->attenuation.linear, light->attenuation.constant));
                     break;
+                    // set the light position, direction, attenuation and cone angles for spot lights
                 case LightType::SPOT:
                     command.material->shader->set(prefix + "position", light->position);
                     command.material->shader->set(prefix + "direction", lightDirection);
@@ -266,14 +278,15 @@ namespace our
                                                                                     light->attenuation.linear, light->attenuation.constant));
                     command.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
-                case LightType::SKY:
-                    break;
                 }
+                // increment the light index
                 light_index++;
+                // break if we reached the max number of lights
                 if (light_index >= MAX_LIGHT_COUNT)
                     break;
             }
 
+            // draw the mesh
             command.mesh->draw();
         }
 
@@ -347,6 +360,7 @@ namespace our
             auto light = entity->getComponent<LightComponent>();
             if (light && light->enabled)
             {
+                // if the light is a sky light, we set its shader uniforms
                 if (light->typeLight == LightType::SKY)
                 {
                     auto litShader = AssetLoader<ShaderProgram>::get("light");
