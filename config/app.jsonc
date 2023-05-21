@@ -19,11 +19,12 @@
       // distance between generated objects in the z-axis
       "generationStep": 3,
       // rng chance of generating an object
-      "generationChance": 0.2,
+      "generationChance": 0.15,
       // all the probabilities should sum up to 1
-      "coinChance": 0.65,
-      "obstacleChance": 0.25,
-      "powerupChance": 0.09,
+      "coinChance": 0.5,
+      "ancientCoinChance": 0.15,
+      "blueCoinChance": 0.05,
+      "obstacleChance": 0.29,
       "heartChance": 0.01,
       // generated ground
       "groundLength": 100,
@@ -119,32 +120,91 @@
       },
       // generated coin
       "coin": {
-        "name": "Coin",
-        "position": [0, -0.25, 0],
-        "rotation": [0, 0, 0],
-        "scale": [1.5, 1.5, 1.5],
-        // "scale": [0.1, 0.1, 0.1],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "coin",
-            "material": "coin"
-          },
-          {
-            "type": "Movement",
-            "angularVelocity": [0, 100, 0],
-            "linearVelocity": [0, 0, 0]
-          },
-          {
-            "type": "CoinTag"
-          },
-          {
-            "type": "Collision",
-            "detectionRadius": 1.0,
-            "soundPath": "assets/sounds/coin.wav",
-            "soundName": 0
-          }
-        ]
+        "regular": {
+          "name": "Coin",
+          "position": [0, -0.25, 0],
+          "rotation": [0, 0, 0],
+          "scale": [1.5, 1.5, 1.5],
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "coin",
+              "material": "coin"
+            },
+            {
+              "type": "Movement",
+              "angularVelocity": [0, 100, 0],
+              "linearVelocity": [0, 0, 0]
+            },
+            {
+              "type": "Coin"
+            },
+            {
+              "type": "Collision",
+              "detectionRadius": 1.0,
+              "soundPath": "assets/sounds/coin.wav",
+              "soundName": 0
+            }
+          ]
+        },
+        "ancient": {
+          "name": "Coin",
+          "position": [0, -0.25, 0],
+          "rotation": [0, 0, 0],
+          "scale": [1.5, 1.5, 1.5],
+          // "scale": [0.1, 0.1, 0.1],
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "coin",
+              "material": "coin_ancient"
+            },
+            {
+              "type": "Movement",
+              "angularVelocity": [0, 100, 0],
+              "linearVelocity": [0, 0, 0]
+            },
+            {
+              "type": "Coin",
+              "score": 5
+            },
+            {
+              "type": "Collision",
+              "detectionRadius": 1.0,
+              "soundPath": "assets/sounds/coin.wav",
+              "soundName": 0
+            }
+          ]
+        },
+        "blue": {
+          "name": "Coin",
+          "position": [0, -0.25, 0],
+          "rotation": [0, 0, 0],
+          "scale": [1.5, 1.5, 1.5],
+          // "scale": [0.1, 0.1, 0.1],
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "coin",
+              "material": "coin_blue"
+            },
+            {
+              "type": "Movement",
+              "angularVelocity": [0, 100, 0],
+              "linearVelocity": [0, 0, 0]
+            },
+            {
+              "type": "Coin",
+              "score": 25
+            },
+            {
+              "type": "Collision",
+              "detectionRadius": 1.0,
+              "soundPath": "assets/sounds/coin.wav",
+              "soundName": 0
+            }
+          ]
+        }
       },
       // generated obstacle
       "obstacle": {
@@ -260,15 +320,13 @@
         }
       },
       "textures": {
-        "moon": "assets/textures/moon.jpg",
         "ball": "assets/textures/ball.png",
         "ball_albedo": "assets/textures/materials/ball/albedo.png",
         "ball_emissive": "assets/textures/materials/ball/emissive.png",
         "ball_ambient_occlusion": "assets/textures/materials/ball/ambient_occlusion.png",
-        "grass": "assets/textures/grass_ground_d.jpg",
         "wood": "assets/textures/wood.jpg",
-        "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
+        "moon": "assets/textures/moon.jpg",
         "monkey_ambient_occlusion": "assets/textures/materials/monkey/ambient_occlusion.jpg",
         "asphalt_albedo": "assets/textures/materials/asphalt/albedo.jpg",
         "asphalt_roughness": "assets/textures/materials/asphalt/roughness.jpg",
@@ -279,16 +337,16 @@
         "gold_specular": "assets/textures/materials/gold/specular.png",
         "gold_roughness": "assets/textures/materials/gold/roughness.png",
         "coin": "assets/textures/coin.png",
+        "coin_ancient": "assets/textures/coin_ancient.png",
+        "coin_blue": "assets/textures/coin_blue.png",
         "coin_ambient_occlusion": "assets/textures/materials/coin/ambient_occlusion.png",
-        "rock": "assets/textures/rock.png",
         "rock_albedo": "assets/textures/materials/rock/albedo.png",
         "rock_emissive": "assets/textures/materials/rock/emissive.png",
-        "lamp": "assets/textures/lamp.png",
         "stagelight": "assets/textures/stagelight.png",
-        "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
-        "powerup": "assets/textures/powerup.png",
         "gem_heart_ambient_occlusion": "assets/textures/materials/gem_heart/ambient_occlusion.png",
+        "powerup": "assets/textures/powerup.png",
+        // default textures
         "albedo": "assets/textures/albedo.jpg",
         "emissive": "assets/textures/emissive.jpg",
         "roughness": "assets/textures/roughness.jpg",
@@ -305,10 +363,8 @@
         "ball": "assets/models/ball.obj",
         "coin": "assets/models/coin.obj",
         "rock": "assets/models/rock.obj",
-        "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj",
         "powerup": "assets/models/powerup.obj",
-        "lamp": "assets/models/lamp.obj",
         "stagelight": "assets/models/stagelight.obj"
       },
       "samplers": {
@@ -328,43 +384,6 @@
         }
       },
       "materials": {
-        "glass": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            },
-            "blending": {
-              "enabled": true,
-              "sourceFactor": "GL_SRC_ALPHA",
-              "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-            },
-            "depthMask": false
-          },
-          "transparent": true,
-          "tint": [1, 1, 1, 1],
-          "texture": "glass",
-          "sampler": "pixelated"
-        },
-        "grass": {
-          "type": "lit",
-          "shader": "light",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "grass",
-          "sampler": "repeated"
-        },
         "asphalt": {
           "type": "lit",
           "shader": "light_repeated",
@@ -464,7 +483,47 @@
           "texture": "coin",
           "sampler": "default",
           "albedo": "coin",
-          "specular": "white",
+          "specular": "metal_specular",
+          "roughness": "metal_roughness",
+          "ambient_occlusion": "coin_ambient_occlusion"
+        },
+        "coin_ancient": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": true,
+              "mode": "GL_BACK"
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "coin_ancient",
+          "sampler": "default",
+          "albedo": "coin_ancient",
+          "specular": "metal_specular",
+          "roughness": "metal_roughness",
+          "ambient_occlusion": "coin_ambient_occlusion"
+        },
+        "coin_blue": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": true,
+              "mode": "GL_BACK"
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "coin_blue",
+          "sampler": "default",
+          "albedo": "coin_blue",
+          "specular": "metal_specular",
           "roughness": "metal_roughness",
           "ambient_occlusion": "coin_ambient_occlusion"
         },
@@ -484,7 +543,7 @@
           "emissive": "rock_emissive",
           "sampler": "default"
         },
-        "lamp": {
+        "powerup": {
           "type": "lit",
           "shader": "light",
           "pipelineState": {
@@ -496,22 +555,7 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "albedo": "lamp",
-          "sampler": "default"
-        },
-        "powerup": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "powerup",
+          "albedo": "powerup",
           "sampler": "default"
         },
         "gem_heart": {
@@ -586,19 +630,6 @@
           }
         ]
       },
-      // {
-      //   "position": [0, -2, 0],
-      //   "rotation": [0, 0, 0],
-      //   "scale": [10, 1, 100],
-      //   "components": [
-      //     {
-      //       "type": "Mesh Renderer",
-      //       "mesh": "cube",
-      //       "material": "asphalt",
-      //       "sampler": "repeated"
-      //     }
-      //   ]
-      // },
       {
         "position": [0, 10, 0],
         "rotation": [45, 45, 0],
@@ -655,8 +686,13 @@
           },
           {
             "type": "Movement",
+            "mass": 1.5,
             "angularVelocity": [-500, 0, 0],
-            "linearVelocity": [0, 0, -5.0]
+            "linearVelocity": [0, 0, -5.0],
+            "linearAcceleration": [0, 0, -0.25],
+            "angularAcceleration": [-0.0625, 0, 0],
+            "maxLinearVelocityComponent": 80.0,
+            "maxAngularVelocityComponent": 600
           },
           {
             "type": "LightSpectrum",
@@ -697,8 +733,9 @@
           // },
           {
             "type": "Movement",
-            "angularVelocity": [0, 0, 0],
-            "linearVelocity": [0, 0, -5.0]
+            "linearVelocity": [0, 0, -5.0],
+            "linearAcceleration": [0, 0, -0.25],
+            "maxLinearVelocityComponent": 80.0
           }
         ]
       },

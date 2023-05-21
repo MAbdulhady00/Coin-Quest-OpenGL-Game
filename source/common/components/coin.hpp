@@ -1,16 +1,20 @@
 #pragma once
 
+#include "../ecs/component.hpp"
+
 namespace our
 {
     class CoinComponent : public Component
     {
-    public:
-        static std::string getID() { return "Coin"; }
 
-        void deserialize(const nlohmann::json &data) override
+    public:
+        int score = 1;
+        void deserialize(const nlohmann::json &data)
         {
-            // No data to deserialize
-            return;
+            if (!data.is_object())
+                return;
+            score = data.value("score", score);
         }
+        static std::string getID() { return "Coin"; }
     };
 }

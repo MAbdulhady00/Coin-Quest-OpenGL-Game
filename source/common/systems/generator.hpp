@@ -3,7 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../components/movement.hpp"
-#include "../components/tags/coin.hpp"
+#include "../components/coin.hpp"
 #include "../components/collision.hpp"
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
@@ -27,11 +27,13 @@ namespace our
         int generationPlaneOffset = 100;         // The distance from the player at which generated entitites are generated
         int destructionPlaneOffset = -10;        // The distance from the player at which generated entities are destroyed
         int horizontalDistance = 7;              // The horizontal distance from the player at which generated entities are generated
-        double generationChance = 0.25;          // The chance that an entity will be generated
-        double coinChance = 0.25;                // The chance that a coin will be generated
-        double obstacleChance = 0.25;            // The chance that an obstacle will be generated
-        double heartChance = 0.25;               // The chance that a heart will be generated
-        double powerupChance = 0.25;             // The chance that a powerup will be generated
+        double generationChance = 0.2;           // The chance that an entity will be generated
+        double coinChance = 0.0;                 // The chance that a coin will be generated
+        double ancientCoinChance = 0.0;          // The chance that a red coin will be generated
+        double blueCoinChance = 0.0;             // The chance that a blue coin will be generated
+        double obstacleChance = 0.0;             // The chance that an obstacle will be generated
+        double heartChance = 0.0;                // The chance that a heart will be generated
+        double powerupChance = 0.0;              // The chance that a powerup will be generated
         double generationStep = 1.0;             // The distance between each generation attempt
         double groundLength = 100.0;             // The length of the ground
         double lastGroundGeneration = 0.0;       // The last ground generated
@@ -45,7 +47,7 @@ namespace our
         nlohmann::json groundConfig;
         glm::vec3 currentCoinRotation;
 
-        inline Entity *randomEntityFactory(World *world, Entity *entity)
+        inline Entity *randomEntityFactory(World *world)
         {
             // Generate a random number between 0 and 1
             double random = distribution(rng);
@@ -54,25 +56,38 @@ namespace our
             // If the random number is less than the coin chance, generate a coin
             if (random < currentChance)
             {
-                Entity *coin = world->deserializeEntity(coinConfig);
+                Entity *coin = world->deserializeEntity(coinConfig.value("regular", nlohmann::json()));
                 coin->localTransform.rotation = currentCoinRotation;
                 return coin;
             }
+            currentChance += ancientCoinChance;
+            if (random < currentChance)
+            {
+                Entity *coin = world->deserializeEntity(coinConfig.value("ancient", nlohmann::json()));
+                coin->localTransform.rotation = currentCoinRotation;
+                return coin;
+            }
+            currentChance += blueCoinChance;
+            if (random < currentChance)
+            {
+                Entity *coin = world->deserializeEntity(coinConfig.value("blue", nlohmann::json()));
+                coin->localTransform.rotation = currentCoinRotation;
+                return coin;
+            }
+            currentChance += obstacleChance;
             // If the random number is less than the obstacle chance, generate an obstacle
-            else if (random < currentChance + obstacleChance)
+            if (random < currentChance)
             {
                 return world->deserializeEntity(obstacleConfig);
             }
+            currentChance += powerupChance;
             // If the random number is less than the powerup chance, generate a powerup
-            else if (random < currentChance + obstacleChance + powerupChance)
+            if (random < currentChance)
             {
                 return world->deserializeEntity(powerupConfig);
             }
             // must generate a heart
-            else
-            {
-                return world->deserializeEntity(heartConfig);
-            }
+            return world->deserializeEntity(heartConfig);
         }
 
     public:
@@ -94,6 +109,8 @@ namespace our
             generationChance = config.value("generationChance", generationChance);
             generationStep = config.value("generationStep", generationStep);
             coinChance = config.value("coinChance", coinChance);
+            ancientCoinChance = config.value("ancientCoinChance", ancientCoinChance);
+            blueCoinChance = config.value("blueCoinChance", blueCoinChance);
             powerupChance = config.value("powerupChance", powerupChance);
             obstacleChance = config.value("obstacleChance", obstacleChance);
             heartChance = config.value("heartChance", heartChance);
@@ -117,7 +134,7 @@ namespace our
                 if (player)
                     playerPosition = player->getOwner()->localTransform.position;
 
-                CoinTagComponent *coin = entity->getComponent<CoinTagComponent>();
+                CoinComponent *coin = entity->getComponent<CoinComponent>();
                 if (coin)
                     currentCoinRotation = coin->getOwner()->localTransform.rotation;
             }
@@ -136,7 +153,7 @@ namespace our
                 {
                     if (distribution(rng) <= generationChance)
                     {
-                        Entity *generatedEntity = randomEntityFactory(world, generatedEntity);
+                        Entity *generatedEntity = randomEntityFactory(world);
                         generatedEntity->localTransform.position = glm::vec3(i, generatedEntity->localTransform.position.y, lastGeneration);
                         generatedEntity->addComponent<GeneratedComponent>()->destructionOffset = destructionPlaneOffset;
                     }

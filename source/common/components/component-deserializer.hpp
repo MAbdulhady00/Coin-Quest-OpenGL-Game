@@ -11,7 +11,7 @@
 #include "player-movement-controller.hpp"
 #include "collision.hpp"
 #include "postprocess.hpp"
-#include "tags/coin.hpp"
+#include "./coin.hpp"
 #include "tags/obstacle.hpp"
 #include "tags/powerup.hpp"
 #include "tags/heart.hpp"
@@ -62,10 +62,10 @@ namespace our
             // if the type is "PlayerMovementControllerComponent", then create a new PlayerMovementControllerComponent and return pointer to it
             component = entity->addComponent<PlayerMovementControllerComponent>();
         }
-        else if (type == CoinTagComponent::getID())
+        else if (type == CoinComponent::getID())
         {
-            // if the type is "CoinTagComponent", then create a new CoinTagComponent and return pointer to it
-            component = entity->addComponent<CoinTagComponent>();
+            // if the type is "CoinComponent", then create a new CoinComponent and return pointer to it
+            component = entity->addComponent<CoinComponent>();
         }
         else if (type == ObstacleTagComponent::getID())
         {
