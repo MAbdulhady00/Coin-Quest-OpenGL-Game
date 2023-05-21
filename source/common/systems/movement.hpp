@@ -18,7 +18,6 @@ namespace our
     // For more information, see "common/components/movement.hpp"
     class MovementSystem
     {
-        long long initialTime;
         float lastDeltaTime;
 
     public:

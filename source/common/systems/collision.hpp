@@ -4,7 +4,7 @@
 #include "../ecs/entity.hpp"
 #include "../components/collision.hpp"
 #include "../components/player.hpp"
-#include "../components/tags/coin.hpp"
+#include "../components/coin.hpp"
 #include "../components/tags/heart.hpp"
 #include "../components/tags/obstacle.hpp"
 #include "../components/tags/powerup.hpp"
@@ -27,11 +27,12 @@ namespace our
          */
         inline bool onCollision(PlayerComponent *playerComponent, Entity *collidedEntity)
         {
+            CoinComponent *coin = collidedEntity->getComponent<CoinComponent>();
             // If the collided entity is a coin
-            if (collidedEntity->getComponent<CoinTagComponent>())
+            if (coin)
             {
                 // Increase the score
-                playerComponent->score++;
+                playerComponent->score += coin->score;
             }
             // If the collided entity is a heart
             if (collidedEntity->getComponent<HeartTagComponent>())

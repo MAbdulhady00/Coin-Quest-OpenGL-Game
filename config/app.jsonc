@@ -19,11 +19,12 @@
       // distance between generated objects in the z-axis
       "generationStep": 3,
       // rng chance of generating an object
-      "generationChance": 0.2,
+      "generationChance": 0.15,
       // all the probabilities should sum up to 1
-      "coinChance": 0.65,
-      "obstacleChance": 0.25,
-      "powerupChance": 0.09,
+      "coinChance": 0.5,
+      "ancientCoinChance": 0.15,
+      "blueCoinChance": 0.05,
+      "obstacleChance": 0.29,
       "heartChance": 0.01,
       // generated ground
       "groundLength": 100,
@@ -119,32 +120,91 @@
       },
       // generated coin
       "coin": {
-        "name": "Coin",
-        "position": [0, -0.25, 0],
-        "rotation": [0, 0, 0],
-        "scale": [1.5, 1.5, 1.5],
-        // "scale": [0.1, 0.1, 0.1],
-        "components": [
-          {
-            "type": "Mesh Renderer",
-            "mesh": "coin",
-            "material": "coin"
-          },
-          {
-            "type": "Movement",
-            "angularVelocity": [0, 100, 0],
-            "linearVelocity": [0, 0, 0]
-          },
-          {
-            "type": "CoinTag"
-          },
-          {
-            "type": "Collision",
-            "detectionRadius": 1.0,
-            "soundPath": "assets/sounds/coin.wav",
-            "soundName": 0
-          }
-        ]
+        "regular": {
+          "name": "Coin",
+          "position": [0, -0.25, 0],
+          "rotation": [0, 0, 0],
+          "scale": [1.5, 1.5, 1.5],
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "coin",
+              "material": "coin"
+            },
+            {
+              "type": "Movement",
+              "angularVelocity": [0, 100, 0],
+              "linearVelocity": [0, 0, 0]
+            },
+            {
+              "type": "Coin"
+            },
+            {
+              "type": "Collision",
+              "detectionRadius": 1.0,
+              "soundPath": "assets/sounds/coin.wav",
+              "soundName": 0
+            }
+          ]
+        },
+        "ancient": {
+          "name": "Coin",
+          "position": [0, -0.25, 0],
+          "rotation": [0, 0, 0],
+          "scale": [1.5, 1.5, 1.5],
+          // "scale": [0.1, 0.1, 0.1],
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "coin",
+              "material": "coin_ancient"
+            },
+            {
+              "type": "Movement",
+              "angularVelocity": [0, 100, 0],
+              "linearVelocity": [0, 0, 0]
+            },
+            {
+              "type": "Coin",
+              "score": 5
+            },
+            {
+              "type": "Collision",
+              "detectionRadius": 1.0,
+              "soundPath": "assets/sounds/coin.wav",
+              "soundName": 0
+            }
+          ]
+        },
+        "blue": {
+          "name": "Coin",
+          "position": [0, -0.25, 0],
+          "rotation": [0, 0, 0],
+          "scale": [1.5, 1.5, 1.5],
+          // "scale": [0.1, 0.1, 0.1],
+          "components": [
+            {
+              "type": "Mesh Renderer",
+              "mesh": "coin",
+              "material": "coin_blue"
+            },
+            {
+              "type": "Movement",
+              "angularVelocity": [0, 100, 0],
+              "linearVelocity": [0, 0, 0]
+            },
+            {
+              "type": "Coin",
+              "score": 25
+            },
+            {
+              "type": "Collision",
+              "detectionRadius": 1.0,
+              "soundPath": "assets/sounds/coin.wav",
+              "soundName": 0
+            }
+          ]
+        }
       },
       // generated obstacle
       "obstacle": {
@@ -279,6 +339,8 @@
         "gold_specular": "assets/textures/materials/gold/specular.png",
         "gold_roughness": "assets/textures/materials/gold/roughness.png",
         "coin": "assets/textures/coin.png",
+        "coin_ancient": "assets/textures/coin_ancient.png",
+        "coin_blue": "assets/textures/coin_blue.png",
         "coin_ambient_occlusion": "assets/textures/materials/coin/ambient_occlusion.png",
         "rock": "assets/textures/rock.png",
         "rock_albedo": "assets/textures/materials/rock/albedo.png",
@@ -468,6 +530,46 @@
           "roughness": "metal_roughness",
           "ambient_occlusion": "coin_ambient_occlusion"
         },
+        "coin_ancient": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": true,
+              "mode": "GL_BACK"
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "coin_ancient",
+          "sampler": "default",
+          "albedo": "coin_ancient",
+          "specular": "white",
+          "roughness": "metal_roughness",
+          "ambient_occlusion": "coin_ambient_occlusion"
+        },
+        "coin_blue": {
+          "type": "lit",
+          "shader": "light",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": true,
+              "mode": "GL_BACK"
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "coin_blue",
+          "sampler": "default",
+          "albedo": "coin_blue",
+          "specular": "white",
+          "roughness": "metal_roughness",
+          "ambient_occlusion": "coin_ambient_occlusion"
+        },
         "rock": {
           "type": "lit",
           "shader": "light",
@@ -500,8 +602,8 @@
           "sampler": "default"
         },
         "powerup": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "light",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -511,7 +613,7 @@
             }
           },
           "tint": [1, 1, 1, 1],
-          "texture": "powerup",
+          "albedo": "powerup",
           "sampler": "default"
         },
         "gem_heart": {
