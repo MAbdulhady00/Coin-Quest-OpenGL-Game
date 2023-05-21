@@ -23,9 +23,13 @@ in Varyings {
 
 out vec4 frag_color;
 
+// hue shift the given color by the given angle
+// this is done by shifting the color in the hue channel by the given angle hue
 vec3 hueShift(vec3 color, float hue) {
+    // precomputed axis of rotation
     const vec3 k = vec3(0.57735, 0.57735, 0.57735);
     float cosAngle = cos(hue);
+    // see https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
     return vec3(color * cosAngle + cross(k, color) * sin(hue) + k * dot(k, color) * (1.0 - cosAngle));
 }
 

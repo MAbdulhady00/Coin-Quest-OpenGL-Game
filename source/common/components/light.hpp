@@ -6,6 +6,7 @@
 namespace our
 {
 
+    // The type of light source in the scene
     enum class LightType
     {
         DIRECTIONAL,
@@ -13,7 +14,8 @@ namespace our
         SPOT,
         SKY
     };
-    // This class defined an OpenGL texture which will be used as a GL_TEXTURE_2D
+
+    // A light component that represents a light source in the scene
     class LightComponent : public Component
     {
     public:
@@ -24,9 +26,9 @@ namespace our
         // But you may want to keep them separate if you want extra artistic control where you may want to ignore realism.
         // Also, we no longer have an ambient term in the  We will keep the ambient in a separate struct called "SkyLight".
 
-        glm::vec3 color = {1.0f, 1.0f, 1.0f}; // The color of the light, we do not need separate diffuse and specular colors because it is unrealistic.
-        glm::vec3 position;                   // Used for Point and Spot Lights only
-        glm::vec3 direction;                  // Used for Directional and Spot Lights only
+        glm::vec3 color = {1.0f, 1.0f, 1.0f};     // The color of the light, we do not need separate diffuse and specular colors because it is unrealistic.
+        glm::vec3 position = {0.0f, 0.0f, 0.0f};  // Used for Point and Spot Lights only
+        glm::vec3 direction = {0.0f, 0.0f, 0.0f}; // Used for Directional and Spot Lights only, note that is the diretion in the local space of the light
         struct
         {
             float quadratic, linear, constant;
@@ -40,10 +42,9 @@ namespace our
             glm::vec3 top_color, middle_color, bottom_color;
         } sky_light;
 
-        // The ID of this component type is "Movement"
+        // The ID of this component type is "Light"
         static std::string getID() { return "Light"; }
         virtual std::string getIDPolymorphic() { return getID(); }
-        // Reads linearVelocity & angularVelocity from the given json object
         void deserialize(const nlohmann::json &data) override;
     };
 } // namespace our
