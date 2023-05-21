@@ -23,10 +23,7 @@ class Playstate : public our::State
     our::FreeCameraControllerSystem cameraController;
     our::PlayerMovementControllerSystem playerMovementController;
     our::MovementSystem movementSystem;
-    // our::CoinGeneratorSystem coinGeneratorSystem;
     our::HUDSystem hudSystem;
-    // our::ObstacleSystem obstacleSystem;
-    // our::GemsGeneratorSystem gemGeneratorSystem;
     our::CollisionSystem collisionSystem;
     our::GeneratorSystem generatorSystem;
 
@@ -44,7 +41,7 @@ class Playstate : public our::State
         {
             world.deserialize(config["world"]);
         }
-        // We initialize the camera controller system since it needs a pointer to the app
+        // We initialize the camera and player movement controllers system since it needs a pointer to the app
         cameraController.enter(getApp());
         playerMovementController.enter(getApp());
         // Then we initialize the renderer
@@ -58,17 +55,21 @@ class Playstate : public our::State
     void onDraw(double deltaTime) override
     {
         // Here, we just run a bunch of systems to control the world logic
-        // coinGeneratorSystem.update(&world, (float)deltaTime);
-        // gemGeneratorSystem.update(&world, (float)deltaTime);
-        // obstacleSystem.update(&world, (float)deltaTime);
+        // update the movement system of the world to move the entities
         movementSystem.update(&world, (float)deltaTime);
+        // update the camera controller system to move the camera
         cameraController.update(&world, (float)deltaTime);
+        // update the player movement controller system to move the player
         playerMovementController.update(&world, (float)deltaTime);
-        collisionSystem.update(&world, (float)deltaTime);
+        // update the collision system to check for collisions
+        collisionSystem.update(&world, (float)deltaTime); 
+        // update the hud system to update the score and lives
         hudSystem.update(&world, (float)deltaTime);
+        // update the generator system
         generatorSystem.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world, (float)deltaTime);
+        // get the player component and check if the player is dead or not to change the state
         our::PlayerComponent *player = nullptr;
         for (auto entity : world.getEntities())
         {
@@ -88,9 +89,11 @@ class Playstate : public our::State
         // Get a reference to the keyboard object
         auto &keyboard = getApp()->getKeyboard();
 
+        // if the escape key is pressed, we go back to the menu
         if (keyboard.justPressed(GLFW_KEY_ESCAPE))
         {
             if (player)
+                // write the max score to the file if the player is not null to get the score in the menu state
                 writeMaxScore(player->score);
             // If the escape  key is pressed in this frame, go to the play state
             getApp()->changeState("menu");
@@ -128,7 +131,7 @@ class Playstate : public our::State
     {
         // Don't forget to destroy the renderer
         renderer.destroy();
-        // On exit, we call exit for the camera controller system to make sure that the mouse is unlocked
+        // On exit, we call exit for the camera and player movement controllers system to make sure that the mouse is unlocked
         cameraController.exit();
         playerMovementController.exit();
         // Clear the world

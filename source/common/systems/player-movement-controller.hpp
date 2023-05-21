@@ -56,6 +56,7 @@ namespace our
                 mouse_locked = true;
                 // If the left mouse button is released, we unlock and unhide the mouse.
             }
+            // on the other hand if the mouse is locked and the left mouse button is not pressed, we unlock and unhide the mouse
             else if (!app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && mouse_locked)
             {
                 app->getMouse().unlockMouse(app->getWindow());
@@ -65,14 +66,16 @@ namespace our
             // We get a reference to the entity's position
             glm::vec3 &position = entity->localTransform.position;
 
+            // we get the TRS matrix of the entity to get the front, up and right vectors
             glm::mat4 matrix = entity->localTransform.toMat4();
 
             glm::vec3 front = glm::vec3(matrix * glm::vec4(0, 0, -1, 0)),
                       up = glm::vec3(matrix * glm::vec4(0, 1, 0, 0)),
                       right = glm::vec3(matrix * glm::vec4(1, 0, 0, 0));
-
+            
             glm::vec3 current_sensitivity = controller->positionSensitivity;
 
+            // get the jump speed
             float jumpSpeed = controller->jumpSpeed;
 
             // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
@@ -81,13 +84,13 @@ namespace our
             // We change the camera position based on the keys WASD/QE
             // S & W moves the player back and forth
 
-            // A & D moves the player left or right
+            // D || Right Arrow moves the player right
             if (app->getKeyboard().isPressed(GLFW_KEY_D) || app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
                 position += right * (deltaTime * current_sensitivity.x);
-
+            // A || Left Arrow moves the player left
             if (app->getKeyboard().isPressed(GLFW_KEY_A) || app->getKeyboard().isPressed(GLFW_KEY_LEFT))
                 position -= right * (deltaTime * current_sensitivity.x);
-
+            // W || Up Arrow moves the player up
             if((app->getKeyboard().isPressed(GLFW_KEY_W) || app->getKeyboard().isPressed(GLFW_KEY_UP)) && movement->linearVelocity.y == 0.0f)
                 movement->linearVelocity.y = jumpSpeed;
                 
