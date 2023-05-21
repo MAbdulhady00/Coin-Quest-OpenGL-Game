@@ -97,8 +97,8 @@ set(COMMON_SOURCES
         source/common/components/collision.hpp
         source/common/components/collision.cpp
         source/common/components/generated.hpp
+        source/common/components/coin.hpp
         
-        source/common/components/tags/coin.hpp
         source/common/components/tags/obstacle.hpp
         source/common/components/tags/heart.hpp
 

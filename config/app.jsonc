@@ -526,7 +526,7 @@
           "texture": "coin",
           "sampler": "default",
           "albedo": "coin",
-          "specular": "white",
+          "specular": "metal_specular",
           "roughness": "metal_roughness",
           "ambient_occlusion": "coin_ambient_occlusion"
         },
@@ -546,7 +546,7 @@
           "texture": "coin_ancient",
           "sampler": "default",
           "albedo": "coin_ancient",
-          "specular": "white",
+          "specular": "metal_specular",
           "roughness": "metal_roughness",
           "ambient_occlusion": "coin_ambient_occlusion"
         },
@@ -566,7 +566,7 @@
           "texture": "coin_blue",
           "sampler": "default",
           "albedo": "coin_blue",
-          "specular": "white",
+          "specular": "metal_specular",
           "roughness": "metal_roughness",
           "ambient_occlusion": "coin_ambient_occlusion"
         },
