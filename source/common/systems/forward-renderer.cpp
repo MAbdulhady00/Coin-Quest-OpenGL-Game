@@ -172,62 +172,7 @@ namespace our
 
         // store extra postprocess material indices
         std::vector<int> extraPostProcessMaterialIndices;
-
-        for (auto entity : world->getEntities())
-        {
-            // If we hadn't found a camera yet, we look for a camera in this entity
-            if (!camera)
-                camera = entity->getComponent<CameraComponent>();
-            // If this entity has a mesh renderer component
-            if (auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer)
-            {
-                // We construct a command from it
-                RenderCommand command;
-                command.localToWorld = meshRenderer->getOwner()->getLocalToWorldMatrix();
-                command.center = glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1));
-                command.mesh = meshRenderer->mesh;
-                command.material = meshRenderer->material;
-                // if it is transparent, we add it to the transparent commands list
-                if (command.material->transparent)
-                {
-                    transparentCommands.push_back(command);
-                }
-                else
-                {
-                    // Otherwise, we add it to the opaque command list
-                    opaqueCommands.push_back(command);
-                }
-            }
-            // If this entity has a light component and it is enabled we add it to the lights list (if it is a sky light, we don't add it)
-            auto light = entity->getComponent<LightComponent>();
-            if (light && light->enabled)
-            {
-                if (light->typeLight == LightType::SKY)
-                {
-                    auto litShader = AssetLoader<ShaderProgram>::get("light");
-                    litShader->use();
-                    litShader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.5f));
-                    litShader->set("sky.horizon", glm::vec3(0.3f, 0.3f, 0.3f));
-                    litShader->set("sky.bottom", glm::vec3(0.1f, 0.1f, 0.1f));
-                }
-                else
-                    lights.push_back(light);
-            }
-
-            // find the postprocess component
-            auto component = entity->getComponent<PostProcessComponent>();
-            // if the entity has a PostProcessComponent component check if it is enabled
-            if (!component)
-                continue;
-            if (!component->isEnabled)
-                continue;
-
-            // if it has a postprocess component, check if it has a postprocess index
-            if (component->postProcessIndex < postProcessMaterials.size())
-            {
-                extraPostProcessMaterialIndices.push_back(component->postProcessIndex);
-            }
-        }
+        searchWorldEntities(extraPostProcessMaterialIndices, world, camera);
 
         // If there is no camera, we return (we cannot render without a camera)
         if (camera == nullptr)
@@ -370,7 +315,65 @@ namespace our
 
         time += deltaTime;
     }
+    inline void ForwardRenderer::searchWorldEntities(std::vector<int> &extraPostProcessMaterialIndices, World *world, CameraComponent *&camera)
+    {
+        // Search for all world entities
+        for (auto entity : world->getEntities())
+        {
+            // If we hadn't found a camera yet, we look for a camera in this entity
+            if (!camera)
+                camera = entity->getComponent<CameraComponent>();
+            // If this entity has a mesh renderer component
+            if (auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer)
+            {
+                // We construct a command from it
+                RenderCommand command;
+                command.localToWorld = meshRenderer->getOwner()->getLocalToWorldMatrix();
+                command.center = glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1));
+                command.mesh = meshRenderer->mesh;
+                command.material = meshRenderer->material;
+                // if it is transparent, we add it to the transparent commands list
+                if (command.material->transparent)
+                {
+                    transparentCommands.push_back(command);
+                }
+                else
+                {
+                    // Otherwise, we add it to the opaque command list
+                    opaqueCommands.push_back(command);
+                }
+            }
+            // If this entity has a light component and it is enabled we add it to the lights list (if it is a sky light, we don't add it)
+            auto light = entity->getComponent<LightComponent>();
+            if (light && light->enabled)
+            {
+                if (light->typeLight == LightType::SKY)
+                {
+                    auto litShader = AssetLoader<ShaderProgram>::get("light");
+                    litShader->use();
+                    litShader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.5f));
+                    litShader->set("sky.horizon", glm::vec3(0.3f, 0.3f, 0.3f));
+                    litShader->set("sky.bottom", glm::vec3(0.1f, 0.1f, 0.1f));
+                }
+                else
+                    lights.push_back(light);
+            }
 
+            // find the postprocess component
+            auto component = entity->getComponent<PostProcessComponent>();
+            // if the entity has a PostProcessComponent component check if it is enabled
+            if (!component)
+                continue;
+            if (!component->isEnabled)
+                continue;
+
+            // if it has a postprocess component, check if it has a postprocess index
+            if (component->postProcessIndex < postProcessMaterials.size())
+            {
+                extraPostProcessMaterialIndices.push_back(component->postProcessIndex);
+            }
+        }
+    }
     inline void ForwardRenderer::postProcessInitialFrame(std::vector<int> &extraPostProcessMaterialIndices, World *world)
     {
 
