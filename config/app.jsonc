@@ -320,15 +320,13 @@
         }
       },
       "textures": {
-        "moon": "assets/textures/moon.jpg",
         "ball": "assets/textures/ball.png",
         "ball_albedo": "assets/textures/materials/ball/albedo.png",
         "ball_emissive": "assets/textures/materials/ball/emissive.png",
         "ball_ambient_occlusion": "assets/textures/materials/ball/ambient_occlusion.png",
-        "grass": "assets/textures/grass_ground_d.jpg",
         "wood": "assets/textures/wood.jpg",
-        "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
+        "moon": "assets/textures/moon.jpg",
         "monkey_ambient_occlusion": "assets/textures/materials/monkey/ambient_occlusion.jpg",
         "asphalt_albedo": "assets/textures/materials/asphalt/albedo.jpg",
         "asphalt_roughness": "assets/textures/materials/asphalt/roughness.jpg",
@@ -342,15 +340,13 @@
         "coin_ancient": "assets/textures/coin_ancient.png",
         "coin_blue": "assets/textures/coin_blue.png",
         "coin_ambient_occlusion": "assets/textures/materials/coin/ambient_occlusion.png",
-        "rock": "assets/textures/rock.png",
         "rock_albedo": "assets/textures/materials/rock/albedo.png",
         "rock_emissive": "assets/textures/materials/rock/emissive.png",
-        "lamp": "assets/textures/lamp.png",
         "stagelight": "assets/textures/stagelight.png",
-        "pepsiman": "assets/textures/Pepsiman.png",
         "gem_heart": "assets/textures/gem_heart.png",
-        "powerup": "assets/textures/powerup.png",
         "gem_heart_ambient_occlusion": "assets/textures/materials/gem_heart/ambient_occlusion.png",
+        "powerup": "assets/textures/powerup.png",
+        // default textures
         "albedo": "assets/textures/albedo.jpg",
         "emissive": "assets/textures/emissive.jpg",
         "roughness": "assets/textures/roughness.jpg",
@@ -367,10 +363,8 @@
         "ball": "assets/models/ball.obj",
         "coin": "assets/models/coin.obj",
         "rock": "assets/models/rock.obj",
-        "pepsiman": "assets/models/pepsiman.obj",
         "gem_heart": "assets/models/gem_heart.obj",
         "powerup": "assets/models/powerup.obj",
-        "lamp": "assets/models/lamp.obj",
         "stagelight": "assets/models/stagelight.obj"
       },
       "samplers": {
@@ -390,43 +384,6 @@
         }
       },
       "materials": {
-        "glass": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            },
-            "blending": {
-              "enabled": true,
-              "sourceFactor": "GL_SRC_ALPHA",
-              "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-            },
-            "depthMask": false
-          },
-          "transparent": true,
-          "tint": [1, 1, 1, 1],
-          "texture": "glass",
-          "sampler": "pixelated"
-        },
-        "grass": {
-          "type": "lit",
-          "shader": "light",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "texture": "grass",
-          "sampler": "repeated"
-        },
         "asphalt": {
           "type": "lit",
           "shader": "light_repeated",
@@ -586,21 +543,6 @@
           "emissive": "rock_emissive",
           "sampler": "default"
         },
-        "lamp": {
-          "type": "lit",
-          "shader": "light",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
-          "albedo": "lamp",
-          "sampler": "default"
-        },
         "powerup": {
           "type": "lit",
           "shader": "light",
@@ -688,19 +630,6 @@
           }
         ]
       },
-      // {
-      //   "position": [0, -2, 0],
-      //   "rotation": [0, 0, 0],
-      //   "scale": [10, 1, 100],
-      //   "components": [
-      //     {
-      //       "type": "Mesh Renderer",
-      //       "mesh": "cube",
-      //       "material": "asphalt",
-      //       "sampler": "repeated"
-      //     }
-      //   ]
-      // },
       {
         "position": [0, 10, 0],
         "rotation": [45, 45, 0],
