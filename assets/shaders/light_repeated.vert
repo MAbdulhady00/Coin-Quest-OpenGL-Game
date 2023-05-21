@@ -34,5 +34,7 @@ void main() {
     // Finally, we compute the position in the homogenous clip space and send the rest of the data.
     gl_Position = VP * vec4(vsout.world, 1.0);
     vsout.color = color;
+    // We will use the x and z coordinates of the world position to compute the texture coordinates.
+    // this is useful for the terrain since we will have a texture that repeats every 10 meters.
     vsout.tex_coord = vec2(vsout.world.x, vsout.world.z) * 0.1f;
 }
