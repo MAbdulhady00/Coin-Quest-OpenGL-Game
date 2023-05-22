@@ -27,7 +27,6 @@ namespace our
         // Also, we no longer have an ambient term in the  We will keep the ambient in a separate struct called "SkyLight".
 
         glm::vec3 color = {1.0f, 1.0f, 1.0f};     // The color of the light, we do not need separate diffuse and specular colors because it is unrealistic.
-        glm::vec3 position = {0.0f, 0.0f, 0.0f};  // Used for Point and Spot Lights only
         glm::vec3 direction = {0.0f, 0.0f, 0.0f}; // Used for Directional and Spot Lights only, note that is the diretion in the local space of the light
         struct
         {

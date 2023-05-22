@@ -179,7 +179,7 @@ namespace our
             return;
 
         // get the camera forward direction in world space looking at the negative z axis
-        glm::vec3 cameraForward = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, 0.0, -1.0f, 1.0f);
+        glm::vec3 cameraForward = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, 0.0, -1.0f, 0.0f);
         // sort the transparent commands based on the distance from the camera
         // this is done to prevent the transparent objects from being drawn in the wrong order
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand &first, const RenderCommand &second)
@@ -216,7 +216,7 @@ namespace our
         {
             command.material->setup();
             // set the camera position
-            command.material->shader->set("camera_position", cameraForward);
+            command.material->shader->set("camera_position", camera->getOwner()->getWorldTranslation());
             // set the M matrix for the shader
             command.material->shader->set("M", command.localToWorld);
             // set the M_IT matrix for the shader
@@ -242,7 +242,7 @@ namespace our
                     continue;
 
                 // get the light position in world space (for point and spot lights)
-                light->position = light->getOwner()->getWorldTranslation();
+                glm::vec3 lightPosition = light->getOwner()->getWorldTranslation();
                 // get the light direction in world space (for directional and spot lights)
                 glm::vec3 lightDirection = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(light->direction, 0.0f);
                 lightDirection = glm::normalize(lightDirection);
@@ -266,13 +266,13 @@ namespace our
                     break;
                     // set the light position and attenuation for point lights
                 case LightType::POINT:
-                    command.material->shader->set(prefix + "position", light->position);
+                    command.material->shader->set(prefix + "position", lightPosition);
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                     light->attenuation.linear, light->attenuation.constant));
                     break;
                     // set the light position, direction, attenuation and cone angles for spot lights
                 case LightType::SPOT:
-                    command.material->shader->set(prefix + "position", light->position);
+                    command.material->shader->set(prefix + "position", lightPosition);
                     command.material->shader->set(prefix + "direction", lightDirection);
                     command.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                     light->attenuation.linear, light->attenuation.constant));
