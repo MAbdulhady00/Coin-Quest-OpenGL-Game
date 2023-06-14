@@ -20,7 +20,9 @@ Coin Quest is an exciting arcade-style game where you control a rolling ball in 
 # 🏁 Demo and ScreenShots
 
 ## Demo Video
-https://github.com/MohammedAbdulhady00/Coin-Quest-OpenGL-Game/assets/75921148/a3b8b4b1-a0d9-4bdb-a81c-1d5080e44f95
+https://github.com/MohammedAbdulhady00/Coin-Quest-OpenGL-Game/assets/75921148/40b362f0-e51d-4469-af88-0cc603607e4b
+
+
 
 ## ScreenShots
 ![GAME_APPLICATION_aVlv4mN4Ll](https://github.com/MohammedAbdulhady00/Coin-Quest-OpenGL-Game/assets/76039756/c25bb1bc-5d33-4e5c-9852-93c1330b519a)
